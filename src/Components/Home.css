@@ -16,30 +16,21 @@
   }
   
   .home h2 {
-    position: relative;
-    top:300px;
-    right:35px;
+    margin-top: 300px;
     font-size: 2rem;
-    color: #333; 
+    color: #333;
     margin-bottom: 30px;
   }
   
-  
   .home_text {
-    text-wrap: balance;
-    position: relative;
-    top:290px;
-    left: 1px;
-    font-size: 1.2rem; 
-    color: #666;  
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #666;
     margin-bottom: 25px;
   }
   
  
-  .book-now {
-    position: relative;
-    right: 80px;
-    margin-top: 320px;
+  .book-now { 
     display: inline-flex;
     align-items: center;
     color: white;
