@@ -1,0 +1,66 @@
+.home_logo{
+    position: absolute;
+    width: 256px;
+    height: 332px;
+    left: calc(50% - 256px/2 - 592px);
+    top: -39px;
+    border-radius: 40px;
+    object-fit: cover;}
+
+.home {
+    text-align: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .home h2 {
+    position: relative;
+    top:300px;
+    right:35px;
+    font-size: 2rem;
+    color: #333; 
+    margin-bottom: 30px;
+  }
+  
+  
+  .home_text {
+    text-wrap: balance;
+    position: relative;
+    top:290px;
+    left: 1px;
+    font-size: 1.2rem; 
+    color: #666;  
+    margin-bottom: 25px;
+  }
+  
+ 
+  .book-now {
+    position: relative;
+    right: 80px;
+    margin-top: 320px;
+    display: inline-flex;
+    align-items: center;
+    color: white;
+    background-color:#E0B973;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px; 
+    font-size: 1rem; 
+    cursor: pointer;
+    text-decoration: none; 
+    transition: background-color 0.3s, box-shadow 0.3s; 
+  }
+  
+  .book-now:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+  }
+  
+ 
+  .book-icon {
+    max-width: 20px; 
+    margin-right: 8px; 
+  }
+  
