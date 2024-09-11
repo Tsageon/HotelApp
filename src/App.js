@@ -5,6 +5,7 @@ import Forgotpassword from './Components/Forgotpassword';
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from './Components/Register';
+import Room from './Components/Room'
 
 
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/login" element={<Login />}/>
           <Route path="/forgotpassword" element={<Forgotpassword/>} />
           <Route path="/home" element={<Home />}/>
+          <Route path="/room" element={<Room />}/>
         </Routes>
       </div>
     </Router>
