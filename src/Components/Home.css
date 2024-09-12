@@ -7,10 +7,12 @@
     border-radius: 20px;
     object-fit: cover;}
 
-.border{width: 63%;    
+.border{height:2rem;
+  width: 90%;    
   border-width: thin;
   border-top: 1px solid grey;
   border-bottom: 1px solid grey;}
+  
   .navbar {
     display: flex;
     justify-content: space-around;
@@ -23,7 +25,7 @@
 .home {
     text-align: center;
     padding: 10px;
-    height:100vh;
+    height:120vh;
     background-color: #f4f4f4;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
@@ -31,17 +33,17 @@
   
   .home h2 {
     text-align: center;
-    margin-top: 300px;
+    margin-top: 19rem;
     font-size: 2rem;
     color: #333;
-    margin-bottom: 30px;
+    margin-bottom: 2rem;
   }
   
   .home_text {
     flex-wrap: wrap;
     margin-left: 10rem;
     text-align: center;
-    margin-top: 20px;
+    margin-bottom: 10rem;
     font-size: 1.2rem;
     color: #666;
     margin-bottom: 25px;
@@ -63,8 +65,7 @@
   }
   
   .book-now:hover {
-    background-color: #0056b3;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+    background-color: black;
   }
   
  
@@ -73,6 +74,7 @@
     margin-right: 8px; 
   }
   ul {
+    margin-top: 0.5rem;
     display: flex;
     justify-content: center ;
     gap: 2rem;
