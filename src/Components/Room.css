@@ -8,8 +8,7 @@
     
     .search-btn:hover {
       opacity: 1;
-    }
-    
+    } 
   
   .filter-rooms ul {
     display: flex;
@@ -19,14 +18,12 @@
     margin-bottom: 20px;
   }
   
- 
 select.options {
   appearance: auto; 
-  
   margin: 0 10px; 
   border: 1px solid #ccc; 
   border-radius: 5px; 
-  font-size: 14px;
+  font-size: 10px;
   background-color: #f9f9f9; 
   width: 50%; 
   max-width: 200px; 
@@ -51,21 +48,18 @@ select.options::after {
   pointer-events: none;
 }
 
-
 .search-btn {
   padding: 0.3rem;
   background-color: #E0B973;
   border: none;
   border-radius: 0.3rem;
-  color: white;
+  color: #343131;
   cursor: pointer;
 }
 
 .search-btn:hover {
   background-color:  #E0B973;
 }
-
-  
   .room-cards {
     display: flex;
     flex-wrap: wrap;
@@ -92,14 +86,18 @@ select.options::after {
     height: 200px;
     object-fit: cover;
   }
-
+.heading{align-items: center;
+display: flex;
+justify-content: center;}
   .room-info {
-    padding: 15px;
+    
+    align-items: center;
+    padding: 13px;
   }
 
   .icon-group {
     display: inline-flex;
-  
+    margin-left: 1rem;
     gap: 1.4rem;
     align-items: center; 
     justify-content: center;
@@ -113,7 +111,6 @@ select.options::after {
     margin-left: 5px; 
   }
   
-  
   .icon img {
     width: 10px;
     height: 10px;
@@ -125,6 +122,8 @@ select.options::after {
   
   .room-btn {
     background-color: #E0B973;
+    font-weight: bolder;
+    color: #343131;
     margin-left: auto;
     border-radius: 1rem;
     display: block;
@@ -132,7 +131,7 @@ select.options::after {
     font-size: x-small; }
   
   .room-btn:hover {
-    background-color: #0056b3;
+    background-color: #D8A25E;
   }
   @media (max-width: 768px) {
     .room-cards {

@@ -20,9 +20,10 @@ function App() {
           <Route path="/forgotpassword" element={<Forgotpassword/>} />
           <Route path="/home" element={<Home />}/>
           <Route path="/room" element={<Room />}/>
-        </Routes>
+        </Routes>  <Footer/>
       </div>
     </Router>
+  
   );
 }
 

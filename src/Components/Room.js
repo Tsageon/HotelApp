@@ -20,6 +20,9 @@ const Room = () => {
     roomType: "all",
   });
 
+  const [searchActive, setSearchActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const rooms = [
     {
       image: PovertySuite,
@@ -47,7 +50,8 @@ const Room = () => {
       numBeds: "2 beds",
       price: 2800,
       description: "Elevate your stay in our luxurious Penthouse Suite.",
-    }, {
+    }, 
+    {
       image: istock,
       name: "Family Room",
       capacity: "4 people",
@@ -55,7 +59,8 @@ const Room = () => {
       numBeds: "3 beds",
       price: 5800,
       description: "Designed for families, this spacious room offers ample comfort.",
-    }, {
+    }, 
+    {
       image: istock2,
       name: "Royal Suite",
       capacity: "2 people",
@@ -63,7 +68,8 @@ const Room = () => {
       numBeds: "2 beds",
       price: 4800,
       description: "Indulge in ultimate comfort in our Suite, featuring.",
-    }, {
+    }, 
+    {
       image: istock4,
       name: "Deluxe Room",
       capacity: "2 people",
@@ -71,65 +77,81 @@ const Room = () => {
       numBeds: "2 beds",
       price: 3800,
       description: "Experience a touch of luxury in our Deluxe Room.",
-    },];
+    }];
 
+  
   const filteredRooms = rooms.filter((room) => {
     const matchNumBeds = filter.numBeds === "all" || room.numBeds === filter.numBeds;
     const matchCapacity = filter.capacity === "all" || room.capacity.includes(filter.capacity);
     const matchNumRooms = filter.numRooms === "all" || room.numRooms === filter.numRooms;
     const matchRoomType = filter.roomType === "all" || room.name.toLowerCase().includes(filter.roomType.toLowerCase());
-
-
+   
     const matchPrice =
       filter.priceRange === "all" ||
-      (filter.priceRange === "low" && room.price < 1000) ||
-      (filter.priceRange === "mid" && room.price >= 2000 && room.price <= 5000) ||
-      (filter.priceRange === "high" && room.price > 4000);
+      (filter.priceRange === "low" && room.price < 2000) ||
+      (filter.priceRange === "mid" && room.price >= 3000 && room.price <= 5000) ||
+      (filter.priceRange === "high" && room.price > 5000);
 
-    return matchRoomType && matchNumBeds && matchCapacity && matchNumRooms && matchPrice;
+    const matchSearch = room.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchRoomType && matchNumBeds && matchCapacity && matchNumRooms && matchPrice && matchSearch;
   });
 
   return (
     <div className="rooms">
-      <h4>Available Rooms & Suites</h4>
+      <h6>Available Rooms & Suites</h6>
+      {}
       <div className="search">
-        <button className="search-btn">
-          <FaSearch />
-        </button>
+        {searchActive ? (
+          <input type="text" className="search-input" value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onBlur={() => setSearchActive(false)} 
+            placeholder="Search..." autoFocus/>
+        ) : (
+          <button className="search-btn" onClick={() => setSearchActive(true)}>
+            <FaSearch />
+          </button>
+        )}
       </div>
+
+      {}
       <div className="filter-rooms">
         <ul>
           <li>Filter by:</li>
           <li> Capacity:
             <select className="options" value={filter.capacity}
-              onChange={(e) => setFilter({ ...filter, capacity: e.target.value })}>
+              onChange={(e) => setFilter({ ...filter, capacity: e.target.value})}>
               <option value="all">All</option>
               <option value="2 people">2 people</option>
               <option value="4 people">4 people</option>
-            </select></li>
+            </select>
+          </li>
           <li> Number of Rooms:
             <select className="options" value={filter.numRooms}
-              onChange={(e) => setFilter({ ...filter, numRooms: e.target.value })}>
+              onChange={(e) => setFilter({...filter, numRooms: e.target.value})}>
               <option value="all">All</option>
               <option value="3 rooms">3 rooms</option>
               <option value="4 rooms">4 rooms</option>
-            </select></li>
+            </select>
+          </li>
           <li>Room type:
             <select className="options" value={filter.roomType}
-              onChange={(e) => setFilter({ ...filter, roomType: e.target.value })}>
+              onChange={(e) => setFilter({...filter, roomType: e.target.value})}>
               <option value="all">All</option>
               <option value="Deluxe">Deluxe</option>
               <option value="Royal">Royal</option>
               <option value="Suite">Suite</option>
               <option value="Room">Room</option>
-            </select></li>
+            </select>
+          </li>
           <li>Number of Beds:
             <select className="options" value={filter.numBeds}
               onChange={(e) => setFilter({ ...filter, numBeds: e.target.value })}>
               <option value="all">All</option>
               <option value="2 beds">2 beds</option>
               <option value="4 beds">4 beds</option>
-            </select></li>
+            </select>
+          </li>
           <li>Price Range:
             <select className="options" value={filter.priceRange}
               onChange={(e) => setFilter({ ...filter, priceRange: e.target.value })}>
@@ -137,9 +159,12 @@ const Room = () => {
               <option value="low">Below R3000</option>
               <option value="mid">R3000 - R5000</option>
               <option value="high">Above R5000</option>
-            </select></li>
+            </select>
+          </li>
         </ul>
       </div>
+
+      {}
       <div className="room-cards">
         {filteredRooms.map((room, index) => (
           <div className="room-card" key={index}>
@@ -147,7 +172,7 @@ const Room = () => {
               <img className="room-img" src={room.image} alt="room" />
             </div>
             <div className="room-info">
-              <h7>{room.name}</h7>
+              <div className="heading"><h6>{room.name}</h6></div> {}
               <div className="icon-group">
                 <div className="icon">
                   <BsFillPeopleFill />
@@ -162,12 +187,14 @@ const Room = () => {
                   <p className="text">{room.numBeds}</p>
                 </div>
               </div>
-              <p><span id="dots">{room.description}...</span><span id="more"></span></p>
+              <p>{room.description}</p>
               <p className="text">Price: R{room.price}</p>
               <button className="room-btn">Reserve</button>
-            </div></div>
+            </div>
+          </div>
         ))}
-      </div></div>
+      </div>
+    </div>
   );
 };
 
