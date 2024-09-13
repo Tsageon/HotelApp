@@ -12,7 +12,7 @@ const Register = () => {
           <h2><b>Register</b></h2>
           <p>Please enter the required details to Create an account</p>
           <form><input type="text" id="text" name="name" placeholder="Enter Name" className="register__input" required />
-            <input type="text" id="text" name="gender" placeholder="Enter Gender" className="register__input" required />
+            <input type="text" id="gender" name="gender" placeholder="Enter Gender" className="register__input" required />
             <input type="email" id="email" name="email" placeholder="Enter Email" className="register__input" required />
             <input type="number" id="Phone Number" name="Phone No" placeholder="Enter Phone Number" className="register__input" required/>
             <input type="password" id="password" name="password" placeholder="Enter Password" className="register__input" minLength="6" required />
