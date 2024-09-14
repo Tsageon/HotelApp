@@ -123,158 +123,183 @@ const Room = () => {
   });
 
   return (
-    <div className="rooms">
-      <h6>Available Rooms & Suites</h6>
-      <div className="search">
-        {searchActive ? (
-          <input
-            type="text"
-            className="search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onBlur={() => setSearchActive(false)}
-            placeholder="Search..."
-            autoFocus
-          />
-        ) : (
-          <button className="search-btn" onClick={() => setSearchActive(true)}>
-            <FaSearch />
-          </button>
-        )}
-      </div>
-      <br />
-
-      <div className="filter-rooms">
+    <div className="navbar">
+      <div className="border">
         <ul>
-          <li>Filter by:</li>
           <li>
-            <span class="hover-me">
-              Capacity:
-              <select
-                className="options"
-                value={filter.capacity}
-                onChange={(e) =>
-                  setFilter({ ...filter, capacity: e.target.value })
-                }
-              >
-                <option value="all">All</option>
-                <option value="2 people">2 people</option>
-                <option value="4 people">4 people</option>
-              </select>
-            </span>
+            <a href="/home">Home</a>
           </li>
           <li>
-            <span class="hover-me">
-              {" "}
-              Number of Rooms:
-              <select
-                className="options"
-                value={filter.numRooms}
-                onChange={(e) =>
-                  setFilter({ ...filter, numRooms: e.target.value })
-                }
-              >
-                <option value="all">All</option>
-                <option value="3 rooms">3 rooms</option>
-                <option value="4 rooms">4 rooms</option>
-              </select>
-            </span>
+            <a href="/room">Rooms</a>
           </li>
           <li>
-            <span class="hover-me">
-              Room type:
-              <select
-                className="options"
-                value={filter.roomType}
-                onChange={(e) =>
-                  setFilter({ ...filter, roomType: e.target.value })
-                }
-              >
-                <option value="all">All</option>
-                <option value="Deluxe">Deluxe</option>
-                <option value="Royal">Royal</option>
-                <option value="Suite">Suite</option>
-                <option value="Room">Room</option>
-              </select>
-            </span>
+            <a href="/amenities">Amenities</a>
           </li>
           <li>
-            <span class="hover-me">
-              Number of Beds:
-              <select
-                className="options"
-                value={filter.numBeds}
-                onChange={(e) =>
-                  setFilter({ ...filter, numBeds: e.target.value })
-                }
-              >
-                <option value="all">All</option>
-                <option value="2 beds">2 beds</option>
-                <option value="4 beds">4 beds</option>
-              </select>
-            </span>
+            <a href="/contactus">Contact Us</a>
           </li>
           <li>
-            <span class="hover-me">
-              Price Range:
-              <select
-                className="options"
-                value={filter.priceRange}
-                onChange={(e) =>
-                  setFilter({ ...filter, priceRange: e.target.value })
-                }
-              >
-                <option value="all">All</option>
-                <option value="low">Below R3000</option>
-                <option value="mid">R3000 - R5000</option>
-                <option value="high">Above R5000</option>
-              </select>
-            </span>
+            <a href="/profile">Profile</a>
           </li>
         </ul>
       </div>
 
-      <div className="room-cards">
-        {filteredRooms.map((room, index) => (
-          <div
-            className={`room-card ${
-              room.booked ? "booked" : "available Next Week"
-            }`}
-            key={index}
-          >
-            <div className="img-div">
-              <img className="room-img" src={room.image} alt="room" />
-            </div>
-            <div className="room-info">
-              <div className="heading">
-                <h6>{room.name}</h6>
+      <div className="rooms">
+        <h6>Available Rooms & Suites</h6>
+        <div className="search">
+          {searchActive ? (
+            <input
+              type="text"
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onBlur={() => setSearchActive(false)}
+              placeholder="Search..."
+              autoFocus
+            />
+          ) : (
+            <button
+              className="search-btn"
+              onClick={() => setSearchActive(true)}
+            >
+              <FaSearch />
+            </button>
+          )}
+        </div>
+        <br />
+
+        <div className="filter-rooms">
+          <ul>
+            <li>Filter by:</li>
+            <li>
+              <span class="hover-me">
+                Capacity:
+                <select
+                  className="options"
+                  value={filter.capacity}
+                  onChange={(e) =>
+                    setFilter({ ...filter, capacity: e.target.value })
+                  }
+                >
+                  <option value="all">All</option>
+                  <option value="2 people">2 people</option>
+                  <option value="4 people">4 people</option>
+                </select>
+              </span>
+            </li>
+            <li>
+              <span class="hover-me">
+                {" "}
+                Number of Rooms:
+                <select
+                  className="options"
+                  value={filter.numRooms}
+                  onChange={(e) =>
+                    setFilter({ ...filter, numRooms: e.target.value })
+                  }
+                >
+                  <option value="all">All</option>
+                  <option value="3 rooms">3 rooms</option>
+                  <option value="4 rooms">4 rooms</option>
+                </select>
+              </span>
+            </li>
+            <li>
+              <span class="hover-me">
+                Room type:
+                <select
+                  className="options"
+                  value={filter.roomType}
+                  onChange={(e) =>
+                    setFilter({ ...filter, roomType: e.target.value })
+                  }
+                >
+                  <option value="all">All</option>
+                  <option value="Deluxe">Deluxe</option>
+                  <option value="Royal">Royal</option>
+                  <option value="Suite">Suite</option>
+                  <option value="Room">Room</option>
+                </select>
+              </span>
+            </li>
+            <li>
+              <span class="hover-me">
+                Number of Beds:
+                <select
+                  className="options"
+                  value={filter.numBeds}
+                  onChange={(e) =>
+                    setFilter({ ...filter, numBeds: e.target.value })
+                  }
+                >
+                  <option value="all">All</option>
+                  <option value="2 beds">2 beds</option>
+                  <option value="4 beds">4 beds</option>
+                </select>
+              </span>
+            </li>
+            <li>
+              <span class="hover-me">
+                Price Range:
+                <select
+                  className="options"
+                  value={filter.priceRange}
+                  onChange={(e) =>
+                    setFilter({ ...filter, priceRange: e.target.value })
+                  }
+                >
+                  <option value="all">All</option>
+                  <option value="low">Below R3000</option>
+                  <option value="mid">R3000 - R5000</option>
+                  <option value="high">Above R5000</option>
+                </select>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="room-cards">
+          {filteredRooms.map((room, index) => (
+            <div
+              className={`room-card ${
+                room.booked ? "booked" : "available Next Week"
+              }`}
+              key={index}
+            >
+              <div className="img-div">
+                <img className="room-img" src={room.image} alt="room" />
               </div>
-              {room.booked && <span className="booked-label">Booked</span>}
-              <div className="icon-group">
-                <div className="icon">
-                  <BsFillPeopleFill />
-                  <p className="text">{room.capacity}</p>
+              <div className="room-info">
+                <div className="heading">
+                  <h6>{room.name}</h6>
                 </div>
-                <div className="icon">
-                  <MdBedroomParent />
-                  <p className="text">{room.numRooms}</p>
+                {room.booked && <span className="booked-label">Booked</span>}
+                <div className="icon-group">
+                  <div className="icon">
+                    <BsFillPeopleFill />
+                    <p className="text">{room.capacity}</p>
+                  </div>
+                  <div className="icon">
+                    <MdBedroomParent />
+                    <p className="text">{room.numRooms}</p>
+                  </div>
+                  <div className="icon">
+                    <IoIosBed />
+                    <p className="text">{room.numBeds}</p>
+                  </div>
                 </div>
-                <div className="icon">
-                  <IoIosBed />
-                  <p className="text">{room.numBeds}</p>
-                </div>
+                <p>{room.description}</p>
+                <p className="price">Price: R{room.price}</p>
+                <button className="room-btn" disabled={room.booked}>
+                  {room.booked ? "Unavailable" : "Reserve"}
+                </button>
               </div>
-              <p>{room.description}</p>
-              <p className="price">Price: R{room.price}</p>
-              <button className="room-btn" disabled={room.booked}>
-                {room.booked ? "Unavailable" : "Reserve"}
-              </button>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        <br />
+        <Footer />
       </div>
-      <br />
-      <Footer />
     </div>
   );
 };

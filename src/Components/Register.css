@@ -1,66 +1,63 @@
-
 .register {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    background-color: whitesmoke;
-    width: 100%;
-  
-    margin-top: 125px;
-  }
-  
- 
-.register__logo{
-    height: 500px;
-    width: 400px;
-    border-radius: 20px;
-    object-fit: cover;
-  }
-  
- .register__page{
-    display: flex;
-    align-items: center; 
-    height: 500px;
-    width: auto;
- 
-  }
- 
-  .Register__content {
-    background-color: rgba(20, 39, 74, 0.5);
-    border-radius: 20px;
-    height: 500px;
-    width: 500px;
-    padding: 30px; 
-    background-color: white;
-    color: black; 
-    text-align: center; }
-  
-  .register__input {
-    width: calc(100% - 60px);
-    padding: 10px;
-    margin-bottom: 20px; 
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    display: block; 
-    margin: 10px auto;
-  }
- 
-  .Register__btn {
-    border-radius: 5px;
-    width: 175px;
-    padding: 10px;
-    background-color: #14addf;
-    color: white;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: whitesmoke;
+  width: 100%;
 
-  .Register__btn:hover {
-    background-color: grey; 
-    color: white;
-  }
+  margin-top: 125px;
+}
+
+.register__logo {
+  height: 500px;
+  width: 400px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.register__page {
+  display: flex;
+  align-items: center;
+  height: 500px;
+  width: auto;
+}
+
+.Register__content {
+  background-color: rgba(20, 39, 74, 0.5);
+  border-radius: 20px;
+  height: 500px;
+  width: 500px;
+  padding: 30px;
+  background-color: white;
+  color: black;
+  text-align: center;
+}
+
+.register__input {
+  width: calc(100% - 60px);
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  display: block;
+  margin: 10px auto;
+}
+
+.Register__btn {
+  border-radius: 5px;
+  width: 175px;
+  padding: 10px;
+  background-color: #14addf;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.Register__btn:hover {
+  background-color: grey;
+  color: white;
+}

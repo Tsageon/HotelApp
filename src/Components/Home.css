@@ -1,91 +1,87 @@
-.home_logo{
-    position: absolute;
-    width: 256px;
-    height: 332px;
-    left: calc(60% - 256px/2 - 592px);
-    top: -39px;
-    border-radius: 20px;
-    object-fit: cover;}
+.home_logo {
+  position: absolute;
+  width: 256px;
+  height: 332px;
+  left: calc(60% - 256px / 2 - 592px);
+  top: -39px;
+  border-radius: 20px;
+  object-fit: cover;
+}
 
-.border{
-  height:2rem;
-  width: 100%;    
-  border-width: thin;
-  border-top: 1px solid grey;
-  border-bottom: 1px solid grey;}
+.border {
+  height: 2rem;
+  width: 100%;
+}
+
+.navbar {
   
-  .navbar {
-    display: flex;
-    justify-content: space-around;
-    margin-left: 60px;
  
-    max-width: 100%;
-    min-width: 50%;
-    width: 100%;
-  }
+  margin-left: 0rem;
+  max-width: 100%;
+  min-width: 50%;
+  width: 100%;
+}
 .home {
-    text-align: center;
-    padding: 10px;
-    height:120vh;
-    background-color: #f4f4f4;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  }
-  
-  .home h2 {
-    text-align: center;
-    margin-top: 19rem;
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 2rem;
-  }
-  
-  .home_text {
-    flex-wrap: wrap;
-    margin-left: 10rem;
-    text-align: center;
-    margin-bottom: 10rem;
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 25px;
-  }
-  
- 
-  .book-now { 
-    display: inline-flex;
-    align-items: center;
-    color: white;
-    background-color:#E0B973;
-    border-radius: 5px;
-    padding: 10px 20px; 
-    margin-right: 90px;
-    font-size: 1rem; 
-    cursor: pointer;
-    text-decoration: none; 
-    transition: background-color 0.3s, box-shadow 0.3s; 
-  }
-  
-  .book-now:hover {
-    background-color: black;
-  }
-  
- 
-  .book-icon {
-    max-width: 20px; 
-    margin-right: 8px; 
-  }
-  ul {
-    margin-top: 0.8rem;
-    display: flex;
-    justify-content: center ;
-    gap: 2rem;
-  }
-  
-  li {
-    list-style: none;
-  }
-  
-  a {
-    text-decoration: none;
-    color: black;
-  }
+  text-align: center;
+  padding: 10px;
+  height: 120vh;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.home h2 {
+  text-align: center;
+  margin-top: 19rem;
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.home_text {
+  flex-wrap: wrap;
+  margin-left: 10rem;
+  text-align: center;
+  margin-bottom: 10rem;
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.book-now {
+  display: inline-flex;
+  align-items: center;
+  color: white;
+  background-color: #e0b973;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-right: 90px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.book-now:hover {
+  background-color: black;
+}
+
+.book-icon {
+  max-width: 20px;
+  margin-right: 8px;
+}
+ul {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}

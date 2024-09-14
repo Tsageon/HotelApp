@@ -13,12 +13,11 @@ import Footer from "./Footer";
 const Amenities = () => {
   return (
     <>
-     <div className="title">
-          <h5>Amenities</h5>
-        </div>
+   
+      <div className="title">
+        <h5>Amenities</h5>
+      </div>
       <div className="amenities-container">
-       
-     
         <div className="amenity-item">
           <h6>Spa</h6>
           <img src={Spa} alt="spa" />

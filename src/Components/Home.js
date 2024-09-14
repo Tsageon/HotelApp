@@ -1,7 +1,6 @@
 import Img from "./mt.png";
 import React from "react";
 import "./Home.css";
-import Amenities from "./Amenities";
 import group37 from "../Components/Group37.png";
 import Footer from "./Footer";
 
@@ -24,7 +23,7 @@ const Home = () => {
                 <a href="/room">Rooms</a>
               </li>
               <li>
-                <a href={Amenities}>Amenities</a>
+                <a href="/amenities">Amenities</a>
               </li>
               <li>
                 <a href="/contactus">Contact Us</a>
