@@ -6,8 +6,8 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from './Components/Register';
 import Room from './Components/Room'
-import Footer from './Components/Footer';
 import Profile from './Components/Profile'
+import Amenities from './Components/Amenities';
 
 
 function App() {
@@ -20,7 +20,8 @@ function App() {
           <Route path="/forgotpassword" element={<Forgotpassword/>} />
           <Route path="/home" element={<Home />}/>
           <Route path="/room" element={<Room />}/>
-        </Routes>  <Footer/>
+          <Route path="/amenities" element={<Amenities />}/>
+        </Routes> 
       </div>
     </Router>
   

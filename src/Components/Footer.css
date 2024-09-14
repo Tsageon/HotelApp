@@ -1,112 +1,117 @@
 .footer {
-    background-color: whitesmoke;
-    color: black;
-    padding: 40px;
-    text-align: center;
-    font-family: 'Arial', sans-serif;
-    border-top: 5px solid #E0B973; 
-    position: relative;
-  }
-  
-  .footer .title {
-    font-size: 1.3rem;
-    margin-bottom: 20px;
-    font-weight: bold;
-  }
-  
-  .newsletter {
-    margin-bottom: 30px;
-  }
-  
-  .sub {
-  
-    font-size: 1rem;
-    margin-bottom: 15px;
-  }
-  
-  .sub h4 {
-    display: inline;
-    flex-wrap: wrap;
-    margin-right: 10px;
-  }
-  
-  .input input {
-    text-align: center;
-    padding: 0.7em 1em;
-    border: none;
-    border-radius: 5px;
-    width: 40%;
-    max-width: 400px;
-  }
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background-color: whitesmoke;
+  color: black;
+  padding: 40px;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  border-top: 5px solid #e0b973;
+  position: relative;
+}
 
-.icons{display: flex;
-     justify-content: center;
-      gap:2rem;}
+.footer .title {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
 
-  .button button {
-    width: 40%;
-    max-width: 400px;
-    font-weight: bolder;
-    background-color: #E0B973;
-    color: #343131;
-    padding: 10px ;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .button button:hover {
-    background-color: #D8A25E;
-  }
-  
-  .reservation h4, .connect h6 {
-    margin: 20px 0;
-  }
-  
-  .phone, .connect {
-    margin: 10px 0;
-    font-size: 15px;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .connect svg, .phone svg {
-    margin-right: 10px;
-  }
-  
-  .phone p, .copyright p {
-    display: inline;
-    margin-left: 5px;
-    font-size: 10px;
-  }
-  
+.newsletter {
+  margin-bottom: 30px;
+}
 
-  .scroll button {
-    background: none;
-    border: none;
-    color: #E0B973;
-    font-size: 40px;
-    cursor: pointer;
-  }
-  
-  .scroll button:hover {
-    color: #D8A25E;
-  }
-  
-  .scroll button svg {
-    vertical-align: middle;
-  }
-  
-  
-  .copyright {
-    margin-top: 20px;
-    font-size: 14px;
-  }
-  
-  .border {
-    border-bottom: 2px solid #E0B973;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-  }
-  
+.sub {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.sub h4 {
+  display: inline;
+  flex-wrap: wrap;
+  margin-right: 10px;
+}
+
+.input input {
+  text-align: center;
+  padding: 0.7em 1em;
+  border: none;
+  border-radius: 5px;
+  width: 40%;
+  max-width: 400px;
+}
+
+.icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.button button {
+  width: 40%;
+  max-width: 400px;
+  font-weight: bolder;
+  background-color: #e0b973;
+  color: #343131;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button button:hover {
+  background-color: #d8a25e;
+}
+
+.reservation h4,
+.connect h6 {
+  margin: 20px 0;
+}
+
+.phone,
+.connect {
+  margin: 10px 0;
+  font-size: 15px;
+  align-items: center;
+  gap: 1rem;
+}
+
+.connect svg,
+.phone svg {
+  margin-right: 10px;
+}
+
+.phone p,
+.copyright p {
+  display: inline;
+  margin-left: 5px;
+  font-size: 10px;
+}
+
+.scroll button {
+  background: none;
+  border: none;
+  color: #e0b973;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.scroll button:hover {
+  color: #d8a25e;
+}
+
+.scroll button svg {
+  vertical-align: middle;
+}
+
+.copyright {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.border {
+  border-bottom: 2px solid #e0b973;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}

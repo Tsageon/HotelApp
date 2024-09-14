@@ -1,0 +1,72 @@
+.amenities-container {
+    padding: 1rem;
+    max-width: 60rem;
+    margin: 0 auto;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .title h5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #343131;
+  }
+  
+  .amenity-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    max-width: 350px;
+    text-align: center;
+    margin-bottom: 40px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .amenity-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .amenities-container h6 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+  .amenities-container img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .amenities-container img:hover {
+    transform: scale(1.05);
+  }
+  
+  .amenities-container div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 40px;
+  }
+  
+  @media (min-width: 768px) {
+    .amenities-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .amenity-item {
+      max-width: 280px;
+    }
+  }
+  
