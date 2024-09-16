@@ -12,8 +12,27 @@ import Footer from "./Footer";
 
 const Amenities = () => {
   return (
-    <>
    
+       <div className="navbar">
+      <div className="border">
+        <ul>
+          <li>
+            <a href="/home">Home</a>
+          </li>
+          <li>
+            <a href="/room">Rooms</a>
+          </li>
+          <li>
+            <a href="/amenities">Amenities</a>
+          </li>
+          <li>
+            <a href="/contact">Contact Us</a>
+          </li>
+          <li>
+            <a href="/profile">Profile</a>
+          </li>
+        </ul>
+      </div>
       <div className="title">
         <h5>Amenities</h5>
       </div>
@@ -60,7 +79,7 @@ const Amenities = () => {
       </div>
 
       <Footer />
-    </>
+   </div>
   );
 };
 

@@ -6,8 +6,10 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Room from "./Components/Room";
-
 import Amenities from "./Components/Amenities";
+import Contact from "./Components/Contact";
+import Admin from "./Components/Admin"
+import Reserve from "./Components/Reserve";
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/room" element={<Room />} />
           <Route path="/amenities" element={<Amenities />} />
+          <Route path="/contact" element={<Contact/>}/>
+          <Route path="/admin" element={<Admin/>}/>
+          <Route path="/reserve" element={<Reserve/>}/>
         </Routes>
       </div>
     </Router>

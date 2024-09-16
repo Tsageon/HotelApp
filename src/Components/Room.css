@@ -9,7 +9,7 @@
   border-bottom: 2px solid #e0b973; 
   padding-bottom: 1rem; 
   width: 100%; 
-  max-width: 1200px;
+
 }
 
 
@@ -185,6 +185,8 @@ select.options::after {
   justify-content: center;
   align-items: center;
 }
+p{display: flex;
+justify-content: center;}
 
 .price {
   text-align: center;

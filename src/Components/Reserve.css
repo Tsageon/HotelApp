@@ -1,0 +1,56 @@
+.reserve-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .reserve-details {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .reserve-room-img {
+    max-width: 300px;
+    height: auto;
+    margin-right: 20px;
+  }
+  
+  .reserve-info {
+    flex: 1;
+  }
+  
+  .reserve-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .confirm-btn {
+    background-color:  lightskyblue;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 1rem;
+  }
+  
+  .cancel-btn {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 1rem;
+  }
+  
+  .confirm-btn:hover, .cancel-btn:hover {
+    color: #e0b973;
+    opacity: 0.8;
+    transform: scale(1.1); 
+  }
+  
+  .error-message {
+    text-align: center;
+  }

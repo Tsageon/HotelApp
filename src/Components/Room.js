@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Room.css";
 import { FaSearch } from "react-icons/fa";
 import { IoIosBed } from "react-icons/io";
@@ -21,10 +22,12 @@ const Room = () => {
     roomType: "all",
   });
 
+  const navigate = useNavigate();
+
   const [searchActive, setSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const rooms = [
+  const [rooms,setRooms] = useState([
     {
       image: PovertySuite,
       name: "Standard Suite",
@@ -32,9 +35,8 @@ const Room = () => {
       numRooms: "3 rooms",
       numBeds: "2 beds",
       price: 1800,
-      description:
-        "Our cozy Standard Room offers the perfect retreat after a long day.",
-      booked: true,
+      description:"Step into a sanctuary of serenity in our Standard Suite. Perfect for couples or solo travelers, this cozy haven offers modern comforts and stylish décor. Unwind after a day of exploring in a beautifully appointed space that promises rest and relaxation like never before.",
+      booked: false,
     },
     {
       image: istock5,
@@ -43,7 +45,7 @@ const Room = () => {
       numRooms: "5 rooms",
       numBeds: "4 beds",
       price: 1000,
-      description: "Our Quad Room is perfect for groups of friends or family.",
+      description: "Designed for unforgettable group getaways, our Quad Room is the ultimate choice for families or friends traveling together. Spacious, vibrant, and equipped with all the amenities you need, this room offers a balance of comfort and fun, ensuring every moment is filled with joy and connection",
       booked: false,
     },
     {
@@ -53,7 +55,7 @@ const Room = () => {
       numRooms: "3 rooms",
       numBeds: "2 beds",
       price: 2800,
-      description: "Elevate your stay in our luxurious Penthouse Suite.",
+      description: "Elevate your experience in our exclusive Penthouse Suite, where luxury reaches new heights. With breathtaking views, sophisticated design, and premium amenities, this suite is your personal oasis. Indulge in opulence and let us pamper you in a setting designed for pure indulgence.",
       booked: false,
     },
     {
@@ -64,7 +66,7 @@ const Room = () => {
       numBeds: "3 beds",
       price: 5800,
       description:
-        "Designed for families, this spacious room offers ample comfort.",
+        "Create lasting memories in our Family Room, tailored for comfort and convenience. This spacious retreat is perfect for family vacations, offering ample room for everyone to relax and unwind. Whether you're exploring local attractions or enjoying downtime together, this room is your family’s home away from home",
       booked: false,
     },
     {
@@ -74,7 +76,7 @@ const Room = () => {
       numRooms: "3 rooms",
       numBeds: "2 beds",
       price: 4800,
-      description: "Indulge in ultimate comfort in our Suite, featuring.",
+      description: "Experience true grandeur in our Royal Suite, where elegance meets comfort. Perfect for guests seeking the finest in hospitality, this suite boasts refined décor, plush bedding, and exclusive amenities. Feel like royalty as you immerse yourself in unparalleled luxury and sophistication.",
       booked: true,
     },
     {
@@ -84,11 +86,23 @@ const Room = () => {
       numRooms: "3 rooms",
       numBeds: "2 beds",
       price: 3800,
-      description: "Experience a touch of luxury in our Deluxe Room.",
+      description: "Indulge in the perfect blend of style and comfort in our Deluxe Room. Designed for discerning travelers, this room offers a serene escape with exquisite furnishings and thoughtful touches. Treat yourself to a night of lavish rest in a space that embodies the essence of relaxation and tranquility",
       booked: false,
     },
-  ];
+  ]);
 
+  const handleReserve = (index) => {
+    const updatedRooms = [...rooms];
+    if (!updatedRooms[index].booked) {
+      updatedRooms[index].booked = true; 
+      setRooms(updatedRooms);           
+      
+      navigate("/reserve", { state: { roomDetails: updatedRooms[index] } });
+    } else {
+      navigate("/room");                 
+    }
+  };
+  
   const filteredRooms = rooms.filter((room) => {
     const matchNumBeds =
       filter.numBeds === "all" || room.numBeds === filter.numBeds;
@@ -103,23 +117,12 @@ const Room = () => {
     const matchPrice =
       filter.priceRange === "all" ||
       (filter.priceRange === "low" && room.price < 2000) ||
-      (filter.priceRange === "mid" &&
-        room.price >= 3000 &&
-        room.price <= 5000) ||
+      (filter.priceRange === "mid" && room.price >= 3000 && room.price <= 5000) ||
       (filter.priceRange === "high" && room.price > 5000);
 
-    const matchSearch = room.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+    const matchSearch = room.name.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return (
-      matchRoomType &&
-      matchNumBeds &&
-      matchCapacity &&
-      matchNumRooms &&
-      matchPrice &&
-      matchSearch
-    );
+    return matchRoomType && matchNumBeds && matchCapacity && matchNumRooms && matchPrice && matchSearch;
   });
 
   return (
@@ -136,7 +139,7 @@ const Room = () => {
             <a href="/amenities">Amenities</a>
           </li>
           <li>
-            <a href="/contactus">Contact Us</a>
+            <a href="/contact">Contact Us</a>
           </li>
           <li>
             <a href="/profile">Profile</a>
@@ -189,7 +192,7 @@ const Room = () => {
             </li>
             <li>
               <span class="hover-me">
-                {" "}
+                {""}
                 Number of Rooms:
                 <select
                   className="options"
@@ -290,7 +293,7 @@ const Room = () => {
                 </div>
                 <p>{room.description}</p>
                 <p className="price">Price: R{room.price}</p>
-                <button className="room-btn" disabled={room.booked}>
+                <button onClick={() => handleReserve(index)} className="room-btn" disabled={room.booked}>
                   {room.booked ? "Unavailable" : "Reserve"}
                 </button>
               </div>

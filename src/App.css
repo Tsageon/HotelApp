@@ -6,9 +6,16 @@
 html,
 body {
   height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+.title{
+  width: 100%;
+  text-align: center;
 }
-
 a {
   text-decoration: none;
   color: inherit;

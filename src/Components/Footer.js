@@ -32,7 +32,7 @@ const Footer = () => {
   return (
     <div className="footer">
       <div className="border">
-        <h4 className="title">The Matrix Hotel</h4>
+        <h4>The Matrix Hotel</h4>
       </div>
       <div className="newsletter">
         <div className="sub">
@@ -66,7 +66,7 @@ const Footer = () => {
           <TbDeviceLandlinePhone />
           <p>+1-700-897-563</p>
         </div>
-        <div className="connect">
+        <div className="connect1">
           <h6>Connect With Us</h6>
         </div>
         <div className="icons">

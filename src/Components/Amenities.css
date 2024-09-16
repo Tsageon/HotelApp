@@ -28,14 +28,15 @@
     list-style: none;
   }
 
-.title h5 {
+ h5{
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: #343131;
+  justify-content: center;
 }
 
 .amenity-item {

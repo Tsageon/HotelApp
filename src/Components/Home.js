@@ -8,13 +8,10 @@ const Home = () => {
   return (
     <>
       <div className="home">
-        <div>
-          <div>
-            <img className="home_logo" src={Img} alt="Logo" />
-          </div>
-        </div>
+      <div className="home" style={{ backgroundImage: `url(https://media.istockphoto.com/id/903417402/photo/luxury-construction-hotel-with-swimming-pool-at-sunset.jpg?s=2048x2048&w=is&k=20&c=fTWeu7OGRhaG6yFf2yv0ZyWADOgdp2x8hgiZd5M-hPs=)` }}/>
         <div className="navbar">
-          <div className="border">
+          <div className="border"> 
+            <img className="home_logo" src={Img} alt="Logo" />
             <ul>
               <li>
                 <a href="/home">Home</a>
@@ -26,7 +23,7 @@ const Home = () => {
                 <a href="/amenities">Amenities</a>
               </li>
               <li>
-                <a href="/contactus">Contact Us</a>
+                <a href="/contact">Contact Us</a>
               </li>
               <li>
                 <a href="/profile">Profile</a>
@@ -46,9 +43,10 @@ const Home = () => {
             Book Now
           </button>
         </a>
-      </div>
+       
+        </div>
       <Footer />
-    </>
+      </>
   );
 };
 
