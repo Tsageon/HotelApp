@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Room.css";
-import { FaSearch } from "react-icons/fa";
 import { IoIosBed } from "react-icons/io";
 import PovertySuite from "../Components/istockphoto-3-1024x1024.jpg";
 import istock from "../Components/51.jpg";
@@ -11,7 +10,7 @@ import istock4 from "../Components/istockphoto-1452529483-1024x1024.jpg";
 import istock5 from "../Components/34.jpg";
 import { MdBedroomParent } from "react-icons/md";
 import { BsFillPeopleFill } from "react-icons/bs";
-import Footer from "./Footer";
+import Contact from "./Contact";
 
 const Room = () => {
   const [filter, setFilter] = useState({
@@ -23,9 +22,6 @@ const Room = () => {
   });
 
   const navigate = useNavigate();
-
-  const [searchActive, setSearchActive] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
   const [rooms,setRooms] = useState([
     {
@@ -94,15 +90,15 @@ const Room = () => {
   const handleReserve = (index) => {
     const updatedRooms = [...rooms];
     if (!updatedRooms[index].booked) {
-      updatedRooms[index].booked = true; 
-      setRooms(updatedRooms);           
-      
+      updatedRooms[index].booked = true;
+      setRooms(updatedRooms);
+
       navigate("/reserve", { state: { roomDetails: updatedRooms[index] } });
     } else {
-      navigate("/room");                 
+      navigate("/room");
     }
   };
-  
+
   const filteredRooms = rooms.filter((room) => {
     const matchNumBeds =
       filter.numBeds === "all" || room.numBeds === filter.numBeds;
@@ -120,189 +116,153 @@ const Room = () => {
       (filter.priceRange === "mid" && room.price >= 3000 && room.price <= 5000) ||
       (filter.priceRange === "high" && room.price > 5000);
 
-    const matchSearch = room.name.toLowerCase().includes(searchQuery.toLowerCase());
-
-    return matchRoomType && matchNumBeds && matchCapacity && matchNumRooms && matchPrice && matchSearch;
+    return (
+      matchRoomType &&
+      matchNumBeds &&
+      matchCapacity &&
+      matchNumRooms &&
+      matchPrice
+    );
   });
 
   return (
-    <div className="navbar">
-      <div className="border">
+    <div className="rooms">
+      <h6>Available Rooms & Suites</h6>
+      <div className="filter-rooms">
         <ul>
+          <li>Filter by:</li>
+          
+          {/* Capacity filter */}
           <li>
-            <a href="/home">Home</a>
+            Capacity:
+            <div className="button-group">
+              {["all","2","4","6"].map((option) => (
+                <button
+                  key={option}
+                  className={`filter-btn ${filter.capacity === option ? "active" : ""}`}
+                  onClick={() => setFilter({ ...filter, capacity: option })}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
           </li>
+
+          {/* Number of Rooms filter */}
           <li>
-            <a href="/room">Rooms</a>
+            Number of Rooms:
+            <div className="button-group">
+              {["all", "3", "4", "5"].map((option) => (
+                <button
+                  key={option}
+                  className={`filter-btn ${filter.numRooms === option ? "active" : ""}`}
+                  onClick={() => setFilter({ ...filter, numRooms: option })}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
           </li>
+
+          {/* Room Type filter */}
           <li>
-            <a href="/amenities">Amenities</a>
+            Room Type:
+            <div className="button-group">
+              {["all", "Deluxe", "Royal", "Suite", "Room"].map((option) => (
+                <button
+                  key={option}
+                  className={`filter-btn ${filter.roomType === option ? "active" : ""}`}
+                  onClick={() => setFilter({ ...filter, roomType: option })}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
           </li>
+
+          {/* Number of Beds filter */}
           <li>
-            <a href="/contact">Contact Us</a>
+            Number of Beds:
+            <div className="button-group">
+              {["all", "2", "4"].map((option) => (
+                <button
+                  key={option}
+                  className={`filter-btn ${filter.numBeds === option ? "active" : ""}`}
+                  onClick={() => setFilter({ ...filter, numBeds: option })}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
           </li>
+
+          {/* Price Range filter */}
           <li>
-            <a href="/profile">Profile</a>
+            Price Range:
+            <div className="button-group">
+              {["all", "low", "mid", "high"].map((option) => (
+                <button
+                  key={option}
+                  className={`filter-btn ${filter.priceRange === option ? "active" : ""}`}
+                  onClick={() => setFilter({ ...filter, priceRange: option })}
+                >
+                  {option === "low"
+                    ? "Standard"
+                    : option === "mid"
+                    ? "Deluxe"
+                    : option === "high"
+                    ? "Royal"
+                    : "all"}
+                </button>
+              ))}
+            </div>
           </li>
         </ul>
       </div>
 
-      <div className="rooms">
-        <h6>Available Rooms & Suites</h6>
-        <div className="search">
-          {searchActive ? (
-            <input
-              type="text"
-              className="search-input"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onBlur={() => setSearchActive(false)}
-              placeholder="Search..."
-              autoFocus
-            />
-          ) : (
-            <button
-              className="search-btn"
-              onClick={() => setSearchActive(true)}
-            >
-              <FaSearch />
-            </button>
-          )}
-        </div>
-        <br />
-
-        <div className="filter-rooms">
-          <ul>
-            <li>Filter by:</li>
-            <li>
-              <span class="hover-me">
-                Capacity:
-                <select
-                  className="options"
-                  value={filter.capacity}
-                  onChange={(e) =>
-                    setFilter({ ...filter, capacity: e.target.value })
-                  }
-                >
-                  <option value="all">All</option>
-                  <option value="2 people">2 people</option>
-                  <option value="4 people">4 people</option>
-                </select>
-              </span>
-            </li>
-            <li>
-              <span class="hover-me">
-                {""}
-                Number of Rooms:
-                <select
-                  className="options"
-                  value={filter.numRooms}
-                  onChange={(e) =>
-                    setFilter({ ...filter, numRooms: e.target.value })
-                  }
-                >
-                  <option value="all">All</option>
-                  <option value="3 rooms">3 rooms</option>
-                  <option value="4 rooms">4 rooms</option>
-                </select>
-              </span>
-            </li>
-            <li>
-              <span class="hover-me">
-                Room type:
-                <select
-                  className="options"
-                  value={filter.roomType}
-                  onChange={(e) =>
-                    setFilter({ ...filter, roomType: e.target.value })
-                  }
-                >
-                  <option value="all">All</option>
-                  <option value="Deluxe">Deluxe</option>
-                  <option value="Royal">Royal</option>
-                  <option value="Suite">Suite</option>
-                  <option value="Room">Room</option>
-                </select>
-              </span>
-            </li>
-            <li>
-              <span class="hover-me">
-                Number of Beds:
-                <select
-                  className="options"
-                  value={filter.numBeds}
-                  onChange={(e) =>
-                    setFilter({ ...filter, numBeds: e.target.value })
-                  }
-                >
-                  <option value="all">All</option>
-                  <option value="2 beds">2 beds</option>
-                  <option value="4 beds">4 beds</option>
-                </select>
-              </span>
-            </li>
-            <li>
-              <span class="hover-me">
-                Price Range:
-                <select
-                  className="options"
-                  value={filter.priceRange}
-                  onChange={(e) =>
-                    setFilter({ ...filter, priceRange: e.target.value })
-                  }
-                >
-                  <option value="all">All</option>
-                  <option value="low">Below R3000</option>
-                  <option value="mid">R3000 - R5000</option>
-                  <option value="high">Above R5000</option>
-                </select>
-              </span>
-            </li>
-          </ul>
-        </div>
-
-        <div className="room-cards">
-          {filteredRooms.map((room, index) => (
-            <div
-              className={`room-card ${
-                room.booked ? "booked" : "available Next Week"
-              }`}
-              key={index}
-            >
-              <div className="img-div">
-                <img className="room-img" src={room.image} alt="room" />
-              </div>
-              <div className="room-info">
-                <div className="heading">
-                  <h6>{room.name}</h6>
-                </div>
-                {room.booked && <span className="booked-label">Booked</span>}
-                <div className="icon-group">
-                  <div className="icon">
-                    <BsFillPeopleFill />
-                    <p className="text">{room.capacity}</p>
-                  </div>
-                  <div className="icon">
-                    <MdBedroomParent />
-                    <p className="text">{room.numRooms}</p>
-                  </div>
-                  <div className="icon">
-                    <IoIosBed />
-                    <p className="text">{room.numBeds}</p>
-                  </div>
-                </div>
-                <p>{room.description}</p>
-                <p className="price">Price: R{room.price}</p>
-                <button onClick={() => handleReserve(index)} className="room-btn" disabled={room.booked}>
-                  {room.booked ? "Unavailable" : "Reserve"}
-                </button>
-              </div>
+      <div className="room-cards">
+        {filteredRooms.map((room, index) => (
+          <div
+            className={`room-card ${room.booked ? "booked" : "available"}`}
+            key={index}
+          >
+            <div className="img-div">
+              <img className="room-img" src={room.image} alt="room" />
             </div>
-          ))}
-        </div>
-        <br />
-        <Footer />
+            <div className="room-info">
+              <div className="heading">
+                <h6>{room.name}</h6>
+              </div>
+              {room.booked && <span className="booked-label">Booked</span>}
+              <div className="icon-group">
+                <div className="icon">
+                  <BsFillPeopleFill />
+                  <p className="text">{room.capacity}</p>
+                </div>
+                <div className="icon">
+                  <MdBedroomParent />
+                  <p className="text">{room.numRooms}</p>
+                </div>
+                <div className="icon">
+                  <IoIosBed />
+                  <p className="text">{room.numBeds}</p>
+                </div>
+              </div>
+              <p>{room.description}</p>
+              <p className="price">Price: R{room.price}</p>
+              <button
+                onClick={() => handleReserve(index)}
+                className="room-btn"
+                disabled={room.booked}
+              >
+                {room.booked ? "Unavailable" : "Reserve"}
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
+      <br />
+      <Contact />
     </div>
   );
 };

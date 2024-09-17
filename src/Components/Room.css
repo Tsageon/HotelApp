@@ -251,6 +251,28 @@ justify-content: center;}
   color: #333;
   font-weight: 600;
 }
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  border-radius: 1px;
+  width: auto;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background-color: #d8a25e ;
+  color: white;
+}
+
+.filter-btn:hover {
+  background-color: #ddd;
+}
+
 .filter-rooms {
   margin-bottom: 30px;
 }

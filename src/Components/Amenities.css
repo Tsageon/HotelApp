@@ -6,28 +6,6 @@
   gap: 1rem;
 }
 
-.border {
-    height: 2rem;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    font-size: medium;
-    max-width: 100%;
-    min-width: 50%;
-    width: 100%;
-  }
-  
-  ul {
-    margin-top: 0.8rem;
-   
-    justify-content: center;
-    gap: 2rem;
-  }
-  
-  li {
-    list-style: none;
-  }
-
  h5{
   display: flex;
   flex-wrap: wrap;
@@ -35,7 +13,7 @@
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #343131;
+  color:#e0b973;
   justify-content: center;
 }
 

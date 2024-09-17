@@ -1,99 +1,112 @@
-.Contact.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 50px 20px;
-    background-color: white;
-  }
-  
-  .Contact h5 {
-    font-size: 28px;
-    text-align: center;  
-    color: black;
-  }
-  
-  .Contact p {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 18px;
-    color: black;
-  }
-  
-  .location, .connect{
-    padding: 20px;   
-    border-radius: 10px;
-    background-color: white;
-    text-align: center;
-  }
-  
-  .location h5 {
-    font-size: 22px;
-    color: black;
-  }
-  
-  .location p {
-    font-size: 16px;
-    color: black;
-  }
-  
-  .connect h6 {
-    font-size: 20px;
-    color: black;
-  }
-  
-  .connect a {
-    margin: 0 10px;
-    font-size: 24px;
-    transition: color 0.3s;
-  }
-  .connect a:hover {
-    color: #e0b973;
-    transform: scale(1.1); 
-  }
-  
-  .phone1 {
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    gap: 10px; 
-  }
-  
-  .phone1 p {
-    font-size: 16px;
-    color: black;
-  }
-  
-  .phone1 svg {
-    gap: 1rem;
-    font-size: 24px;
-    color: black;
-  }
-  
+.Contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0 auto;
+  background-color: black;
+  gap: 1rem;
+  height: 350px;
+}
 
-  .map iframe {
-    width: 100%;
-    height: 450px;
-    border: none;
-    margin-top: 30px;
-    border-radius: 10px;
-  }
-  
- .message__input, .name__input,.email__input{
+.Contact h5 {
+  font-size: 28px;
+  text-align: center;
+  color: white;
+}
+
+.connect p {
+  display: flex;
+  justify-content: center;
+  color: white;
+}
+
+.contact-logo {
+  border-radius: 2rem;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
+.copyright {
+  display: flex;
   justify-content: center;
   align-items: center;
+}
+.copyright-icon{
+  display: flex;
+  margin-bottom: 1.5rem;
+  height: auto;
+  width: auto;
+}
+.footer-icon {
+  display: inline;
+  justify-content: center;
+  width: 19px;
+  height: 17px;
+  color: white;
+}
+.location,
+.connect {
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  width: 350px;
+}
 
- }
-  @media (max-width: 768px) {
-    .Contact h5 {
-      font-size: 24px;
-    }
-  
-    .Contact p {
-      font-size: 16px;
-    }
-  
-    .location, .connect {
-      padding: 15px; 
-    }
+.location h5 {
+  font-size: 22px;
+  color: white;
+}
+
+.location p {
+  font-size: 10px;
+  color: white;
+}
+
+.connect h6 {
+  margin-top: 12.5rem;
+  font-size: 15px;
+  color: white;
+}
+.contact-icon {
+  background-color: white;
+}
+
+.footer-icon a {
+  margin: 0 10px;
+  font-size: 24px;
+  transition: color 0.3s;
+}
+.footer-icon a:hover {
+  color: #e0b973;
+  transform: scale(1.1);
+}
+
+.phone {
+  background-color: white;
+  width: 22.88px;
+  height: 23.25px;
+}
+
+.map iframe {
+  max-width: 100%;
+  width: 350px;
+  height: 300px;
+  border: none;
+  margin-top: 30px;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .Contact h5 {
+    font-size: 24px;
   }
+
+  .Contact p {
+    font-size: 16px;
+  }
+
+  .location,
+  .connect {
+    padding: 15px;
+  }}

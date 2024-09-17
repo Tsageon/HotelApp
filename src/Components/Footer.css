@@ -1,4 +1,5 @@
 .footer {
+  display: flex;
   left: 0;
   bottom: 0;
   margin-top: 2rem;
@@ -7,7 +8,6 @@
   padding: 40px;
   text-align: center;
   font-family: "Arial", sans-serif;
-  border-top: 5px solid #e0b973;
   position: relative;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .sub h4 {
-  display: inline;
+  display: grid;
   flex-wrap: wrap;
   margin-right: 10px;
 }
