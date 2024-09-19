@@ -1,43 +1,48 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {createUserWithEmailAndPassword,signInWithEmailAndPassword,} from "firebase/auth";
-import { auth } from "../Config/Fire";
+import { createSlice } from '@reduxjs/toolkit';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../Config/Fire';
 
 const initialState = {
-  user: {
-    email: "",
-    password: "",
-  },
-  value: 0,
+  user: null,
+  loading: false,
+  error: null,
 };
-
-export const authSlice = createSlice({
-  name: "auth",
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
-    signUp: (state, action) => {
-      createUserWithEmailAndPassword(auth, action.payload, action.payload)
-        .then(() => {
-          alert("Registration successfully");
-        })
-
-        .catch((err) => {
-          console.log(err.message);
-        });
+    setLoading(state) {
+      state.loading = true;
+      state.error = null;
     },
-
-    signIn:(state, action) =>{
-      signInWithEmailAndPassword(auth, action.payload, action.payload)
-      .then(() => {
-        alert("Loggedin successfully")})
-      
-        .catch((err)=>{
-          console.log(err.message);
-        })
-    }
+    setUser(state, action) {
+      state.user = action.payload;
+      state.loading = false;
+    },
+    setError(state, action) {
+      state.error = action.payload;
+      state.loading = false;
+    },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { signUp,signIn } = authSlice.actions;
-
+export const { setLoading, setUser, setError } = authSlice.actions;
+export const signUp = ({ email, password }) => async (dispatch) => {
+  dispatch(setLoading());
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    dispatch(setUser(userCredential.user));
+  } catch (error) {
+    dispatch(setError(error.message));
+  }
+};
+export const signIn = ({ email, password }) => async (dispatch) => {
+  dispatch(setLoading());
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    dispatch(setUser(userCredential.user));
+  } catch (error) {
+    dispatch(setError(error.message));
+  }
+};
 export default authSlice.reducer;

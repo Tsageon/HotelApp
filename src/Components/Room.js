@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom"; 
-import "./Room.css";
 import { IoIosBed } from "react-icons/io";
+import { MdBedroomParent } from "react-icons/md";
+import { BsFillPeopleFill } from "react-icons/bs";
 import Img from "./mt.png";
 import PovertySuite from "../Components/istockphoto-3-1024x1024.jpg";
 import istock from "../Components/51.jpg";
@@ -10,9 +12,8 @@ import istock2 from "../Components/52.jpg";
 import istock3 from "../Components/istockphoto-1342056590-1024x1024.jpg";
 import istock4 from "../Components/istockphoto-1452529483-1024x1024.jpg";
 import istock5 from "../Components/34.jpg";
-import { MdBedroomParent } from "react-icons/md";
-import { BsFillPeopleFill } from "react-icons/bs";
 import Contact from "./Contact";
+import "./Room.css";
 
 const Room = () => {
   const [filter, setFilter] = useState({
