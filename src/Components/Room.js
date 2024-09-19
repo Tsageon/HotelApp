@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import "./Room.css";
 import { IoIosBed } from "react-icons/io";
+import Img from "./mt.png";
 import PovertySuite from "../Components/istockphoto-3-1024x1024.jpg";
 import istock from "../Components/51.jpg";
 import istock2 from "../Components/52.jpg";
@@ -126,6 +128,19 @@ const Room = () => {
   });
 
   return (
+    <div>  <nav className="navbar">
+  <div className="logo-container">
+    <img className="home_logo" src={Img} alt="Logo" />
+  </div>
+  <ul className="nav-links">
+    <li><Link to="/home">Home</Link></li>
+    <li><Link to="/room">Rooms</Link></li>
+    <li><Link to="/amenities">Amenities</Link></li>
+    <li><Link to="/contact">Contact Us</Link></li>
+    <li><Link to="/profile">Profile</Link></li>
+  </ul>
+</nav>
+
     <div className="rooms">
       <h6>Available Rooms & Suites</h6>
       <div className="filter-rooms">
@@ -260,10 +275,10 @@ const Room = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div></div>
       <br />
       <Contact />
-    </div>
+      </div> 
   );
 };
 

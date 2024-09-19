@@ -1,174 +1,120 @@
-.navbar1 {
+.navbar {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  background-color: white; 
-  padding:5px;
- width: 100%;
+  background-color: white;
+  padding: 10px 20px;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+  flex: 1;
 }
 
 .home_logo {
-  position: relative;
-  width: 20%; 
-  max-width: 100%;
-  border-radius: 1rem;
-  cursor: pointer; 
+  border-radius: 2rem;
+  max-width: 10%;
+  width: auto; 
+  cursor: pointer;
 }
 
-.navbar1 ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
 }
 
-.navbar1 ul li {
-  margin: 0 15px; 
+.nav-links li {
+  list-style: none;
 }
 
-.navbar1 ul li a {
+.nav-links li a {
   text-decoration: none;
-  color: black; 
+  color: black;
   font-size: 16px;
   font-weight: bold;
-  padding: 10px 15px;
-  transition: color 0.3s ease, background-color 0.3s ease;
+  padding: 10px;
+  transition: color 0.3s, background-color 0.3s;
 }
 
-.navbar1 ul li a:hover {
-  background-color: #575757;
-  color: #ffcc00; 
-  border-radius: 5px;
+.nav-links li a:hover {
+  color: #e0b973;
 }
 
 
 .home {
-  background-size: cover;
-  background-position: center;
-  height: auto;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-  height: auto;
   background-color: #f4f4f4;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
 }
 
 .home_h2 {
   color: #000;
-  opacity: 0;
-  font-size: 2.5rem;
-  text-align: center;
-  margin-top: 5rem;
+  font-size: 2rem;
+  margin-top: 50px;
   opacity: 0;
   transform: translateY(-20px);
   animation: fadeIn 1s ease-in-out forwards;
 }
 
-.home_text {
+.home_text p {
+  color: #666;
   margin: 0 auto;
   max-width: 600px;
-  font-size: 1.5rem;
-  color: white;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.home_text p {
-  font-size: 0.8rem;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
 }
 
 .book-now {
   background-color: #e0b973;
   color: white;
   padding: 10px 20px;
+  border: none;
   border-radius: 5px;
-  text-decoration: none;
+  cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .book-now:hover {
-  background-color: black;
+  background-color: #000;
 }
 
 
-.border {
-  height: 2rem;
-  width: 100%;
-}
-
-
-
-.home_text {
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-  margin: 0 auto;
-  max-width: 600px;
-  font-size: 1.2rem;
-  color: #666;
+.about-section {
+  padding: 40px 0;
   text-align: center;
 }
 
-.book-now {
-  display: inline-flex;
-  align-items: center;
-  color: white;
-  padding: 10px 18px;
-  font-size: 1rem;
-  margin-right: 90px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  border: none;
-}
-
-.book-now:hover {
-  background-color: #000;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-ul {
-  display: flex;
-  flex-wrap: wrap;
-  font-size: small;
-}
-
-li {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-  color: black;
-}
-
-a:hover {
+.aboutus-header {
   color: #e0b973;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.about-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  padding: 20px;
+}
+
+.about-img {
+  width: 300px;
+  height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .aboutus-text {
-  color: black;
+  max-width: 600px;
+  color: #333;
+  font-size: 1rem;
+  text-align: left;
 }
 
-
-.about-section{
-  display: flex;
-  justify-content: center;  
-  align-items: center;
-  gap:1rem;
-  margin-left: 12%;
-}
-.aboutus-header{
-  color: #e0b973;;
-  font-weight: bold;
-}
-.about-img{ 
-  width: 300px;
-  height: 200px;
-}
-.aboutus-text p{
-  width: 100%;
-  font-size: 0.8rem; 
-}
 @keyframes fadeIn {
   to {
     opacity: 1;
@@ -177,12 +123,16 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-  .navbar1 ul {
+  .nav-links {
     flex-direction: column;
-    align-items: center;
+    gap: 10px;
   }
 
-  .navbar1 ul li {
-    margin-bottom: 10px;
+  .about-content {
+    flex-direction: column;
+  }
+
+  .home_h2 {
+    font-size: 1.5rem;
   }
 }

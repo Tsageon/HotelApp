@@ -2,20 +2,25 @@ import "./Login.css";
 import React,{useState} from 'react';
 import Img from "./mt.png";
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { signIn } from "../Redux/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
   const [Password, setPassword] = useState("");
   const [email, setEmail] = useState("");  
 
+  const dispatch = useDispatch();
+
   const handleLogin = (event) => {
+    dispatch(signIn(email, Password))
+    
     event.preventDefault(); 
     if (Password === "000012") { 
       navigate("/admin");       
     } else {
-      navigate("/");           
-    }
-  };
+      navigate("/home");           
+    }};
 
   return (
     <div className="login">
@@ -30,7 +35,6 @@ const Login = () => {
             <button type="submit" className="login__btn" onClick={handleLogin}>Login</button>
           </form>
           <p>Don't have an account?<b><Link to="/">Register here!</Link></b></p>
-          <Link to="/home">Home</Link>
         </div>
       </div>
     </div>
