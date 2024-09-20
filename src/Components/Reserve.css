@@ -1,288 +1,225 @@
 .reserve-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    
-  }
-
-  .reserve-details {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .reserve-room-img {
-    max-width: 300px;
-    height: 320px;
-    margin-right: 20px;
-    border-radius: 0.6rem;
-  }
-  
-  .reserve-info {
-    flex: 1;
-  }
-  
-  .reserve-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .checkout-btn{
-    background-color:  lightskyblue;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 1rem;
-  }
-  
-  .cancel-btn {
-    background-color: #e0b973;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 1rem;
-  }
-  
-  .checkout-btn:hover, .cancel-btn:hover {
-    color: black;
-    opacity: 0.8;
-    transform: scale(1.1); 
-  }
-
-  .reserve-actions button {
-    padding: 10px 20px;
-    border-radius: 0.5rem;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
-  .reserve-actions button:hover {
-    transform: scale(1.05);
-  }
-  .error-message {
-    text-align: center;
-  }
-
-  .date-picker-container {
-    margin: 10px 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .date-picker-container label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .react-datepicker__input-container input {
-    width: 80%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .react-datepicker {
-    border: 1px solid #ccc;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-
-  .react-datepicker__header {
-    background-color: lightskyblue;
-    color: black;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-  
-  .react-datepicker__day,
-  .react-datepicker__day-name,
-  .react-datepicker__time-name {
-    color: black;
-    font-size: 16px;
-    margin: 0.2rem;
-  }
-  
-  .react-datepicker__day:hover {
-    background-color: #e0b973;
-    border-radius: 50%;
-  }
-  
-  .react-datepicker__day--selected {
-    background-color: #e0b973;
-    color: black;
-    border-radius: 50%;
-  }
-
-  .react-datepicker__navigation {
-    top: 10px;
-  }
-  
-  .react-datepicker__navigation--previous {
-    border-right-color: black;
-  }
-  
-  .react-datepicker__navigation--next {
-    border-left-color: black;
-  }
- 
-  .react-datepicker__month-dropdown,
-  .react-datepicker__year-dropdown {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .react-datepicker__month-option,
-  .react-datepicker__year-option {
-    padding: 5px;
-    color: black;
-  }
- 
-  .react-datepicker__month-option:hover,
-  .react-datepicker__year-option:hover {
-    background-color: #e0b973;
-    color: black;
-  }
-  
-  .react-datepicker__time-container {
-    border-left: 1px solid #ccc;
-  }
-  
-  .react-datepicker__time {
-    background-color: white;
-  }
-  
-  .react-datepicker__time-box {
-    background-color: white;
-  }
-  
-  .react-datepicker__time-list-item {
-    padding: 5px;
-    font-size: 10px;
-  }
-  
-  .react-datepicker__time-list-item:hover {
-    background-color: #e0b973;
-    color: black;
-  }
-  
-  .react-datepicker__day--today {
-    font-weight: bold;
-    border-bottom: 2px solid lightskyblue;
-  }
- 
-.payment-method {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
-  border-radius: 0.5rem;
-}
-
-
-.payment-method p {
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: black;
-
-}
-
-.payment-method label {
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  font-size: 0.8rem; 
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-.payment-method input[type="radio"] {
-  margin-right: 10px; 
-  cursor: pointer;
-  transform: scale(1.2); 
-}
-
-
-.payment-method label:hover {
-  color: black;
-  background-color: lightskyblue;
-  border-radius: 0.5rem;
-  padding: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.confirmation-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  z-index: 9999; 
-}
-
-.modal-content {
-  background-color: #fff;
-  border-radius: 8px;
+  margin: 0 auto;
   padding: 20px;
-  width: 80%;
-  max-width: 500px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100vh;
 }
 
-.modal-content h4 {
+.reserve-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem; 
   margin-bottom: 20px;
-  font-size: 1.5rem;
-  color: #333;
 }
 
-.modal-content p {
-  font-size: 1.1rem;
+.reserve-room-img {
+  width: 300px; 
+  height: auto;
+  border-radius: 8px; 
+}
+
+.reserve-info {
+  display: flex;
+  flex-direction: column; 
+  justify-content: space-between;
+  flex: 1; 
+}
+
+
+
+.room {
+
+  margin-bottom: 5px;
+}
+
+
+.room-price {
+  font-size: smaller;
+  font-weight: bold;
+}
+
+.reserve-room-img {
+  width: 300px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.room-info-flex {
+  display: flex;
+  justify-content: center;
+  gap: 10px; 
+}
+
+.room-item {
+  white-space: nowrap;
+}
+
+.room-name
+ {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
   margin-bottom: 10px;
-  color: #666;
-  line-height: 1.5;
 }
 
-.modal-actions {
+.room-price{
+  display: inline-flex;
+  font-size: smaller;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.room {
+  white-space: nowrap; 
+}
+
+
+.date-picker-card {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 100%; 
+}
+
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.date-picker-container p {
+  display: flex;
+  flex-direction: row ;
+  justify-content: flex-start;
+  margin: 0;
+  font-weight: bold;
+  color: #555;
+}
+
+.reserve-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-.confirm-btn, .goback-btn {
-  background-color: #4caf50; 
-  color: white;
+.checkout-btn,
+.cancel-btn {
   padding: 10px 20px;
+  font-size: 16px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+}
+
+.checkout-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.confirmation-modal {
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.modal-content img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.confirm-btn,
+.goback-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-btn {
+  background-color: #4caf50;
+  color: white;
 }
 
 .goback-btn {
   background-color: #f44336;
+  color: white;
 }
 
-.confirm-btn:hover {
-  background-color: #45a049;
+
+.reserve-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+ 
+  width: 100%;
 }
 
-.goback-btn:hover {
-  background-color: #e53935; 
+.reserve-details,
+.date-picker-card {
+  height: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .reserve-container {
+    flex-direction: column;
+  }
+
+  .reserve-details {
+    flex-direction: column;
+  }
+
+  .reserve-room-img {
+    width: 100%;
+  }
+
+  .date-picker-card {
+    margin-top: 20px;
+    width: 50%;
+  }
+}
+
+.date-fix{
+  margin-left: 5%;
+  width: 60%;
 }

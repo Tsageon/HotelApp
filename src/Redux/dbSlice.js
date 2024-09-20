@@ -9,7 +9,7 @@ const initialState = {
 }
 
 export const dbSlice = createSlice({
-  name: 'data',
+  name: 'db',
   initialState,
   reducers: {
    setLoading(state) {
@@ -30,21 +30,27 @@ export const dbSlice = createSlice({
 )
 
 // Action creators are generated for each case reducer function
-export const { setLoading,setData, setError } = dbSlice.actions
+export const { setLoading, setData, setError } = dbSlice.actions
 
 export default dbSlice.reducer
-export const fetchData = () => async(dispatch) => {
+export const fetchData = () => async (dispatch) => {
     dispatch(setLoading());
-    try{
-        const querySnapshot = await getDocs(
-            collection(db,"Rooms")
-        );
-        const data = querySnapshot.docs.map((doc)=> ({
-            id: doc.id,
-            ...doc.data(),
-        }))
-        dispatch(setData(data));
-    } catch (error){
-        dispatch(setError(error.message));
+  
+    try {
+    
+      const querySnapshot = await getDocs(collection(db, "Rooms"));
+      
+      const data = querySnapshot.docs.map((doc) => ({
+        id: doc.id,     
+        ...doc.data(),   
+      }));
+  
+      if (data.length === 0) {
+        console.log('Warning: No documents found in the "Rooms" collection!');
+      }
+      dispatch(setData(data));
+    } catch (error) {
+      dispatch(setError(error.message));
+      console.error('Error fetching documents from Firebase:', error);
     }
-};
+  };

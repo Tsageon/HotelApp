@@ -15,7 +15,8 @@ const Register = () => {
   const [phoneNumber, setphonenumber] = useState("");
   const [password, setpassword] = useState("");
   const [confirmpassword, setconfirmpassword] = useState("");
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { user, loading, error } = useSelector((state) => state.auth || {});
+
 
   const dispatch = useDispatch();
 
@@ -27,7 +28,7 @@ const Register = () => {
       alert("Signup successfull");
       navigate("/home");
     }
-  });
+  },[user, navigate]);
 
   return (
     <div className="register">

@@ -251,6 +251,11 @@ justify-content: center;}
   color: #333;
   font-weight: 600;
 }
+.rooms p{
+  display: flex;
+    justify-content: center;
+}
+.select{width: 40%;}
 .button-group {
   display: flex;
   gap: 0.5rem;

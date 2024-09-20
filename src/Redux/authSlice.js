@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Config/Fire';
-
 const initialState = {
   user: null,
   loading: false,
@@ -25,7 +24,6 @@ const authSlice = createSlice({
     },
   },
 });
-
 export const { setLoading, setUser, setError } = authSlice.actions;
 export const signUp = ({ email, password }) => async (dispatch) => {
   dispatch(setLoading());
@@ -42,6 +40,7 @@ export const signIn = ({ email, password }) => async (dispatch) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     dispatch(setUser(userCredential.user));
   } catch (error) {
+    console.error('Sign In Error: ', error);
     dispatch(setError(error.message));
   }
 };

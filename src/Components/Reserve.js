@@ -4,7 +4,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Reserve.css";
 
-
 const Reserve = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,6 +13,13 @@ const Reserve = () => {
   const [endDate, setEndDate] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [data, setData] = useState("");
+  const options = ["1","2", "3","4","5","6","7","8","9","10"];
+
+  const onOptionChangeHandler = (event) => {
+    setData(event.target.value);
+    console.log("User Selected Value - ", event.target.value);
+  };
 
   if (!roomDetails) {
     return (
@@ -28,14 +34,14 @@ const Reserve = () => {
     if (startDate && endDate) {
       const timeDiff = Math.abs(endDate - startDate);
       let daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-  
+
       if (daysDiff === 0) {
         daysDiff = 1;
       }
-  
+
       return daysDiff * roomDetails.price;
     }
-    return roomDetails.price; 
+    return roomDetails.price;
   };
 
   const handleConfirmReservation = () => {
@@ -43,39 +49,54 @@ const Reserve = () => {
       alert("Select both start and end dates for your stay.");
       return;
     }
-    if (!paymentMethod) {
-      alert("Select a payment method.");
+    if (!data || data === "Amount of guests") {
+      alert("Select the number of guests.");
       return;
     }
-    setIsConfirmed(true); 
+    setIsConfirmed(true);
   };
 
   const handleCheckout = () => {
-    alert(`Reservation confirmed for ${roomDetails.name} with ${paymentMethod}.`);
+    alert(
+      `Reservation confirmed for ${roomDetails.roomName} with ${paymentMethod}.`
+    );
     setIsConfirmed(false);
     navigate("/room");
   };
 
   return (
     <div className="reserve-container">
-      <h3>Confirm Your Reservation</h3>
       <div className="reserve-details">
         <img
           className="reserve-room-img"
           src={roomDetails.image}
-          alt={roomDetails.name}
+          alt={roomDetails.roomName}
         />
         <div className="reserve-info">
-          <h4>{roomDetails.name}</h4>
-          <p>{roomDetails.description}</p>
-          <p>Capacity: {roomDetails.capacity}</p>
-          <p>Number of Rooms: {roomDetails.numRooms}</p>
-          <p>Number of Beds: {roomDetails.numBeds}</p>
-          <p>Price per night: R{roomDetails.price}</p>
-          {/* Total price based on days selected */}
-          <p>Total Price: R{calculateTotalPrice()}</p>
+          <p className="room-name">{roomDetails.roomName}</p>
 
-          {/* Stay duration */}
+          <div className="room-info-flex">
+            <p className="room-item">Capacity: {roomDetails.guests}</p>
+            <p className="room-item">
+              Number of Rooms: {roomDetails.noofRooms}
+            </p>
+            <p className="room-item">Number of Beds: {roomDetails.noofBeds}</p>
+          </div>
+
+          <p>{roomDetails.descriptions}</p>
+          <p className="room-price">
+            Price per night: <b>R{roomDetails.price}</b>
+          </p>
+          <p className="room-price">
+            Total Price: <b>{calculateTotalPrice()}</b>
+          </p>
+        </div>
+      </div>
+
+      <div className="date-fix">
+        {/* Date Picker Card */}
+        <div className="date-picker-card">
+          <h5>Select Dates</h5>
           <div className="date-picker-container">
             <p>Check-in Date:</p>
             <DatePicker
@@ -96,90 +117,28 @@ const Reserve = () => {
               minDate={startDate}
               placeholderText="Select check-out date"
             />
-          </div>
-
-          {/* Payment Method */}
-          <div className="payment-method">
-            <p>Payment Method</p>
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="Credit Card"
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-                Credit Card
-              </label>
-            </div>
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="PayPal"
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-                PayPal
-              </label>
-            </div>
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="Bank Transfer"
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-                Bank Transfer
-              </label>
-            </div>
+            <p>Number of guests</p>
+            <select className="select" onChange={onOptionChangeHandler}>
+              <option value="" disabled selected>
+                Amount of guests
+              </option>
+              {options.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
-      </div>
-
-      <div className="reserve-actions">
-        <button className="checkout-btn" onClick={handleConfirmReservation}>
-          Checkout
-        </button>
-        <button className="cancel-btn" onClick={() => navigate("/room")}>
-          Cancel
-        </button>
-      </div>
-
-      {/* Confirmation Modal */}
-      {isConfirmed && (
-        <div className="confirmation-modal">
-          <div className="modal-content">
-            <h4>Confirm Your Reservation</h4>
-            <p>
-              Name:
-              <br/>
-              Email:
-              <br/>
-              PhoneNumber:
-              <br/>
-              Room: {roomDetails.name}
-              <br />
-              Total Price: R{calculateTotalPrice()}
-              <br />
-              Payment Method: {paymentMethod}
-            </p>
-            <div className="modal-actions">
-              <button className="confirm-btn" onClick={handleCheckout}>
-                Confirm
-              </button>
-              <button
-                className="goback-btn"
-                onClick={() => setIsConfirmed(false)}
-              >
-                Go Back
-              </button>
-            </div>
-          </div>
+        <div className="reserve-actions">
+          <button className="checkout-btn" onClick={handleConfirmReservation}>
+            Checkout
+          </button>
+          <button className="cancel-btn" onClick={() => navigate("/room")}>
+            Cancel
+          </button>
         </div>
-      )}
-  
+      </div>
     </div>
   );
 };
