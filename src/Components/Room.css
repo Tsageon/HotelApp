@@ -61,7 +61,10 @@
   padding: 0;
   margin-bottom: 20px;
 }
-
+.room-title{
+  color:#e0b973 ;
+  
+}
 select.options {
   display: flex;
   justify-content: center;
@@ -124,7 +127,12 @@ select.options::after {
   gap: 30px;
   justify-content: center;
 }
-
+.room-sum{
+  display: flex;
+  justify-content: center;
+  
+ 
+}
 .room-card {
   width: 250px;
   height: auto;
@@ -191,7 +199,7 @@ justify-content: center;}
 .price {
   text-align: center;
   font-size: smaller;
-  font-weight: bolder;
+  font-weight: 900;
 }
 
 .room-btn {

@@ -1,28 +1,20 @@
 .reserve-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 100vh;
-}
-
-.reserve-details {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 3rem; 
-  margin-bottom: 20px;
+  height: 50vh;
+  gap: 2rem;
 }
 
 .reserve-room-img {
-  width: 300px; 
-  height: auto;
+  width: 300px;
+  height: 300px;
+  border-radius: 8px;
+  object-fit: cover;
   border-radius: 8px; 
 }
 
@@ -30,14 +22,19 @@
   display: flex;
   flex-direction: column; 
   justify-content: space-between;
+  margin-top: 5rem;
   flex: 1; 
 }
 
-
-
-.room {
-
-  margin-bottom: 5px;
+.room-p{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 80%;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+  margin-left: 9rem;
 }
 
 
@@ -46,12 +43,6 @@
   font-weight: bold;
 }
 
-.reserve-room-img {
-  width: 300px;
-  height: auto;
-  border-radius: 8px;
-  object-fit: cover;
-}
 
 .room-info-flex {
   display: flex;
@@ -81,9 +72,12 @@
   white-space: nowrap; 
 }
 
+.input1-containe{
+  border-radius: 0.3rem;
+  border: 1px solid #ccc;
+}
 
 .date-picker-card {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -92,33 +86,35 @@
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 100%; 
+  height: 100px; 
+  ;
+  width: 500px;
 }
 
 .date-picker-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.15rem
 }
 
 .date-picker-container p {
   display: flex;
-  flex-direction: row ;
   justify-content: flex-start;
   margin: 0;
+  font-size: small;
   font-weight: bold;
   color: #555;
 }
 
 .reserve-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 20px;
 }
 
 .checkout-btn,
-.cancel-btn {
-  padding: 10px 20px;
+.cancel-btn1 {
+  padding: 10px ;
   font-size: 16px;
   border: none;
   border-radius: 5px;
@@ -126,11 +122,11 @@
 }
 
 .checkout-btn {
-  background-color: #4caf50;
+  background-color: #e0b973;
   color: white;
 }
 
-.cancel-btn {
+.cancel-btn1 {
   background-color: #f44336;
   color: white;
 }
@@ -186,15 +182,6 @@
 }
 
 
-.reserve-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
- 
-  width: 100%;
-}
-
 .reserve-details,
 .date-picker-card {
   height: auto;
@@ -219,7 +206,9 @@
   }
 }
 
-.date-fix{
-  margin-left: 5%;
-  width: 60%;
+.select1 {
+  border-radius: 1rem;
+  width: 36%;
+  border-radius: 0.3rem;
+  border: 1px solid #ccc;
 }

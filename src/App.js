@@ -1,6 +1,6 @@
 import React from "react";
-import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
 import Forgotpassword from "./Components/Forgotpassword";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
@@ -10,6 +10,7 @@ import Amenities from "./Components/Amenities";
 import Contact from "./Components/Contact";
 import Admin from "./Components/Admin"
 import Reserve from "./Components/Reserve";
+import Checkout from "./Components/Checkout"
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/contact" element={<Contact/>}/>
           <Route path="/admin" element={<Admin/>}/>
           <Route path="/reserve" element={<Reserve/>}/>
+          <Route path="/checkout" element={<Checkout/>}/>
         </Routes>
       </div>
     </Router>

@@ -40,8 +40,8 @@ export const signIn = ({ email, password }) => async (dispatch) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     dispatch(setUser(userCredential.user));
   } catch (error) {
-    console.error('Sign In Error: ', error);
-    dispatch(setError(error.message));
+    console.error('Sign In Error:', error.code, error.message); // Log error code and message
+    dispatch(setError(error.message)); // Dispatch error message to Redux state
   }
 };
 export default authSlice.reducer;

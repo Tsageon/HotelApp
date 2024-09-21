@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchData } from "../Redux/dbSlice";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import { IoIosBed } from "react-icons/io";
 import { MdBedroomParent } from "react-icons/md";
 import { BsFillPeopleFill } from "react-icons/bs";
@@ -25,42 +25,41 @@ const Room = () => {
   useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
-  
-  console.log('Rooms Data:', data);
-  console.log('Loading:', loading);
-  console.log('Error:', error);
-  
+
+  console.log("Rooms Data:", data);
+  console.log("Loading:", loading);
+  console.log("Error:", error);
+
   const navigate = useNavigate();
 
- 
   const rooms = Array.isArray(data) && data.length > 0 ? data : [];
 
   const handleReserve = (index) => {
     const selectedRoom = rooms[index];
-  
+
     if (!selectedRoom.booked) {
       const updatedRoom = {
         ...selectedRoom,
         booked: true,
       };
-  
+
       navigate("/reserve", { state: { roomDetails: updatedRoom } });
     } else {
       navigate("/room");
     }
   };
-  
+
   const filteredRooms = rooms.filter((room) => {
     const matchNumBeds =
       filter.numBeds === "all" || room.numBeds === filter.numBeds;
-      const matchCapacity =
+    const matchCapacity =
       filter.capacity === "all" || room.guests === filter.capacity;
-    
+
     const matchNumRooms =
-      filter.numRooms === "all" || room.numRooms === filter.numRooms;
+      filter.numRooms === "all" || room.noofRooms === filter.numRooms;
     const matchRoomType =
       filter.roomType === "all" ||
-      room.name.toLowerCase().includes(filter.roomType.toLowerCase());
+      room.roomName.toLowerCase().includes(filter.roomType.toLowerCase());
 
     const matchPrice =
       filter.priceRange === "all" ||
@@ -93,8 +92,8 @@ const Room = () => {
       </nav>
 
       <div className="rooms">
-        <h6>Available Rooms & Suites</h6>
-        {/* Display filtered rooms */}
+        <h2 className="room-title">Available Rooms & Suites</h2>
+        <div className="room-sum"><p className="description">Indulge in the perfect blend of elegance and comfort with our beautifully appointed rooms and luxurious suites. Whether you're seeking a cozy retreat for two or a spacious suite for the whole family, we have accommodations to suit every need. Each room is thoughtfully designed with plush bedding, modern amenities, and breathtaking views, ensuring your stay is as relaxing as it is memorable. Enjoy the serenity of a deluxe king room, the expansive comfort of a family suite, or the exclusive luxury of a premier suite.</p></div>
         <div className="room-cards">
           {loading ? (
             <p>Loading...</p>
@@ -105,6 +104,7 @@ const Room = () => {
               <div
                 className={`room-card ${room.booked ? "booked" : "available"}`}
                 key={index}
+                onClick={() => handleReserve(index)}
               >
                 <div className="img-div">
                   <img className="room-img" src={room.image} alt="room" />
@@ -128,15 +128,9 @@ const Room = () => {
                       <p className="text">{room.noofBeds}</p>
                     </div>
                   </div>
-                  <p>{room.descriptions}</p>
+                  {/* Limit description */}
+                  <p>{room.descriptions.split(".").slice(0, 1).join(".")}.</p>
                   <p className="price">Price: R{room.price}</p>
-                  <button
-                    onClick={() => handleReserve(index)}
-                    className="room-btn"
-                    disabled={room.booked}
-                  >
-                    {room.booked ? "Unavailable" : "Reserve"}
-                  </button>
                 </div>
               </div>
             ))

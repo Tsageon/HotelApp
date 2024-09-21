@@ -11,14 +11,13 @@ const Reserve = () => {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState("");
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [data, setData] = useState("");
   const options = ["1","2", "3","4","5","6","7","8","9","10"];
 
   const onOptionChangeHandler = (event) => {
     setData(event.target.value);
-    console.log("User Selected Value - ", event.target.value);
+    console.log("Selected Value - ", event.target.value);
   };
 
   if (!roomDetails) {
@@ -44,7 +43,7 @@ const Reserve = () => {
     return roomDetails.price;
   };
 
-  const handleConfirmReservation = () => {
+  const handleCheckout = () => {
     if (!startDate || !endDate) {
       alert("Select both start and end dates for your stay.");
       return;
@@ -53,44 +52,29 @@ const Reserve = () => {
       alert("Select the number of guests.");
       return;
     }
-    setIsConfirmed(true);
-  };
-
-  const handleCheckout = () => {
-    alert(
-      `Reservation confirmed for ${roomDetails.roomName} with ${paymentMethod}.`
-    );
     setIsConfirmed(false);
-    navigate("/room");
+    navigate("/checkout", {
+      state: {
+        roomDetails,   
+        startDate,     
+        endDate,     
+        guests: data,  
+      },
+    });
+    alert(`Reservation confirmed for ${roomDetails.roomName}.`);
   };
+  
 
   return (
+    <div>
     <div className="reserve-container">
       <div className="reserve-details">
+      <p className="room-name">{roomDetails.roomName}</p>
         <img
           className="reserve-room-img"
           src={roomDetails.image}
-          alt={roomDetails.roomName}
-        />
-        <div className="reserve-info">
-          <p className="room-name">{roomDetails.roomName}</p>
-
-          <div className="room-info-flex">
-            <p className="room-item">Capacity: {roomDetails.guests}</p>
-            <p className="room-item">
-              Number of Rooms: {roomDetails.noofRooms}
-            </p>
-            <p className="room-item">Number of Beds: {roomDetails.noofBeds}</p>
-          </div>
-
-          <p>{roomDetails.descriptions}</p>
-          <p className="room-price">
-            Price per night: <b>R{roomDetails.price}</b>
-          </p>
-          <p className="room-price">
-            Total Price: <b>{calculateTotalPrice()}</b>
-          </p>
-        </div>
+          alt={roomDetails.roomName}/>
+     
       </div>
 
       <div className="date-fix">
@@ -99,7 +83,7 @@ const Reserve = () => {
           <h5>Select Dates</h5>
           <div className="date-picker-container">
             <p>Check-in Date:</p>
-            <DatePicker
+            <DatePicker className="input1-containe"
               selected={startDate}
               onChange={(date) => setStartDate(date)}
               selectsStart
@@ -108,7 +92,7 @@ const Reserve = () => {
               placeholderText="Select check-in date"
             />
             <p>Check-out Date:</p>
-            <DatePicker
+            <DatePicker className="input1-containe"
               selected={endDate}
               onChange={(date) => setEndDate(date)}
               selectsEnd
@@ -117,10 +101,10 @@ const Reserve = () => {
               minDate={startDate}
               placeholderText="Select check-out date"
             />
-            <p>Number of guests</p>
-            <select className="select" onChange={onOptionChangeHandler}>
+            <p>Number of guests:</p>
+            <select className="select1" onChange={onOptionChangeHandler}>
               <option value="" disabled selected>
-                Amount of guests
+                Select Amount of guests
               </option>
               {options.map((option, index) => (
                 <option key={index} value={option}>
@@ -128,17 +112,20 @@ const Reserve = () => {
                 </option>
               ))}
             </select>
+            <p className="room-price">
+            Total Price: R{calculateTotalPrice()}
+          </p>
           </div>
         </div>
         <div className="reserve-actions">
-          <button className="checkout-btn" onClick={handleConfirmReservation}>
-            Checkout
-          </button>
-          <button className="cancel-btn" onClick={() => navigate("/room")}>
-            Cancel
-          </button>
-        </div>
+          <button className="checkout-btn" onClick={handleCheckout}>
+            Reserve
+          </button>    
+        </div>  
       </div>
+    </div>
+    <div className="room-description">
+    <b><p className="room-p">{roomDetails.descriptions}</p></b></div>
     </div>
   );
 };
