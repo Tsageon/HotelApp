@@ -11,10 +11,8 @@ const Home = () => {
     <>
       <div className="home">
         <nav className="navbar">
-          <div className="logo-container">
-            <img className="home_logo" src={Img} alt="Logo" />
-          </div>
           <ul className="nav-links">
+          <img className="home_logo" src={Img} alt="Logo" />
             <li><Link to="/home">Home</Link></li>
             <li><Link to="/room">Rooms</Link></li>
             <li><Link to="/amenities">Amenities</Link></li>

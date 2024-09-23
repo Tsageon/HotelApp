@@ -116,6 +116,7 @@ const Reserve = () => {
             Total Price: R{calculateTotalPrice()}
           </p>
           </div>
+         
         </div>
         <div className="reserve-actions">
           <button className="checkout-btn" onClick={handleCheckout}>

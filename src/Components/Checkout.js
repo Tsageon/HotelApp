@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Payment from './Payment'
 import "./Checkout.css";
 
 const Checkout = () => {
@@ -13,14 +14,14 @@ const Checkout = () => {
     startDate: initialStartDate = new Date(),
     endDate: initialEndDate = new Date(),
     guests: initialGuests = 1,
+    totalprice="0"
+    
   } = location.state || {};
 
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
   const [guests, setGuests] = useState(initialGuests);
-  
  
-
   const calculateTotalPrice = () => {
     if (startDate && endDate) {
       const timeDiff = Math.abs(endDate - startDate);
@@ -37,18 +38,21 @@ const Checkout = () => {
 
   const handleConfirm = () => {
     if (!startDate || !endDate) {
-      alert("Please select check-in and check-out dates.");
-      return;
+        alert("Please select check-in and check-out dates.");
+        return;
     }
 
+    const calculatedPrice = calculateTotalPrice(); 
     alert(
-      `Reservation confirmed for ${roomDetails.roomName} from ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}.`
+        `Reservation confirmed for ${roomDetails.roomName} from ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}.`
     );
-    navigate("/home");
-  };
+    navigate("/payment", {
+        state: { roomDetails, startDate, endDate, guests, totalprice: calculatedPrice }
+    });
+};
+
 
   
-
   return (
     <div className="checkout-container">
       <h3>Confirm Reservation</h3>
@@ -93,8 +97,10 @@ const Checkout = () => {
           max="10"
         />
       </div>
-
-    
+      <button className="checkout-btn" onClick={handleConfirm}>
+            Reserve
+          </button>    
+          
     </div>
   );
 };

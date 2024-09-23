@@ -1,0 +1,90 @@
+.admin-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #218838;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  table th {
+    background-color: #f4f4f4;
+  }
+  
+  table td {
+    text-align: center;
+  }
+  
+  table button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  table button:first-child {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  table button:first-child:hover {
+    background-color: #0056b3;
+  }
+  
+  table button:last-child {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  table button:last-child:hover {
+    background-color: #c82333;
+  }  
