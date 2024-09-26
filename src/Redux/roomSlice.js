@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { db } from "../Config/Fire"; 
 
 const initialState = {
-  rooms: [], 
+  rooms: [],
   loading: false,
   error: null,
 };
-
 
 const roomSlice = createSlice({
   name: "rooms",
@@ -23,24 +24,17 @@ const roomSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
-    addRoom(state, action) {
-      state.rooms.push({
-        id: state.rooms.length + 1,
-        ...action.payload,
-      });
+    addRoomSuccess(state, action) {
+      state.rooms.push(action.payload);
     },
-    deleteRoom(state, action) {
+    deleteRoomSuccess(state, action) {
       state.rooms = state.rooms.filter((room) => room.id !== action.payload);
     },
-    updateRoom(state, action) {
+    updateRoomSuccess(state, action) {
       const { id, roomName, price } = action.payload;
       const roomIndex = state.rooms.findIndex((room) => room.id === id);
       if (roomIndex !== -1) {
-        state.rooms[roomIndex] = {
-          ...state.rooms[roomIndex],
-          roomName,
-          price,
-        };
+        state.rooms[roomIndex] = { id, roomName, price };
       }
     },
   },
@@ -50,22 +44,56 @@ export const {
   fetchRoomsStart,
   fetchRoomsSuccess,
   fetchRoomsFailure,
-  addRoom,
-  deleteRoom,
-  updateRoom,
+  addRoomSuccess,
+  deleteRoomSuccess,
+  updateRoomSuccess,
 } = roomSlice.actions;
 
 export const selectRooms = (state) => state.rooms.rooms;
 
+
 export const fetchRooms = () => async (dispatch) => {
   dispatch(fetchRoomsStart());
   try {
-    const response = await new Promise((resolve) =>
-      setTimeout(() => resolve([{ id: 1, roomName: "Deluxe Suite", price: 5000 }]), 1000)
-    );
-    dispatch(fetchRoomsSuccess(response));
+    const roomsCollection = collection(db, "Rooms");
+    const roomSnapshot = await getDocs(roomsCollection);
+    const roomList = roomSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    dispatch(fetchRoomsSuccess(roomList));
   } catch (error) {
     dispatch(fetchRoomsFailure("Failed to fetch rooms"));
+  }
+};
+
+export const addRoom = (roomData) => async (dispatch) => {
+  try {
+    const roomsCollection = collection(db, "Rooms");
+    const docRef = await addDoc(roomsCollection, roomData);
+    dispatch(addRoomSuccess({ id: docRef.id, ...roomData }));
+  } catch (error) {
+    dispatch(fetchRoomsFailure("Failed to add room"));
+  }
+};
+
+
+export const deleteRoom = (id) => async (dispatch) => {
+  try {
+    const roomDoc = doc(db, "Rooms", id);
+    await deleteDoc(roomDoc);
+    dispatch(deleteRoomSuccess(id));
+  } catch (error) {
+    dispatch(fetchRoomsFailure("Failed to delete room"));
+  }
+};
+
+
+export const updateRoom = (updatedRoom) => async (dispatch) => {
+  try {
+    const { id, roomName, price } = updatedRoom;
+    const roomDoc = doc(db, "Rooms", id);
+    await updateDoc(roomDoc, { roomName, price });
+    dispatch(updateRoomSuccess(updatedRoom));
+  } catch (error) {
+    dispatch(fetchRoomsFailure("Failed to update room"));
   }
 };
 

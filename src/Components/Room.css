@@ -17,6 +17,7 @@
   list-style: none; 
   display: flex; 
   align-items: center;
+  justify-content: center;
   margin: 0; 
   padding: 0; 
 }
@@ -130,12 +131,19 @@ select.options::after {
 }
 .room-sum{
   display: flex;
-  justify-content: center;
-  
- 
+  justify-content: center; 
 }
+
+.room-name {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  font-size: 1.2em; 
+}
+
 .room-card {
-  width: 250px;
+  position: relative;
+  width: 300px;
   height: auto;
   border-radius: 10px;
   text-align: left;
@@ -169,7 +177,7 @@ select.options::after {
 
 .icon-group {
   display: inline-flex;
-  margin-left: 1rem;
+  margin-left: 3.1rem;
   gap: 1.4rem;
   text-align: center;
   align-items: center;
@@ -178,6 +186,19 @@ select.options::after {
 
 .icon {
   gap: 5px;
+}
+.favorite-icon,
+.share-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  color: #ff4081; 
+  transition: color 0.3s; 
+}
+
+
+.favorite-icon:hover,
+.share-icon:hover {
+  color: #e0b973; 
 }
 
 .text {

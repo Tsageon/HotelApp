@@ -1,38 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchData } from "../Redux/dbSlice";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { IoIosBed } from "react-icons/io";
 import { MdBedroomParent } from "react-icons/md";
-import { BsFillPeopleFill } from "react-icons/bs";
+import {
+  BsFillPeopleFill,
+  BsHeart,
+  BsHeartFill,
+  BsShare,
+} from "react-icons/bs";
 import Img from "./mt.png";
 import Contact from "./Contact";
 import "./Room.css";
 
 const Room = () => {
-  const [filter, setFilter] = useState({
-    capacity: "all",
-    numRooms: "all",
-    priceRange: "all",
-    numBeds: "all",
-    roomType: "all",
-  });
-
   const { data, loading, error } = useSelector((state) => state.db);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [favorites, setFavorites] = useState(new Set());
 
   useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
-
-  console.log("Rooms Data:", data);
-  console.log("Loading:", loading);
-  console.log("Error:", error);
-
-  const navigate = useNavigate();
-
-  const rooms = Array.isArray(data) && data.length > 0 ? data : [];
 
   const handleReserve = (index) => {
     const selectedRoom = rooms[index];
@@ -49,56 +40,66 @@ const Room = () => {
     }
   };
 
-  const filteredRooms = rooms.filter((room) => {
-    const matchNumBeds =
-      filter.numBeds === "all" || room.numBeds === filter.numBeds;
-    const matchCapacity =
-      filter.capacity === "all" || room.guests === filter.capacity;
+  const handleFavorite = (roomId) => {
+    setFavorites((prevFavorites) => {
+      const newFavorites = new Set(prevFavorites);
+      if (newFavorites.has(roomId)) {
+        newFavorites.delete(roomId);
+      } else {
+        newFavorites.add(roomId);
+      }
+      return newFavorites;
+    });
+  };
 
-    const matchNumRooms =
-      filter.numRooms === "all" || room.noofRooms === filter.numRooms;
-    const matchRoomType =
-      filter.roomType === "all" ||
-      room.roomName.toLowerCase().includes(filter.roomType.toLowerCase());
+  const handleShare = (room) => {
+    alert(`Sharing room: ${room.roomName}`);
+  };
 
-    const matchPrice =
-      filter.priceRange === "all" ||
-      (filter.priceRange === "low" && room.price < 2000) ||
-      (filter.priceRange === "mid" && room.price >= 3000 && room.price <= 5000) ||
-      (filter.priceRange === "high" && room.price > 5000);
-
-    return (
-      matchRoomType &&
-      matchNumBeds &&
-      matchCapacity &&
-      matchNumRooms &&
-      matchPrice
-    );
-  });
+  const rooms = Array.isArray(data) && data.length > 0 ? data : [];
 
   return (
     <div>
       <nav className="navbar">
         <ul className="nav-links">
-        <img className="home_logo" src={Img} alt="Logo" />
-          <li><Link to="/home">Home</Link></li>
-          <li><Link to="/room">Rooms</Link></li>
-          <li><Link to="/amenities">Amenities</Link></li>
-          <li><Link to="/contact">Contact Us</Link></li>
-          <li><Link to="/profile">Profile</Link></li>
+          <img className="home_logo" src={Img} alt="Logo" />
+          <li>
+            <Link to="/home">Home</Link>
+          </li>
+          <li>
+            <Link to="/room">Rooms</Link>
+          </li>
+          <li>
+            <Link to="/amenities">Amenities</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact Us</Link>
+          </li>
+          <li>
+            <Link to="/profile">Profile</Link>
+          </li>
         </ul>
       </nav>
 
       <div className="rooms">
         <h2 className="room-title">Available Rooms & Suites</h2>
-        <div className="room-sum"><p className="description">Indulge in the perfect blend of elegance and comfort with our beautifully appointed rooms and luxurious suites. Whether you're seeking a cozy retreat for two or a spacious suite for the whole family, we have accommodations to suit every need. Each room is thoughtfully designed with plush bedding, modern amenities, and breathtaking views, ensuring your stay is as relaxing as it is memorable. Enjoy the serenity of a deluxe king room, the expansive comfort of a family suite, or the exclusive luxury of a premier suite.</p></div>
+        <div className="room-sum">
+          <p className="description">
+            Indulge in the perfect blend of elegance and comfort with our
+            beautifully appointed rooms and luxurious suites. Whether you're
+            seeking a cozy retreat for two or a spacious suite for the whole
+            family, we have accommodations to suit every need. Each room is
+            thoughtfully designed with plush bedding, modern amenities, and
+            breathtaking views.
+          </p>
+        </div>
         <div className="room-cards">
           {loading ? (
             <p>Loading...</p>
           ) : error ? (
             <p>Error: {error}</p>
-          ) : filteredRooms.length > 0 ? (
-            filteredRooms.map((room, index) => (
+          ) : rooms.length > 0 ? (
+            rooms.map((room, index) => (
               <div
                 className={`room-card ${room.booked ? "booked" : "available"}`}
                 key={index}
@@ -109,7 +110,30 @@ const Room = () => {
                 </div>
                 <div className="room-info">
                   <div className="heading">
-                    <h6>{room.roomName}</h6>
+                    <h6 className="room-name">
+                      {room.roomName}
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFavorite(room.id);
+                        }}
+                      >
+                        {favorites.has(room.id) ? (
+                          <BsHeartFill className="favorite-icon" />
+                        ) : (
+                          <BsHeart className="favorite-icon" />
+                        )}
+                      </span>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleShare(room);
+                        }}
+                        className="share-icon"
+                      >
+                        <BsShare />
+                      </span>
+                    </h6>
                   </div>
                   {room.booked && <span className="booked-label">Booked</span>}
                   <div className="icon-group">
@@ -126,7 +150,6 @@ const Room = () => {
                       <p className="text">{room.noofBeds}</p>
                     </div>
                   </div>
-                  {/* Limit description */}
                   <p>{room.descriptions.split(".").slice(0, 1).join(".")}.</p>
                   <p className="price">Price: R{room.price}</p>
                 </div>

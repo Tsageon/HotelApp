@@ -1,0 +1,31 @@
+.share-favorite-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+.icon-container {
+    display: flex;
+    gap: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .fa-heart {
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  
+  .fa-heart:hover {
+    transform: scale(1.2);
+  }
+  
+  .fa-share-alt:hover {
+    transform: scale(1.2);
+    color: #d8a25e;
+  }
+  
+.share-favorite-container p {
+    font-size: 16px;
+    color: black;
+    margin: 0;
+  }

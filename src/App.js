@@ -7,13 +7,15 @@ import Forgotpassword from "./Components/Forgotpassword";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
+import Profile from "./Components/Profile"
 import Room from "./Components/Room";
 import Amenities from "./Components/Amenities";
 import Contact from "./Components/Contact";
 import Admin from "./Components/Admin";
 import Reserve from "./Components/Reserve";
-import Checkout from "./Components/Checkout";
-import Payment from "./Components/Payment";
+import CheckoutPayment from "./Components/Checkout";
+import ShareAndFavorite from "./Components/Share";
+
 
 
 function Message({ content }) {
@@ -22,13 +24,11 @@ function Message({ content }) {
 
 function App() {
   const initialOptions = {
-    "client-id":
-      "ATwp-NmB8ehhPMPHigRkdZ85dAmLIM51g-_YY0rsRUeRSiaeYVthITPu3fQAxgVbPlgTNdjymAwhkgcT", 
+    "client-id":"ATwp-NmB8ehhPMPHigRkdZ85dAmLIM51g-_YY0rsRUeRSiaeYVthITPu3fQAxgVbPlgTNdjymAwhkgcT", 
     intent: "capture",
     currency: "USD",
   };
   const user = useSelector((state) => state.auth.user);
-  const isAdmin = user?.email === "KB@gmail.com" && user?.password === "Hoteladministrator";
 
   const [message, setMessage] = useState("");
 
@@ -43,14 +43,16 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/room" element={<Room />} />
             <Route path="/amenities" element={<Amenities />} />
+            <Route path="/profile" element={<Profile />}/>
             <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={isAdmin ? <Admin /> : <Navigate to="/home" />}/>
+            <Route path="/admin" element={<Admin />}/>
             <Route path="/reserve" element={<Reserve />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/payment" element={<Payment />} />
+            <Route path="/checkout" element={<CheckoutPayment />} />
+            <Route path="/share" element={<hareAndFavorite/>} />
+            
           </Routes>
 
-          {/* PayPal Buttons for Payment */}
+          {/* PayPal ButtonsPayment */}
         
           <Message content={message} />
         </div>
