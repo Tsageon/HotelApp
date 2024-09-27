@@ -21,7 +21,7 @@ const Register = () => {
   const dispatch = useDispatch();
 
   const handleSignUp = () => {
-    dispatch(signUp({ email, password }));
+    dispatch(signUp({ email, password,name }));
   };
   useEffect(() => {
     if (user) {

@@ -6,7 +6,8 @@ import {
   deleteRoom,
   updateRoom,
   fetchRooms,
-  selectRooms,} from "../Redux/roomSlice";
+  selectRooms,
+} from "../Redux/dbSlice";
 import { db } from "../Config/Fire";
 import "./Admin.css";
 
@@ -37,24 +38,33 @@ const Admin = () => {
     dispatch(fetchRooms());
   }, [dispatch]);
 
-  const handleSubmit = (e) => {
+  const uploadImage = async (file) => {
+    // Your logic for uploading the image and returning the URL.
+    // Replace this with your actual upload function to Firebase or another service.
+    // For demonstration, this just returns a placeholder URL.
+    return "https://via.placeholder.com/150"; // Replace with actual URL after uploading.
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!roomName || !price || !image) {
       alert("All fields are required!");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("roomName", roomName);
-    formData.append("guests", guests);
-    formData.append("duration", duration);
-    formData.append("price", price);
-    formData.append("image", image);
+    const imageUrl = await uploadImage(image); // Upload image first
+    const roomData = {
+      roomName,
+      guests,
+      duration,
+      price,
+      imageUrl, // Store the image URL instead of the image file
+    };
 
     if (editingId) {
-      dispatch(updateRoom({ id: editingId, formData }));
+      dispatch(updateRoom({ id: editingId, ...roomData }));
     } else {
-      dispatch(addRoom(formData));
+      dispatch(addRoom(roomData));
     }
 
     clearForm();
@@ -82,6 +92,8 @@ const Admin = () => {
     setGuests(room.guests);
     setPrice(room.price);
     setDuration(room.duration);
+    setImage(null); // Reset image to avoid confusion during edit
+    setPreviewUrl(null); // Reset preview URL
   };
 
   const clearForm = () => {
@@ -91,6 +103,7 @@ const Admin = () => {
     setDuration("");
     setImage(null);
     setEditingId(null);
+    setPreviewUrl(null); // Reset preview URL
   };
 
   return (
@@ -104,14 +117,16 @@ const Admin = () => {
             type="text"
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
+            required
           />
         </div>
         <div>
           <label>Guests:</label>
           <input
-            type="text"
+            type="number"
             value={guests}
             onChange={(e) => setGuests(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -120,6 +135,7 @@ const Admin = () => {
             type="text"
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -128,10 +144,11 @@ const Admin = () => {
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
           />
         </div>
         <div>
-        <label>Room Image:</label>
+          <label>Room Image:</label>
           <input type="file" accept="image/*" onChange={handleImageChange} />
           {previewUrl && <img src={previewUrl} alt="Preview" width="100" />}
         </div>
@@ -171,6 +188,7 @@ const Admin = () => {
           )}
         </tbody>
       </table>
+
       <br />
       <div>
         <h2>All Bookings</h2>
