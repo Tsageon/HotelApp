@@ -1,43 +1,50 @@
-import React, { useState, useEffect } from "react"; 
-import { useDispatch, useSelector } from "react-redux"; 
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { collection, getDocs } from "firebase/firestore";
-import { addRoom, deleteRoom, updateRoom, fetchRooms, selectRooms } from "../Redux/roomSlice"; 
-import { db } from '../Config/Fire';
-import './Admin.css';
+import {
+  addRoom,
+  deleteRoom,
+  updateRoom,
+  fetchRooms,
+  selectRooms,} from "../Redux/roomSlice";
+import { db } from "../Config/Fire";
+import "./Admin.css";
 
 const Admin = () => {
   const [bookings, setBookings] = useState([]);
   const dispatch = useDispatch();
-  const rooms = useSelector(selectRooms); 
+  const rooms = useSelector(selectRooms);
   const [roomName, setRoomName] = useState("");
   const [guests, setGuests] = useState("");
   const [price, setPrice] = useState("");
   const [duration, setDuration] = useState("");
   const [image, setImage] = useState(null);
   const [editingId, setEditingId] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
-      const bookingsCollection = collection(db, 'bookings');
+      const bookingsCollection = collection(db, "bookings");
       const bookingsSnapshot = await getDocs(bookingsCollection);
-      const bookingsData = bookingsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const bookingsData = bookingsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setBookings(bookingsData);
     };
-    
+
     fetchBookings();
     dispatch(fetchRooms());
   }, [dispatch]);
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!roomName || !price || !image) { 
+    if (!roomName || !price || !image) {
       alert("All fields are required!");
       return;
     }
 
-
-    const formData = new FormData(); 
+    const formData = new FormData();
     formData.append("roomName", roomName);
     formData.append("guests", guests);
     formData.append("duration", duration);
@@ -59,6 +66,16 @@ const Admin = () => {
     }
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleEdit = (room) => {
     setEditingId(room.id);
     setRoomName(room.roomName);
@@ -72,7 +89,7 @@ const Admin = () => {
     setGuests("");
     setPrice("");
     setDuration("");
-    setImage(null); 
+    setImage(null);
     setEditingId(null);
   };
 
@@ -83,26 +100,47 @@ const Admin = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Room Name:</label>
-          <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+          <input
+            type="text"
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
+          />
         </div>
         <div>
           <label>Guests:</label>
-          <input type="text" value={guests} onChange={(e) => setGuests(e.target.value)} />
+          <input
+            type="text"
+            value={guests}
+            onChange={(e) => setGuests(e.target.value)}
+          />
         </div>
         <div>
           <label>Duration:</label>
-          <input type="text" value={duration} onChange={(e) => setDuration(e.target.value)} />
+          <input
+            type="text"
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+          />
         </div>
         <div>
           <label>Price:</label>
-          <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
         </div>
         <div>
-          <label>Room Image:</label>
-          <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
+        <label>Room Image:</label>
+          <input type="file" accept="image/*" onChange={handleImageChange} />
+          {previewUrl && <img src={previewUrl} alt="Preview" width="100" />}
         </div>
         <button type="submit">{editingId ? "Update Room" : "Add Room"}</button>
-        {editingId && <button type="button" onClick={clearForm}>Cancel Edit</button>}
+        {editingId && (
+          <button type="button" onClick={clearForm}>
+            Cancel Edit
+          </button>
+        )}
       </form>
 
       <h3>Available Rooms</h3>
@@ -133,36 +171,36 @@ const Admin = () => {
           )}
         </tbody>
       </table>
-      <br/>
+      <br />
       <div>
-      <h2>All Bookings</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>User Email</th>
-            <th>Room Name</th>
-            <th>Check-in Date</th>
-            <th>Check-out Date</th>
-            <th>Guests</th>
-            <th>Total Price</th>
-            <th>Payment Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map(booking => (
-            <tr key={booking.id}>
-              <td>{booking.userEmail}</td>
-              <td>{booking.roomName}</td>
-              <td>{new Date(booking.startDate).toLocaleDateString()}</td>
-              <td>{new Date(booking.endDate).toLocaleDateString()}</td>
-              <td>{booking.guests}</td>
-              <td>R{booking.price}</td>
-              <td>{booking.paymentStatus}</td>
+        <h2>All Bookings</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>User Email</th>
+              <th>Room Name</th>
+              <th>Check-in Date</th>
+              <th>Check-out Date</th>
+              <th>Guests</th>
+              <th>Total Price</th>
+              <th>Payment Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {bookings.map((booking) => (
+              <tr key={booking.id}>
+                <td>{booking.userEmail}</td>
+                <td>{booking.roomName}</td>
+                <td>{new Date(booking.startDate).toLocaleDateString()}</td>
+                <td>{new Date(booking.endDate).toLocaleDateString()}</td>
+                <td>{booking.guests}</td>
+                <td>R{booking.price}</td>
+                <td>{booking.paymentStatus}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

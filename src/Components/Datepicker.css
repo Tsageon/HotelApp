@@ -106,7 +106,7 @@
     color: black;
   }
   
-  /* Highlight current date */
+
   .react-datepicker__day--today {
     font-weight: bold;
     border-bottom: 2px solid lightskyblue;

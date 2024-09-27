@@ -51,4 +51,4 @@ const Amenities = () => {
   );
 };
 
-export default Amenities;
+export default Amenities; 

@@ -53,9 +53,23 @@ const Room = () => {
   };
 
   const handleShare = (room) => {
-    alert(`Sharing room: ${room.roomName}`);
+    if (navigator.share) {
+      navigator.share({
+        title: room.roomName,
+        text: `Check this out:${room.roomName}`,
+        url: window.location.href, 
+      })
+        .then(() => {
+          console.log('Room shared');
+        })
+        .catch((error) => {
+          console.error('Error sharing room:', error);
+        });
+    } else {
+      alert('Sharing is not supported on this device');
+    }
   };
-
+  
   const rooms = Array.isArray(data) && data.length > 0 ? data : [];
 
   return (
@@ -129,9 +143,9 @@ const Room = () => {
                           e.stopPropagation();
                           handleShare(room);
                         }}
-                        className="share-icon"
+                      
                       >
-                        <BsShare />
+                        <BsShare className="share-icon" />
                       </span>
                     </h6>
                   </div>
