@@ -13,6 +13,7 @@ import "./Admin.css";
 
 const Admin = () => {
   const [bookings, setBookings] = useState([]);
+  const [activePage, setActivePage] = useState("rooms"); // New state to track active page
   const dispatch = useDispatch();
   const rooms = useSelector(selectRooms);
   const [roomName, setRoomName] = useState("");
@@ -39,10 +40,7 @@ const Admin = () => {
   }, [dispatch]);
 
   const uploadImage = async (file) => {
-    // Your logic for uploading the image and returning the URL.
-    // Replace this with your actual upload function to Firebase or another service.
-    // For demonstration, this just returns a placeholder URL.
-    return "https://via.placeholder.com/150"; // Replace with actual URL after uploading.
+    return "https://via.placeholder.com/150"; 
   };
 
   const handleSubmit = async (e) => {
@@ -52,13 +50,13 @@ const Admin = () => {
       return;
     }
 
-    const imageUrl = await uploadImage(image); // Upload image first
+    const imageUrl = await uploadImage(image); 
     const roomData = {
       roomName,
       guests,
       duration,
       price,
-      imageUrl, // Store the image URL instead of the image file
+      imageUrl, 
     };
 
     if (editingId) {
@@ -92,8 +90,8 @@ const Admin = () => {
     setGuests(room.guests);
     setPrice(room.price);
     setDuration(room.duration);
-    setImage(null); // Reset image to avoid confusion during edit
-    setPreviewUrl(null); // Reset preview URL
+    setImage(null); 
+    setPreviewUrl(null);
   };
 
   const clearForm = () => {
@@ -103,122 +101,142 @@ const Admin = () => {
     setDuration("");
     setImage(null);
     setEditingId(null);
-    setPreviewUrl(null); // Reset preview URL
+    setPreviewUrl(null); 
   };
 
   return (
     <div className="admin-container">
-      <h2>Admin Panel - Manage Rooms</h2>
+      <h2>Admin Panel</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Room Name:</label>
-          <input
-            type="text"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Guests:</label>
-          <input
-            type="number"
-            value={guests}
-            onChange={(e) => setGuests(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Duration:</label>
-          <input
-            type="text"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Price:</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Room Image:</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          {previewUrl && <img src={previewUrl} alt="Preview" width="100" />}
-        </div>
-        <button type="submit">{editingId ? "Update Room" : "Add Room"}</button>
-        {editingId && (
-          <button type="button" onClick={clearForm}>
-            Cancel Edit
-          </button>
-        )}
-      </form>
-
-      <h3>Available Rooms</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Room</th>
-            <th>Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rooms && rooms.length > 0 ? (
-            rooms.map((room) => (
-              <tr key={room.id}>
-                <td>{room.roomName}</td>
-                <td>{room.price}</td>
-                <td>
-                  <button onClick={() => handleEdit(room)}>Edit</button>
-                  <button onClick={() => handleDelete(room.id)}>Delete</button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="3">No rooms available</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      <br />
-      <div>
-        <h2>All Bookings</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>User Email</th>
-              <th>Room Name</th>
-              <th>Check-in Date</th>
-              <th>Check-out Date</th>
-              <th>Guests</th>
-              <th>Total Price</th>
-              <th>Payment Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking.id}>
-                <td>{booking.userEmail}</td>
-                <td>{booking.roomName}</td>
-                <td>{new Date(booking.startDate).toLocaleDateString()}</td>
-                <td>{new Date(booking.endDate).toLocaleDateString()}</td>
-                <td>{booking.guests}</td>
-                <td>R{booking.price}</td>
-                <td>{booking.paymentStatus}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/*toggle between Rooms and Bookings */}
+      <div className="admin-nav">
+        <button
+          className={activePage === "rooms" ? "active" : ""}
+          onClick={() => setActivePage("rooms")}
+        >
+          Manage Rooms
+        </button>
+        <button
+          className={activePage === "bookings" ? "active" : ""}
+          onClick={() => setActivePage("bookings")}
+        >
+          View Bookings
+        </button>
       </div>
+
+      {/*renders content based on the active page */}
+      {activePage === "rooms" ? (
+        <>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label>Room Name:</label>
+              <input
+                type="text"
+                value={roomName}
+                onChange={(e) => setRoomName(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Guests:</label>
+              <input
+                type="number"
+                value={guests}
+                onChange={(e) => setGuests(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Duration:</label>
+              <input
+                type="text"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Price:</label>
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Room Image:</label>
+              <input type="file" accept="image/*" onChange={handleImageChange} />
+              {previewUrl && <img src={previewUrl} alt="Preview" width="100" />}
+            </div>
+            <button type="submit">{editingId ? "Update Room" : "Add Room"}</button>
+            {editingId && (
+              <button type="button" onClick={clearForm}>
+                Cancel Edit
+              </button>
+            )}
+          </form>
+
+          <h3>Available Rooms</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Room</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rooms && rooms.length > 0 ? (
+                rooms.map((room) => (
+                  <tr key={room.id}>
+                    <td>{room.roomName}</td>
+                    <td>{room.price}</td>
+                    <td>
+                      <button onClick={() => handleEdit(room)}>Edit</button>
+                      <button onClick={() => handleDelete(room.id)}>Delete</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3">No rooms available</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </>
+      ) : (
+        <>
+          <h2>All Bookings</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>User Email</th>
+                <th>Room Name</th>
+                <th>Check-in Date</th>
+                <th>Check-out Date</th>
+                <th>Guests</th>
+                <th>Total Price</th>
+                <th>Payment Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bookings.map((booking) => (
+                <tr key={booking.id}>
+                  <td>{booking.userEmail}</td>
+                  <td>{booking.roomName}</td>
+                  <td>{new Date(booking.startDate).toLocaleDateString()}</td>
+                  <td>{new Date(booking.endDate).toLocaleDateString()}</td>
+                  <td>{booking.guests}</td>
+                  <td>R{booking.price}</td>
+                  <td>{booking.paymentStatus}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 };

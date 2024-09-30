@@ -1,73 +1,91 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, setUser } from '../Redux/dbSlice'; 
-import { db, auth } from '../Config/Fire'; 
-import { collection, addDoc, getDocs } from 'firebase/firestore'; 
-import { onAuthStateChanged } from 'firebase/auth'; 
+import { selectUser, setUser } from '../Redux/dbSlice';
+import { db, auth } from '../Config/Fire';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 import './Profile.css';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        dispatch(setUser({ uid: currentUser.uid, email: currentUser.email, name: currentUser.displayName }));
-      }
-    });
+  const hasUserData = React.useRef(false);
 
-    return () => unsubscribe(); 
-  }, [dispatch]);
+  const userExists = async (email) => {
+    const usersCollection = collection(db, "Users");
+    const usersQuery = query(usersCollection, where("email", "==", email));
+    const querySnapshot = await getDocs(usersQuery);
+    return !querySnapshot.empty;
+  };
 
-  const hasUserData = React.useRef(false); 
+  const addUserData = useCallback(async () => {
+    if (!user || hasUserData.current) return;
 
-  const addUserData = async () => {
-    if (!user || hasUserData.current) return; 
+    const userExistsInDb = await userExists(user.email);
+    if (userExistsInDb) {
+      console.log("User already exists.");
+      hasUserData.current = true;
+      return;
+    }
 
     try {
       const userData = {
-        name: user.name || 'KIngRandy',  
+        name: user.name || 'KingRandy',
         email: user.email,
       };
-
-      await addDoc(collection(db, 'Users'), userData);
+      await addDoc(collection(db, "Users"), userData);
       console.log('User added successfully');
-      hasUserData.current = true; 
+      hasUserData.current = true;
     } catch (error) {
       console.error('Error adding user data: ', error);
     }
-  };
+  }, [user]); 
 
-  const fetchUserData = async () => {
-    if (!user) return; 
+  const fetchUserData = useCallback(async () => {
+    if (!user) return;
+
     try {
-      const usersSnapshot = await getDocs(collection(db, 'Users')); 
-      if (!usersSnapshot.empty) {
-        usersSnapshot.forEach((doc) => {
-          const userData = doc.data();
-          if (userData.email === user.email) {
-            dispatch(setUser({ name: userData.name, email: userData.email }));
-          }
-        });
+      const usersQuery = query(
+        collection(db, 'Users'),
+        where('email', '==', user.email)
+      );
+      const querySnapshot = await getDocs(usersQuery);
+
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
+        dispatch(setUser({ name: userData.name, email: userData.email }));
       } else {
-        console.log('No users found');
+        console.log('No user data found');
       }
     } catch (error) {
       console.error('Error fetching user data: ', error);
     }
-  };
+  }, [user, dispatch]); // Wrap the function in useCallback and add 'user' and 'dispatch' as dependencies
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        dispatch(setUser({
+          uid: currentUser.uid,
+          email: currentUser.email,
+          name: currentUser.displayName
+        }));
+      }
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
 
   useEffect(() => {
     const handleUserData = async () => {
-      await addUserData();  
+      await addUserData();
       await fetchUserData();
     };
 
     if (user && user.email) {
-      handleUserData();  
+      handleUserData();
     }
-  }, [dispatch, user]);
+  }, [user, addUserData, fetchUserData]); 
 
   if (!user || !user.name || !user.email) {
     return <p>Loading user data...</p>;

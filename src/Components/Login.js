@@ -59,18 +59,10 @@ const Login = () => {
             placeholder="Enter Password"
             className="login__input"
             minLength="6"
-            required
-          />
-          <p className="login__forgot-txt">
-            <b>
-              <i>
-                <Link to="/forgotpassword">Forgot Password?</Link>
-              </i>
-            </b>
-          </p>
-          <button type="submit" className="login__btn" onClick={handleLogin}>
-            Login
-          </button>
+            required/>
+          <p>    
+           <b><Link className="login__forgot-txt" to="/forgotpassword">Forgot Password?</Link></b></p>
+          <button type="submit" className="login__btn" onClick={handleLogin}> Login </button>
           {loading && <h1>Loading...</h1>}
           {error && <p>Error: {error}</p>}
           <p>

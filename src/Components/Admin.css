@@ -6,6 +6,28 @@
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   }
+
+  .admin-nav {
+    display: flex;
+    flex-wrap:wrap ;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .admin-nav button {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border: none;
+    background-color: grey;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-nav button.active {
+    background-color: #e0b973;
+    color: white;
+  }
   
   h2 {
     text-align: center;
@@ -15,9 +37,11 @@
   
   form {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 30px;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
   }
   
   label {
@@ -25,17 +49,21 @@
   }
   
   input {
-    padding: 10px;
+    padding: 3px;
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 16px;
   }
   
   button {
-    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10rem;
+    padding: 10px 10px;
     border: none;
     border-radius: 5px;
-    background-color: #28a745;
+    background-color:#0056b3;
     color: white;
     cursor: pointer;
     font-size: 16px;

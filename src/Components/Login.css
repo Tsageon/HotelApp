@@ -46,9 +46,9 @@
   
   .login__forgot-txt {
     position: relative;
-    font-size: 14px;
+    font-size: 0.8rem;
     margin-bottom: 20px;
-    left: 180px; 
+    left: 8rem; 
   }
  
   .login__btn {

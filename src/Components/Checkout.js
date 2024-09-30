@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useDispatch,useSelector } from "react-redux";
@@ -22,7 +22,6 @@ const CheckoutPayment = () => {
     startDate: initialStartDate = new Date(),
     endDate: initialEndDate = new Date(),
     guests: initialGuests = 1,
-    userEmail,
   } = location.state || {};
 
   const [startDate, setStartDate] = useState(initialStartDate);
@@ -30,8 +29,8 @@ const CheckoutPayment = () => {
   const [guests, setGuests] = useState(initialGuests);
   const [totalPrice, setTotalPrice] = useState(0);
   const [reservationConfirmed, setReservationConfirmed] = useState(false);
-
-  const calculateTotalPrice = () => {
+  
+  const calculateTotalPrice = useCallback(() => {
     if (startDate && endDate) {
       const timeDiff = Math.abs(endDate - startDate);
       const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
@@ -42,11 +41,11 @@ const CheckoutPayment = () => {
       return daysDiff * roomDetails.price;
     }
     return roomDetails.price;
-  };
-
+  }, [startDate, endDate, roomDetails.price]);
+  
   useEffect(() => {
     setTotalPrice(calculateTotalPrice());
-  }, [startDate, endDate]);
+  }, [startDate, endDate, calculateTotalPrice]);
 
   const addBookingToFirestore = async (bookingData) => {
     try {
@@ -88,7 +87,7 @@ const handleApprove = async (data, actions) => {
       image: roomDetails.image,
       price: totalPrice,
       guests: guests,
-      userEmail: userEmail,
+      userEmail: userEmail || user.email || 'Unknown',
       startDate: startDate,
       endDate: endDate,
       paymentStatus: "Paid",
