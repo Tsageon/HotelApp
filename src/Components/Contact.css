@@ -45,6 +45,18 @@
   height: 17px;
   color: white;
 }
+
+.footer-icon a {
+  margin: 0 10px;
+  font-size: 24px;
+  background-color:#e0b973;
+  transition: color 0.3s;
+}
+.footer-icon :hover {
+  color:#e0b973;
+  transform: scale(1.1);
+}
+
 .location,
 .connect {
   padding: 20px;
@@ -72,15 +84,7 @@
   background-color: white;
 }
 
-.footer-icon a {
-  margin: 0 10px;
-  font-size: 24px;
-  transition: color 0.3s;
-}
-.footer-icon a:hover {
-  color: #e0b973;
-  transform: scale(1.1);
-}
+
 
 .phone {
   background-color: white;

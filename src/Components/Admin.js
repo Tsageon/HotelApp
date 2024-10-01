@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { collection, getDocs } from "firebase/firestore";
-import {
-  addRoom,
-  deleteRoom,
-  updateRoom,
-  fetchRooms,
-  selectRooms,
-} from "../Redux/dbSlice";
-import { db } from "../Config/Fire";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { addRoom, deleteRoom, updateRoom, fetchRooms, selectRooms } from "../Redux/dbSlice";
+import { db, storage } from "../Config/Fire";
 import "./Admin.css";
 
 const Admin = () => {
   const [bookings, setBookings] = useState([]);
-  const [activePage, setActivePage] = useState("rooms"); // New state to track active page
+  const [activePage, setActivePage] = useState("rooms");
   const dispatch = useDispatch();
   const rooms = useSelector(selectRooms);
   const [roomName, setRoomName] = useState("");
   const [guests, setGuests] = useState("");
+  const [roomType, setRoomType] = useState("");       
+  const [descriptions, setDescriptions] = useState("");
+  const [amenities, setAmenities] = useState(""); 
   const [price, setPrice] = useState("");
   const [duration, setDuration] = useState("");
   const [image, setImage] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  const formatDate = (date) => {
+    if (!date || !date.toDate) return "Invalid Date";
+    const parsedDate = date.toDate();
+    return `${parsedDate.getDate()}/${parsedDate.getMonth() + 1}/${parsedDate.getFullYear()}`;
+  };
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -34,39 +38,55 @@ const Admin = () => {
       }));
       setBookings(bookingsData);
     };
-
     fetchBookings();
     dispatch(fetchRooms());
   }, [dispatch]);
 
   const uploadImage = async (file) => {
-    return "https://via.placeholder.com/150"; 
+    try {
+      const storageRef = ref(storage, `rooms/${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      console.log("File uploaded successfully:", downloadURL);
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return null;
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!roomName || !price || !image) {
+  
+    if (!roomName || !price || !guests || !image) {
       alert("All fields are required!");
       return;
     }
-
-    const imageUrl = await uploadImage(image); 
+  
+    const imageUrl = await uploadImage(image);
+    if (!imageUrl) return;
+  
     const roomData = {
       roomName,
       guests,
-      duration,
       price,
-      imageUrl, 
+      duration,
+      roomType,   
+      descriptions, 
+      amenities,    
+      imageUrl,     
     };
-
+  
     if (editingId) {
       dispatch(updateRoom({ id: editingId, ...roomData }));
     } else {
       dispatch(addRoom(roomData));
     }
-
+  
     clearForm();
+    setActivePage("rooms");
   };
+  
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this room?")) {
@@ -90,8 +110,9 @@ const Admin = () => {
     setGuests(room.guests);
     setPrice(room.price);
     setDuration(room.duration);
-    setImage(null); 
-    setPreviewUrl(null);
+    setImage(null);
+    setPreviewUrl(room.imageUrl);
+    setActivePage("addroom"); 
   };
 
   const clearForm = () => {
@@ -101,20 +122,29 @@ const Admin = () => {
     setDuration("");
     setImage(null);
     setEditingId(null);
-    setPreviewUrl(null); 
+    setPreviewUrl(null);
   };
 
   return (
     <div className="admin-container">
       <h2>Admin Panel</h2>
 
-      {/*toggle between Rooms and Bookings */}
+      {/* Toggle between Rooms and Bookings */}
       <div className="admin-nav">
         <button
           className={activePage === "rooms" ? "active" : ""}
           onClick={() => setActivePage("rooms")}
         >
-          Manage Rooms
+          Show Rooms
+        </button>
+        <button
+          className={activePage === "addroom" ? "active" : ""}
+          onClick={() => {
+            clearForm(); // Clear form before adding a new room
+            setActivePage("addroom");
+          }}
+        >
+          Add Room
         </button>
         <button
           className={activePage === "bookings" ? "active" : ""}
@@ -124,9 +154,45 @@ const Admin = () => {
         </button>
       </div>
 
-      {/*renders content based on the active page */}
+      {/* Renders content based on the active page */}
       {activePage === "rooms" ? (
         <>
+          <h3>Available Rooms</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Room</th>
+                <th>Image</th> 
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rooms && rooms.length > 0 ? (
+                rooms.map((room) => (
+                  <tr key={room.id}>
+                    <td>{room.roomName}</td>
+                    <td>
+                      <img src={room.imageUrl} alt={room.roomName} style={{ width: "100px", height: "auto" }} />
+                    </td>
+                    <td>{room.price}</td>
+                    <td>
+                      <button className="button2" onClick={() => handleEdit(room)}>Edit</button>
+                      <button className="button2" onClick={() => handleDelete(room.id)}>Delete</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4">No rooms available</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </>
+      ) : activePage === "addroom" ? (
+        <>
+          <h3>{editingId ? "Edit Room" : "Add Room"}</h3>
           <form onSubmit={handleSubmit}>
             <div>
               <label>Room Name:</label>
@@ -138,20 +204,11 @@ const Admin = () => {
               />
             </div>
             <div>
-              <label>Guests:</label>
+              <label>Number of Guests:</label>
               <input
                 type="number"
                 value={guests}
                 onChange={(e) => setGuests(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Duration:</label>
-              <input
-                type="text"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
                 required
               />
             </div>
@@ -165,46 +222,56 @@ const Admin = () => {
               />
             </div>
             <div>
-              <label>Room Image:</label>
-              <input type="file" accept="image/*" onChange={handleImageChange} />
-              {previewUrl && <img src={previewUrl} alt="Preview" width="100" />}
+              <label>Duration:</label>
+              <input
+                type="text"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="e.g. per night"
+                required
+              />
             </div>
-            <button type="submit">{editingId ? "Update Room" : "Add Room"}</button>
-            {editingId && (
-              <button type="button" onClick={clearForm}>
-                Cancel Edit
-              </button>
+            <div>
+              <label>Room Type:</label>
+              <input type="text"
+              value={roomType}
+              onChange={(e) => setRoomType(e.target.value)}
+              placeholder="e.g. Suite or Room"
+              required
+              />
+            </div>
+            <div>
+              <label>Description:</label>
+              <input
+              type="text"
+              value={descriptions}
+              onChange={(e)=> setDescriptions(e.target.value)}
+              placeholder="e.g. This is a beautiful room with a view"
+              required
+              />
+            </div>
+            <div>
+              <label>Amenities:</label>
+              <input type="text"
+              value={amenities}
+              onChange={(e)=> setAmenities(e.target.value)}
+              placeholder="e.g. Wi-Fi, TV, etc."
+              required
+              />
+            </div>
+            <div>
+              <label>Upload Image:</label>
+              <input type="file" onChange={handleImageChange} required />
+            </div>
+            {previewUrl && (
+              <div>
+                <img src={previewUrl} alt="Preview" style={{ width: "100px" }} />
+              </div>
             )}
+            <button className="button" type="submit">
+              {editingId ? "Update Room" : "Add Room"}
+            </button>
           </form>
-
-          <h3>Available Rooms</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Room</th>
-                <th>Price</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rooms && rooms.length > 0 ? (
-                rooms.map((room) => (
-                  <tr key={room.id}>
-                    <td>{room.roomName}</td>
-                    <td>{room.price}</td>
-                    <td>
-                      <button onClick={() => handleEdit(room)}>Edit</button>
-                      <button onClick={() => handleDelete(room.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3">No rooms available</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
         </>
       ) : (
         <>
@@ -226,8 +293,8 @@ const Admin = () => {
                 <tr key={booking.id}>
                   <td>{booking.userEmail}</td>
                   <td>{booking.roomName}</td>
-                  <td>{new Date(booking.startDate).toLocaleDateString()}</td>
-                  <td>{new Date(booking.endDate).toLocaleDateString()}</td>
+                  <td>{formatDate(booking.startDate)}</td>
+                  <td>{formatDate(booking.endDate)}</td>
                   <td>{booking.guests}</td>
                   <td>R{booking.price}</td>
                   <td>{booking.paymentStatus}</td>

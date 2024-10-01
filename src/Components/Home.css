@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   background-color: white;
+  border-radius: 0.5rem;
   padding: 10px 20px;
   width: 100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -11,7 +12,7 @@
 
 
 .home_logo {
-  border-radius: 2rem;
+  border-radius: 3rem;
   max-width: 7%;
   width: auto; 
   cursor: pointer;
@@ -59,7 +60,7 @@
 .home_text p {
   color: #666;
   margin: 0 auto;
-  max-width: 600px;
+  max-width: 37.5rem;
   font-size: 1.2rem;
   margin-bottom: 20px;
 }
@@ -80,33 +81,33 @@
 
 
 .about-section {
-  padding: 40px 0;
+  padding: 2rem 0;
   text-align: center;
 }
 
 .aboutus-header {
   color: #e0b973;
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .about-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
-  padding: 20px;
+  gap: 1.3rem;
+  padding: 0.9rem;
 }
 
 .about-img {
-  width: 300px;
-  height: 200px;
+  width: 18.75rem;
+  height: 12.5rem;
   border-radius: 8px;
   object-fit: cover;
 }
 
-.aboutus-text {
-  max-width: 600px;
+.aboutus-text p {
+  max-width: 37.5rem;
   color: #333;
   font-size: 1rem;
   text-align: left;
@@ -119,7 +120,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .nav-links {
     flex-direction: column;
     gap: 10px;

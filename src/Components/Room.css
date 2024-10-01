@@ -3,6 +3,7 @@
   padding: 20px;
   text-align: center;
 }
+
 .room-name{
   display: flex;
   justify-content: center; 
@@ -75,6 +76,7 @@
   color:#e0b973 ;
   
 }
+
 select.options {
   display: flex;
   justify-content: center;
@@ -141,8 +143,6 @@ select.options::after {
   display: flex;
   justify-content: center; 
 }
-
-
 
 .room-card {
   position: relative;
@@ -228,7 +228,7 @@ select.options::after {
   align-items: center;
 }
 
-p{
+.rooms p{
 display: flex;
 justify-content: center;}
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom"; 
 import "./Amenities.css";
 import Pool from "./istockphoto-1208302982-1024x1024.jpg";
 import Gym from "./istockphoto-515238274-1024x1024.jpg";
@@ -7,7 +6,7 @@ import Spa from "./istockphoto-1590247969-1024x1024.jpg";
 import Staff from "./istockphoto-1448294355-1024x1024.jpg";
 import Buffet from "./istockphoto-1654917381-1024x1024 (1).jpg";
 import Contact from "./Contact";
-import WiFi from "./istockphoto-1498729744-1024x1024.jpg";
+import WiFi from "./istockphoto-1146115827-1024x1024.jpg";
 
 
 const Amenities = () => {
@@ -41,9 +40,13 @@ const Amenities = () => {
           <img src={Buffet} alt="buffet" />
         </div>   
 
-        <div className="amenity-item">
-          <h6>Free WiFi</h6>
+        {/* <div className="amenity-item">
+          <h6 className="wifi">Free WiFi</h6>
           <img src={WiFi} alt="wifi" />
+        </div> */}
+        <div className="amenity-item">
+          <h6>Free Wifi</h6>
+          <img src={WiFi} alt="wifi"/>
         </div>
       </div>
    <Contact/>

@@ -7,20 +7,22 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     font-family: 'Arial', sans-serif;
   }
-  
-  h2 {
+  /* .wifi{display: flex;
+    font-size: 1rem;
+   } */
+ .profile-container h2 {
     text-align: center;
     color: #333; 
     margin-bottom: 1rem;
   }
   
-  p {
+ .profile-container p {
     font-size: 1.1em;
     color: #555;  
     line-height: 1.6;
   }
   
-  h6 {
+ .profile-container h6 {
     font-size: 1.05em;
     margin-top: 20px;
     color: black; 
@@ -42,11 +44,11 @@
       box-shadow: none;
     }
   
-    h2 {
+    .profile-container h2 {
       font-size: 1.5em;
     }
   
-    p {
+    .profile-container p {
       font-size: 1em;
     }
   }
