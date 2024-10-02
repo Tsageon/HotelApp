@@ -7,9 +7,35 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     font-family: 'Arial', sans-serif;
   }
-  /* .wifi{display: flex;
-    font-size: 1rem;
-   } */
+  .back {
+    position: absolute;
+    top:1rem;
+    right: 26rem;
+    background-color: white; 
+    color: #333;               
+    border: 2px solid #e0b973;    
+    border-radius: 10px;       
+    padding: 7px 10px;         
+    font-size: 16px;             
+    font-weight: bold;           
+    cursor: pointer;             
+    transition: all 0.3s ease;   
+  }
+  
+  .back:hover {
+    background-color: #333;      
+    color: #fff;                
+    border-color: #f0f0f0;  }   
+  
+  .back:active {
+    transform: scale(0.95);      
+  }
+  
+  .back:focus {
+    outline: none;             
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);  
+  }
+  
  .profile-container h2 {
     text-align: center;
     color: #333; 

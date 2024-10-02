@@ -85,12 +85,6 @@
   text-align: center;
 }
 
-.aboutus-header {
-  color: #e0b973;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
 .about-content {
   display: flex;
   justify-content: center;
@@ -104,6 +98,12 @@
   height: 12.5rem;
   border-radius: 8px;
   object-fit: cover;
+}
+
+.about-section h2{
+  color: #e0b973;
+  font-size: 2rem;
+
 }
 
 .aboutus-text p {

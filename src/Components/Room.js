@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchData } from "../Redux/dbSlice";
+import { db } from '../Config/Fire';
+import { updateDoc, doc} from 'firebase/firestore';
 import { useNavigate, Link } from "react-router-dom";
 import { IoIosBed } from "react-icons/io";
 import { MdBedroomParent } from "react-icons/md";
@@ -16,6 +18,7 @@ import "./Room.css";
 
 const Room = () => {
   const { data, loading, error } = useSelector((state) => state.db);
+  const user = useSelector((state) => state.db.user); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,7 +43,7 @@ const Room = () => {
     }
   };
 
-  const handleFavorite = (roomId) => {
+  const handleFavorite = async (roomId) => {
     setFavorites((prevFavorites) => {
       const newFavorites = new Set(prevFavorites);
       if (newFavorites.has(roomId)) {
@@ -48,9 +51,15 @@ const Room = () => {
       } else {
         newFavorites.add(roomId);
       }
+
+      const updatedFavorites = Array.from(newFavorites);
+      const userDocRef = doc(db, 'Users', user.uid);
+      updateDoc(userDocRef, { favorites: updatedFavorites });
+  
       return newFavorites;
     });
   };
+  
 
   const handleShare = (room) => {
     if (navigator.share) {
@@ -143,7 +152,6 @@ const Room = () => {
                           e.stopPropagation();
                           handleShare(room);
                         }}
-                      
                       >
                         <BsShare className="share-icon" />
                       </span>

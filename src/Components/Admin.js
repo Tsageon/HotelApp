@@ -140,7 +140,7 @@ const Admin = () => {
         <button
           className={activePage === "addroom" ? "active" : ""}
           onClick={() => {
-            clearForm(); // Clear form before adding a new room
+            clearForm(); 
             setActivePage("addroom");
           }}
         >
@@ -200,15 +200,17 @@ const Admin = () => {
                 type="text"
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
+                placeholder="e.g. Roomelux"
                 required
               />
             </div>
             <div>
-              <label>Number of Guests:</label>
+              <label>Capacity:</label>
               <input
-                type="number"
+                type="text"
                 value={guests}
                 onChange={(e) => setGuests(e.target.value)}
+                placeholder="e.g. how many people the room can accommadate"
                 required
               />
             </div>
@@ -218,16 +220,7 @@ const Admin = () => {
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Duration:</label>
-              <input
-                type="text"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                placeholder="e.g. per night"
+                 placeholder="e.g. how much does it costs"
                 required
               />
             </div>

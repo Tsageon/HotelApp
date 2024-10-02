@@ -24,7 +24,7 @@ function App() {
   };
 
   return (
-    <PayPalScriptProvider options={initialOptions}> {/* Wrap your entire app */}
+    <PayPalScriptProvider options={initialOptions}> 
       <Router>
         <div className="App">
           <Routes>

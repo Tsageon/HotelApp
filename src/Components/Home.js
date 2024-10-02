@@ -31,7 +31,7 @@ const Home = () => {
             <button className="book-now">Book Now</button>
           </Link>
         </div>
-
+        <br/>
         <section className="about-section">
           <h2 className="aboutus-header">About Us</h2>
           <div className="about-content">

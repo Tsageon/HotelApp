@@ -11,6 +11,7 @@
   font-size: 1rem;
   text-align: center;
   font-weight: bold;
+  flex-grow: 1; 
 }
 
 .navbar .border {
@@ -133,12 +134,14 @@ select.options::after {
 .search-btn:hover {
   background-color: #e0b973;
 }
+
 .room-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
   justify-content: center;
 }
+
 .room-sum{
   display: flex;
   justify-content: center; 
@@ -168,10 +171,12 @@ select.options::after {
 }
 
 .heading {
-  align-items: center;
   display: flex;
-  justify-content: center;
-  margin-left: 1rem;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 10px; 
+  background-color: #f8f9fa; 
+  border-radius: 5px;
 }
 
 .room-info {
@@ -192,20 +197,13 @@ select.options::after {
   gap: 5px;
 }
 
-.favorite-icon {
-  position: absolute;
-  bottom:9rem;
-  width: 12px;
-  cursor: pointer;
-  color: #ff4081; 
-  transition: color 0.3s; 
-}
-.share-icon{
-  position: absolute;
-  right: 1rem;
-  top: 13.5rem;
-  color: #ff4081; 
-  width: 12px;
+.favorite-icon,
+.share-icon {
+  width: 15px;
+  cursor: pointer; 
+  color: lightcoral;
+  margin-left: 10px; 
+  transition: color 0.3s ease;
 }
 
 .favorite-icon:hover,
@@ -230,7 +228,8 @@ select.options::after {
 
 .rooms p{
 display: flex;
-justify-content: center;}
+justify-content: center;
+font-size: 0.9rem;}
 
 .price {
   text-align: center;
