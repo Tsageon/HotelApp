@@ -57,6 +57,12 @@
   transition: background-color 0.3s ease;
 }
 
+.register p{
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.9rem;
+}
+
 .Register__btn:hover {
   background-color: grey;
   color: white;

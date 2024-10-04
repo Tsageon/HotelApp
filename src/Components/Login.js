@@ -1,5 +1,6 @@
-import "./Login.css";
-import React, { useState, useEffect } from "react";
+import "./Login.css"; 
+import Loader from "./Loader";
+import React, { useEffect, useState } from "react";
 import Img from "./mt.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,24 +10,30 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user, loading, error } = useSelector((state) => state.auth || {});
+  const { user, loading, error, } = useSelector((state) => state.auth || {});
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
   const dispatch = useDispatch();
-
-  const handleLogin = () => {
-    dispatch(signIn({ email, password }));
-  };
-
+  
   useEffect(() => {
     if (user) {
-      if (user.email === "KB@gmail.com") {
-        alert("Admin login successful!");
+      console.log("User object after login:", user);
+      
+      if (isAdmin) {
+        console.log('User is admin');
+        alert("Login successful!");
         navigate("/admin");
       } else {
+        console.log('User is not admin');
         alert("Login successful!");
         navigate("/home");
       }
     }
-  }, [user, navigate]);
+  }, [user, isAdmin, navigate]);
+  
+  
+  const handleLogin = () => {
+    dispatch(signIn({ email, password }));
+  };
 
   return (
     <div className="login">
@@ -39,7 +46,7 @@ const Login = () => {
             <b>Login</b>
           </h2>
           <p>Welcome Back</p>
-          
+
           <input
             type="email"
             id="email"
@@ -59,18 +66,32 @@ const Login = () => {
             placeholder="Enter Password"
             className="login__input"
             minLength="6"
-            required/>
-          <p>    
-           <b><Link className="login__forgot-txt" to="/forgotpassword">Forgot Password?</Link></b></p>
-          <button type="submit" className="login__btn" onClick={handleLogin}> Login </button>
-          {loading && <h1>Loading...</h1>}
-          {error && <p>Error: {error}</p>}
+            required
+          />
           <p>
-            Don't have an account?
             <b>
-              <Link to="/">Register here!</Link>
+              <Link className="login__forgot-txt" to="/forgotpassword">
+                Forgot Password?
+              </Link>
             </b>
           </p>
+          <button type="submit" className="login__btn" onClick={handleLogin}>
+            Login
+          </button>
+
+          {loading ? (  
+            <Loader />
+          ) : (
+            <>
+              {error && <p>Error: {error}</p>}
+              <p><br />
+                Don't have an account?
+                <b>
+                  <Link to="/">Register here!</Link>
+                </b>
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>

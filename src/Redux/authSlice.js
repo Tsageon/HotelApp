@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, updateProfile } from 'firebase/auth';
 import { auth, db } from '../Config/Fire';
 import { doc, getDoc } from 'firebase/firestore';
 
 const initialState = {
   user: null,
-  role: null,
   isAdmin: false,
+  role: 'user', 
   loading: false,
   error: null,
 };
@@ -21,9 +21,10 @@ const authSlice = createSlice({
     },
     setUser(state, action) {
       const { uid, email, role } = action.payload;
+      console.log('Setting user in Redux:', action.payload);
       state.user = { uid, email };
-      state.role = role;
-      state.isAdmin = role === 'admin'; // Set isAdmin based on role
+      state.role = role || 'user'; 
+      state.isAdmin = role === 'admin'; 
       state.loading = false;
     },
     setError(state, action) {
@@ -32,30 +33,16 @@ const authSlice = createSlice({
     },
     logout(state) {
       state.user = null;
-      state.role = null;
+      state.role = 'user'; 
       state.isAdmin = false;
+      state.loading = false;
+      state.error = null;
     },
   },
 });
 
 export const { setLoading, setUser, setError, logout } = authSlice.actions;
 
-// Fetch the user's role from Firestore
-export const fetchUserRole = (uid) => async (dispatch) => {
-  try {
-    const userDoc = await getDoc(doc(db, 'Users', uid));
-    if (userDoc.exists()) {
-      const userData = userDoc.data();
-      return userData.role;
-    }
-    return null;
-  } catch (error) {
-    console.error('Error fetching user role:', error);
-    return null;
-  }
-};
-
-// Sign-up function with error handling
 export const signUp = ({ email, password, name }) => async (dispatch) => {
   dispatch(setLoading());
   try {
@@ -67,13 +54,14 @@ export const signUp = ({ email, password, name }) => async (dispatch) => {
 
     const user = userCredential.user;
     
+  
     await updateProfile(user, { displayName: name });
 
     const serializedUser = {
       uid: user.uid,
       email: user.email,
       name: user.displayName || name,
-      role: 'user', // Default role for new users
+      role: 'user', 
     };
 
     dispatch(setUser(serializedUser));
@@ -83,7 +71,35 @@ export const signUp = ({ email, password, name }) => async (dispatch) => {
   }
 };
 
-// Sign-in function with error handling
+
+export const fetchUserRole = (uid) => async (dispatch) => {
+  try {
+    const userDoc = await getDoc(doc(db, 'Users', uid));
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      console.log('User data from Firestore:', userData);
+
+      const role = userData.role || 'user'; 
+      const email = userData.email; 
+      dispatch(setUser({ uid, email, role })); 
+      console.log(`Fetched role: ${role} for UID: ${uid}`);
+      return role; 
+    }
+
+    dispatch(setUser({ uid, email: null, role: 'user' }));
+    console.log(`No user document found, defaulting to user role for UID: ${uid}`);
+    return 'user';
+  } catch (error) {
+    console.error('Error fetching user role:', error);
+    dispatch(setError(error.message));
+    dispatch(setUser({ uid, email: null, role: 'user' })); 
+    return 'user';
+  }
+};
+
+
+
 export const signIn = ({ email, password }) => async (dispatch) => {
   dispatch(setLoading());
   try {
@@ -96,14 +112,21 @@ export const signIn = ({ email, password }) => async (dispatch) => {
     const user = userCredential.user;
 
     const role = await dispatch(fetchUserRole(user.uid));
+    
+    const isAdmin = role === 'admin' || email === "kb@gmail.com"; 
 
     const serializedUser = {
       uid: user.uid,
       email: user.email,
-      role: role || 'user', 
+      role,
+      isAdmin,
     };
 
-    dispatch(setUser(serializedUser));
+    console.log('Serialized user:', serializedUser);
+    
+    dispatch(setUser(serializedUser)); 
+
+    return isAdmin; 
   } catch (error) {
     console.error('Error during sign-in:', error);
     dispatch(setError(error.message));
@@ -111,8 +134,15 @@ export const signIn = ({ email, password }) => async (dispatch) => {
 };
 
 
+
 export const signOut = () => async (dispatch) => {
-  dispatch(logout());
+  try {
+    await firebaseSignOut(auth);
+    dispatch(logout());
+  } catch (error) {
+    console.error('Error during sign-out:', error);
+    dispatch(setError(error.message));
+  }
 };
 
 export default authSlice.reducer;

@@ -135,7 +135,7 @@ const Register = () => {
             />
           )}
           {error && <p>Error:{error}</p>}
-          <p>
+          <p><br/>
             Already have an account?
             <b>
               <Link to="/login">Login here!</Link>

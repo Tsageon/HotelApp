@@ -43,7 +43,12 @@
     display: block; 
     margin: 10px auto;
   }
-  
+  .login p{
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.9rem;
+  }
+
   .login__forgot-txt {
     position: relative;
     font-size: 0.8rem;

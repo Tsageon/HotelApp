@@ -163,6 +163,7 @@ const Admin = () => {
               <tr>
                 <th>Room</th>
                 <th>Image</th> 
+                <th>Description</th>
                 <th>Price</th>
                 <th>Actions</th>
               </tr>
@@ -173,9 +174,9 @@ const Admin = () => {
                   <tr key={room.id}>
                     <td>{room.roomName}</td>
                     <td>
-                      <img src={room.imageUrl} alt={room.roomName} style={{ width: "100px", height: "auto" }} />
-                    </td>
-                    <td>{room.price}</td>
+                      <img src={room.imageUrl} alt={room.roomName} style={{ width: "50px", height: "auto" }} />
+                    </td><td>{room.descriptions.split(".").slice(0,1).join(".")}</td>
+                    <td>R{room.price}</td>
                     <td>
                       <button className="button2" onClick={() => handleEdit(room)}>Edit</button>
                       <button className="button2" onClick={() => handleDelete(room.id)}>Delete</button>
