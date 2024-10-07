@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import { auth, db } from '../Config/Fire';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -9,6 +9,7 @@ const initialState = {
   role: 'user', 
   loading: false,
   error: null,
+  passwordResetSuccess: false, 
 };
 
 const authSlice = createSlice({
@@ -37,11 +38,12 @@ const authSlice = createSlice({
       state.isAdmin = false;
       state.loading = false;
       state.error = null;
+      state.passwordResetSuccess = false;
     },
   },
 });
 
-export const { setLoading, setUser, setError, logout } = authSlice.actions;
+export const { setLoading, setUser, setError, logout, setPasswordResetSuccess, } = authSlice.actions;
 
 export const signUp = ({ email, password, name }) => async (dispatch) => {
   dispatch(setLoading());
@@ -142,6 +144,17 @@ export const signOut = () => async (dispatch) => {
   } catch (error) {
     console.error('Error during sign-out:', error);
     dispatch(setError(error.message));
+  }
+};
+export const resetPassword = (email) => async (dispatch) => {
+  dispatch(setLoading());
+  try {
+    await sendPasswordResetEmail(auth, email); // Firebase function to send the password reset email
+    dispatch(setPasswordResetSuccess(true)); // Update the state for success
+  } catch (error) {
+    console.error('Error resetting password:', error.message);
+    dispatch(setError(error.message)); // Dispatch error if something goes wrong
+    dispatch(setPasswordResetSuccess(false));
   }
 };
 

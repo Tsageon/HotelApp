@@ -21,6 +21,8 @@ const Admin = () => {
   const [image, setImage] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [loading,setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
 
   const formatDate = (date) => {
     if (!date || !date.toDate) return "Invalid Date";
@@ -29,31 +31,42 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      const bookingsCollection = collection(db, "bookings");
-      const bookingsSnapshot = await getDocs(bookingsCollection);
-      const bookingsData = bookingsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setBookings(bookingsData);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const bookingsCollection = collection(db, "bookings");
+        const bookingsSnapshot = await getDocs(bookingsCollection);
+        const bookingsData = bookingsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setBookings(bookingsData);
+        dispatch(fetchRooms());
+        console.log("Fetched rooms:", rooms);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    fetchBookings();
-    dispatch(fetchRooms());
-  }, [dispatch]);
-
+  
+    fetchData();
+  }, [dispatch,rooms]);
+  
   const uploadImage = async (file) => {
+    setUploading(true);
     try {
-      const storageRef = ref(storage, `rooms/${file.name}`);
-      const snapshot = await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      console.log("File uploaded successfully:", downloadURL);
-      return downloadURL;
+        const storageRef = ref(storage, `rooms/${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        console.log("File uploaded successfully:", downloadURL);
+        return downloadURL;
     } catch (error) {
-      console.error("Error uploading image:", error);
-      return null;
+        console.error("Error uploading image:", error);
+        return null;
+    } finally {
+        setUploading(false);
     }
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,10 +86,10 @@ const Admin = () => {
       duration,
       roomType,   
       descriptions, 
-      amenities,    
+      amenities,  
       imageUrl,     
     };
-  
+    
     if (editingId) {
       dispatch(updateRoom({ id: editingId, ...roomData }));
     } else {
@@ -87,7 +100,6 @@ const Admin = () => {
     setActivePage("rooms");
   };
   
-
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this room?")) {
       dispatch(deleteRoom(id));
@@ -96,13 +108,15 @@ const Admin = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setPreviewUrl(reader.result);
-      reader.readAsDataURL(file);
+    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+        setImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => setPreviewUrl(reader.result);
+        reader.readAsDataURL(file);
+    } else {
+        alert("upload a valid image file (JPEG or PNG).");
     }
-  };
+};
 
   const handleEdit = (room) => {
     setEditingId(room.id);
@@ -169,26 +183,32 @@ const Admin = () => {
               </tr>
             </thead>
             <tbody>
-              {rooms && rooms.length > 0 ? (
-                rooms.map((room) => (
-                  <tr key={room.id}>
-                    <td>{room.roomName}</td>
-                    <td>
-                      <img src={room.imageUrl} alt={room.roomName} style={{ width: "50px", height: "auto" }} />
-                    </td><td>{room.descriptions.split(".").slice(0,1).join(".")}</td>
-                    <td>R{room.price}</td>
-                    <td>
-                      <button className="button2" onClick={() => handleEdit(room)}>Edit</button>
-                      <button className="button2" onClick={() => handleDelete(room.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4">No rooms available</td>
-                </tr>
-              )}
-            </tbody>
+  {rooms && rooms.length > 0 ? (
+    rooms.map((room) => (
+      <tr key={room.id}>
+        <td>{room.roomName}</td>
+        <td>
+          {room.imageUrl ? (
+            <img src={room.imageUrl} alt={room.roomName} style={{ width: "50px", height: "auto" }} />
+          ) : (
+            <span>Add a imageUrl</span>
+          )}
+        </td>
+        <td>{room.descriptions.split(".").slice(0, 1).join(".")}</td>
+        <td>R{room.price}</td>
+        <td>
+          <button className="button2" onClick={() => handleEdit(room)}>Edit</button>
+          <button className="button2" onClick={() => handleDelete(room.id)}>Delete</button>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="4">No rooms available</td>
+    </tr>
+  )}
+</tbody>
+
           </table>
         </>
       ) : activePage === "addroom" ? (

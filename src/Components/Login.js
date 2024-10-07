@@ -20,7 +20,7 @@ const Login = () => {
       
       if (isAdmin) {
         console.log('User is admin');
-        alert("Login successful!");
+        alert("Admin detected!Redirecting...");
         navigate("/admin");
       } else {
         console.log('User is not admin');
