@@ -48,18 +48,41 @@
     gap: 1rem;
     margin-bottom: 3rem;
   }
+
+  .back1{
+  position: absolute;
+  font-size: medium;
+  font-weight: bold;
+  border-radius: 1rem;
+  padding: 0.5rem ;
+  right: 1rem;
+  top: 1rem;
+  }
+
+  .back1:hover{
+    background-color: #e0b973;
+  }
+
+  .form input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
   
-  label {
+  .form label {
+    margin-bottom: 5px;
     font-weight: bold;
   }
   
-  input {
-    padding: 3px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 16px;
+  .form img {
+    margin-top: 10px;
+    border-radius: 4px;
   }
-  
+
   .button {
     display: flex;
     justify-content: center;
@@ -94,7 +117,7 @@
   }
   
   button:hover {
-    background-color: #218838;
+    background-color: #e0b973;
   }
   
   table {
@@ -102,6 +125,10 @@
     margin-top: 20px;
   }
   
+  table img {
+    border-radius: 4px;
+  }
+
   table th, table td {
     padding: 10px;
     border: 1px solid whitesmoke;

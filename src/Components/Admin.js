@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate} from "react-router-dom";
+import { Fade } from "react-awesome-reveal";
 import { useDispatch, useSelector } from "react-redux";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc  } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { addRoom, deleteRoom, updateRoom, fetchRooms, selectRooms } from "../Redux/dbSlice";
 import { db, storage } from "../Config/Fire";
 import "./Admin.css";
+
 
 const Admin = () => {
   const [bookings, setBookings] = useState([]);
@@ -21,8 +24,9 @@ const Admin = () => {
   const [image, setImage] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [loading,setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false); 
+  const navigate = useNavigate();
 
   const formatDate = (date) => {
     if (!date || !date.toDate) return "Invalid Date";
@@ -32,41 +36,43 @@ const Admin = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true); 
       try {
-        setLoading(true);
         const bookingsCollection = collection(db, "bookings");
         const bookingsSnapshot = await getDocs(bookingsCollection);
         const bookingsData = bookingsSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setBookings(bookingsData);
+
+        const uniqueBookings = Array.from(new Map(bookingsData.map(item => [item.transactionId, item])).values());
+
+        setBookings(bookingsData, uniqueBookings);
         dispatch(fetchRooms());
-        console.log("Fetched rooms:", rooms);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); 
       }
     };
   
     fetchData();
-  }, [dispatch,rooms]);
-  
+  }, [dispatch]);
+
   const uploadImage = async (file) => {
     setUploading(true);
     try {
-        const storageRef = ref(storage, `rooms/${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        console.log("File uploaded successfully:", downloadURL);
-        return downloadURL;
+      const storageRef = ref(storage, `rooms/${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      return downloadURL;
     } catch (error) {
-        console.error("Error uploading image:", error);
-        return null;
+      console.error("Error uploading image:", error);
+      return null;
     } finally {
-        setUploading(false);
+      setUploading(false);
     }
-};
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,23 +106,37 @@ const Admin = () => {
     setActivePage("rooms");
   };
   
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this room?")) {
-      dispatch(deleteRoom(id));
+  const handleDeleteBooking = async (transactionId) => {
+    try {
+      const bookingRef = doc(db, "bookings", transactionId); 
+      await deleteDoc(bookingRef);
+      setBookings((prevBookings) => prevBookings.filter(booking => booking.transactionId !== transactionId));
+      console.log("Booking deleted successfully");
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+    }
+  };
+
+  const handleDeleteRoom = async (roomId) => {
+    try {
+      await dispatch(deleteRoom(roomId));  
+      console.log("Room deleted successfully");
+    } catch (error) {
+      console.error("Error deleting room:", error);
     }
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
-        setImage(file);
-        const reader = new FileReader();
-        reader.onloadend = () => setPreviewUrl(reader.result);
-        reader.readAsDataURL(file);
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result);
+      reader.readAsDataURL(file);
     } else {
-        alert("upload a valid image file (JPEG or PNG).");
+      alert("Upload a valid image file (JPEG or PNG).");
     }
-};
+  };
 
   const handleEdit = (room) => {
     setEditingId(room.id);
@@ -139,11 +159,15 @@ const Admin = () => {
     setPreviewUrl(null);
   };
 
+  const handlehome = () => {
+    navigate("/home")
+  }
+
+
   return (
     <div className="admin-container">
       <h2>Admin Panel</h2>
-
-      {/* Toggle between Rooms and Bookings */}
+      <button className="back1" onClick={handlehome}>Home</button>
       <div className="admin-nav">
         <button
           className={activePage === "rooms" ? "active" : ""}
@@ -154,7 +178,7 @@ const Admin = () => {
         <button
           className={activePage === "addroom" ? "active" : ""}
           onClick={() => {
-            clearForm(); 
+            clearForm();
             setActivePage("addroom");
           }}
         >
@@ -168,156 +192,182 @@ const Admin = () => {
         </button>
       </div>
 
-      {/* Renders content based on the active page */}
-      {activePage === "rooms" ? (
-        <>
-          <h3>Available Rooms</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Room</th>
-                <th>Image</th> 
-                <th>Description</th>
-                <th>Price</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-  {rooms && rooms.length > 0 ? (
-    rooms.map((room) => (
-      <tr key={room.id}>
-        <td>{room.roomName}</td>
-        <td>
-          {room.imageUrl ? (
-            <img src={room.imageUrl} alt={room.roomName} style={{ width: "50px", height: "auto" }} />
-          ) : (
-            <span>Add a imageUrl</span>
-          )}
-        </td>
-        <td>{room.descriptions.split(".").slice(0, 1).join(".")}</td>
-        <td>R{room.price}</td>
-        <td>
-          <button className="button2" onClick={() => handleEdit(room)}>Edit</button>
-          <button className="button2" onClick={() => handleDelete(room.id)}>Delete</button>
-        </td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="4">No rooms available</td>
-    </tr>
-  )}
-</tbody>
-
-          </table>
-        </>
-      ) : activePage === "addroom" ? (
-        <>
-          <h3>{editingId ? "Edit Room" : "Add Room"}</h3>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label>Room Name:</label>
-              <input
-                type="text"
-                value={roomName}
-                onChange={(e) => setRoomName(e.target.value)}
-                placeholder="e.g. Roomelux"
-                required
-              />
-            </div>
-            <div>
-              <label>Capacity:</label>
-              <input
-                type="text"
-                value={guests}
-                onChange={(e) => setGuests(e.target.value)}
-                placeholder="e.g. how many people the room can accommadate"
-                required
-              />
-            </div>
-            <div>
-              <label>Price:</label>
-              <input
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                 placeholder="e.g. how much does it costs"
-                required
-              />
-            </div>
-            <div>
-              <label>Room Type:</label>
-              <input type="text"
-              value={roomType}
-              onChange={(e) => setRoomType(e.target.value)}
-              placeholder="e.g. Suite or Room"
-              required
-              />
-            </div>
-            <div>
-              <label>Description:</label>
-              <input
-              type="text"
-              value={descriptions}
-              onChange={(e)=> setDescriptions(e.target.value)}
-              placeholder="e.g. This is a beautiful room with a view"
-              required
-              />
-            </div>
-            <div>
-              <label>Amenities:</label>
-              <input type="text"
-              value={amenities}
-              onChange={(e)=> setAmenities(e.target.value)}
-              placeholder="e.g. Wi-Fi, TV, etc."
-              required
-              />
-            </div>
-            <div>
-              <label>Upload Image:</label>
-              <input type="file" onChange={handleImageChange} required />
-            </div>
-            {previewUrl && (
-              <div>
-                <img src={previewUrl} alt="Preview" style={{ width: "100px" }} />
-              </div>
-            )}
-            <button className="button" type="submit">
-              {editingId ? "Update Room" : "Add Room"}
-            </button>
-          </form>
-        </>
-      ) : (
-        <>
-          <h2>All Bookings</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>User Email</th>
-                <th>Room Name</th>
-                <th>Check-in Date</th>
-                <th>Check-out Date</th>
-                <th>Guests</th>
-                <th>Total Price</th>
-                <th>Payment Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookings.map((booking) => (
-                <tr key={booking.id}>
-                  <td>{booking.userEmail}</td>
+      <div className="admin-content">
+        {loading ? (
+          <div>Loading...</div>
+        ) : activePage === "rooms" ? (
+          <Fade duration={800}>
+            <>
+              <h3>Available Rooms</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Room</th>
+                    <th>Image</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rooms && rooms.length > 0 ? (
+                    rooms.map((room) => (
+                      <tr key={room.id}>
+                        <td>{room.roomName}</td>
+                        <td>
+                          {room.imageUrl ? (
+                            <img
+                              src={room.imageUrl}
+                              alt={room.roomName}
+                              style={{ width: "50px", height: "auto" }}
+                            />
+                          ) : (
+                            <span>Add an image URL</span>
+                          )}
+                        </td>
+                        <td>{room.descriptions.split(".").slice(0, 1).join(".")}</td>
+                        <td>R{room.price}</td>
+                        <td>
+                          <button className="button2" onClick={() => handleEdit(room)}>
+                            Edit
+                          </button>
+                          <button className="button2" onClick={() => handleDeleteRoom(room.id)}>Delete</button> 
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5">No rooms available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </>
+          </Fade>
+        ) : activePage === "addroom" ? (
+          <Fade duration={800}>
+            <>
+              <h3>{editingId ? "Edit Room" : "Add Room"}</h3>
+              <form onSubmit={handleSubmit}>
+                <div>
+                  <label>Room Name:</label>
+                  <input
+                    type="text"
+                    value={roomName}
+                    onChange={(e) => setRoomName(e.target.value)}
+                    placeholder="e.g. Roomelux"
+                    required
+                  />
+                </div>
+                <div>
+                  <label>Capacity:</label>
+                  <input
+                    type="text"
+                    value={guests}
+                    onChange={(e) => setGuests(e.target.value)}
+                    placeholder="e.g. 4"
+                    required
+                  />
+                </div>
+                <div>
+                  <label>Price:</label>
+                  <input
+                    type="text"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    placeholder="e.g. 200"
+                    required
+                  />
+                </div>
+                <div>
+                  <label>Room Type:</label>
+                  <input
+                    type="text"
+                    value={roomType}
+                    onChange={(e) => setRoomType(e.target.value)}
+                    placeholder="e.g. Suite"
+                  />
+                </div>
+                <div>
+                  <label>Description:</label>
+                  <textarea
+                    value={descriptions}
+                    onChange={(e) => setDescriptions(e.target.value)}
+                    placeholder="e.g. A luxurious room with a king size bed."
+                  />
+                </div>
+                <div>
+                  <label>Amenities:</label>
+                  <input
+                    type="text"
+                    value={amenities}
+                    onChange={(e) => setAmenities(e.target.value)}
+                    placeholder="e.g. WiFi, Air Conditioning"
+                  />
+                </div>
+                <div>
+                  <label>Duration:</label>
+                  <input
+                    type="text"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    placeholder="e.g. Nightly, Weekly"
+                  />
+                </div>
+                <div>
+                  <label>Upload Image:</label>
+                  <input type="file" accept="image/png, image/jpeg" onChange={handleImageChange} required />
+                </div>
+                {uploading && <p>Uploading image...</p>} 
+                {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: "100px", height: "auto" }} />}
+                <button type="submit">{editingId ? "Update Room" : "Add Room"}</button>
+              </form>
+            </>
+          </Fade>
+        ) : activePage === "bookings" ? (
+          <Fade duration={800}>
+            <>
+              <h3>Bookings</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Room Name</th>
+                    <th>Guest Name</th>
+                    <th>Check-in Date</th>
+                    <th>Check-out Date</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {bookings.length > 0 ? (
+              bookings.map((booking) => (
+                <tr key={booking.transactionId}>
                   <td>{booking.roomName}</td>
+                  <td>{booking.payerName}</td>
                   <td>{formatDate(booking.startDate)}</td>
                   <td>{formatDate(booking.endDate)}</td>
-                  <td>{booking.guests}</td>
-                  <td>R{booking.price}</td>
-                  <td>{booking.paymentStatus}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      )}
+                  <td>R{booking.price.toLocaleString()}</td>
+                  <td style={{ color: booking.paymentStatus === "Paid" ? "green" : "red" }}>
+                    {booking.paymentStatus}
+                  </td>
+                  <td>
+                  <button className="button2" onClick={() => handleDeleteBooking(booking.transactionId)}>Delete</button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5">No bookings available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </>
+          </Fade>
+        ) : null}
+      </div>
     </div>
   );
 };

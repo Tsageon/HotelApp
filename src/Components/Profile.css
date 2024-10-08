@@ -1,5 +1,5 @@
 .profile-container {
-    max-width: 600px;
+    max-width: auto;
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f9;  
@@ -7,10 +7,15 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     font-family: 'Arial', sans-serif;
   }
-  .back {
-    position: absolute;
-    top:1rem;
-    right: 26rem;
+
+.BAK{
+ width: 100%;
+ display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+  
+.back { 
     background-color: white; 
     color: #333;               
     border: 2px solid #e0b973;    
@@ -20,6 +25,7 @@
     font-weight: bold;           
     cursor: pointer;             
     transition: all 0.3s ease;   
+    z-index: 1000; 
   }
   
   .back:hover {
@@ -77,5 +83,12 @@
     .profile-container p {
       font-size: 1em;
     }
+    @media (max-width: 768px) {
+      .back {
+        right: 1rem; 
+        font-size: 0.5rem; 
+      }
+    }
+    
   }
   

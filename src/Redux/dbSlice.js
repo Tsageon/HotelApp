@@ -5,7 +5,8 @@ import { db } from '../Config/Fire';
 const initialState = {
   data: [],     
   loading: false, 
-  error: null,   
+  error: null,
+  user: null,   
   bookings: [], 
   name: '', 
   email: '', 
@@ -21,6 +22,7 @@ export const dbSlice = createSlice({
       state.error = null;
     },
      setUser: (state, action) => {
+      state.user = action.payload;
       state.name = action.payload.name;
       state.email = action.payload.email;
     },
@@ -83,7 +85,8 @@ export const {
   addRoomSuccess,
   deleteRoomSuccess,
   updateRoomSuccess,
-  setUser, clearUser
+  setUser,
+  clearUser
 } = dbSlice.actions;
 
 export default dbSlice.reducer;

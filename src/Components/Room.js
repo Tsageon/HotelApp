@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchData } from "../Redux/dbSlice";
+import { toast } from 'react-toastify';
+import { fetchData, setUser } from "../Redux/dbSlice";
 import { db } from '../Config/Fire';
-import { updateDoc, doc} from 'firebase/firestore';
+import { updateDoc, doc,onSnapshot,} from 'firebase/firestore';
 import { useNavigate, Link } from "react-router-dom";
 import { IoIosBed } from "react-icons/io";
 import { MdBedroomParent } from "react-icons/md";
@@ -17,8 +18,8 @@ import Contact from "./Contact";
 import "./Room.css";
 
 const Room = () => {
-  const { data, loading, error } = useSelector((state) => state.db);
-  const user = useSelector((state) => state.db.user); 
+  const { user,data, loading, error } = useSelector((state) => state.db);
+  console.log("User object in Room component:", user); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,7 +28,7 @@ const Room = () => {
   useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
-
+   
   const handleReserve = (index) => {
     const selectedRoom = rooms[index];
 
@@ -36,31 +37,67 @@ const Room = () => {
         ...selectedRoom,
         booked: true,
       };
-
+   
       navigate("/reserve", { state: { roomDetails: updatedRoom } });
     } else {
       navigate("/room");
     }
   };
 
+  useEffect(() => {
+    dispatch(fetchData());
+    if (user && user.uid) { 
+      const userDocRef = doc(db, 'Users', user.uid);
+      const unsubscribe = onSnapshot(userDocRef, (doc) => {
+        if (doc.exists()) {
+          const userData = doc.data();
+          if (userData.favorites) {
+            setFavorites(new Set(userData.favorites));
+          }
+        }
+      });
+      return () => unsubscribe();
+    }
+  }, [dispatch, user]);
+  
+  
   const handleFavorite = async (roomId) => {
+    console.log("User object:", user);
+    console.log("Favorite button clicked for roomId:", roomId);
+    
+    if (!user || !user.uid) {
+      toast.error('You need to be logged in to add favorites.');
+      return;
+    }
+
     setFavorites((prevFavorites) => {
       const newFavorites = new Set(prevFavorites);
+  
       if (newFavorites.has(roomId)) {
-        newFavorites.delete(roomId);
+        newFavorites.delete(roomId); 
       } else {
-        newFavorites.add(roomId);
+        newFavorites.add(roomId); 
       }
-
-      const updatedFavorites = Array.from(newFavorites);
-      const userDocRef = doc(db, 'Users', user.uid);
-      updateDoc(userDocRef, { favorites: updatedFavorites });
   
-      return newFavorites;
+      const updatedFavorites = Array.from(newFavorites); 
+      console.log("Updated favorites:", updatedFavorites);
+      
+      const userDocRef = doc(db, 'Users', user.uid); 
+
+      return updateDoc(userDocRef, { favorites: updatedFavorites })
+        .then(() => {
+          console.log("Favorites updated successfully.");
+        
+          dispatch(setUser({ ...user, favorites: updatedFavorites }));
+          return updatedFavorites;
+        })
+        .catch((error) => {
+          console.error("Error updating favorites:", error);
+          return prevFavorites;
+        });
     });
-  };
+  };  
   
-
   const handleShare = (room) => {
     if (navigator.share) {
       navigator.share({
@@ -106,6 +143,10 @@ const Room = () => {
 
       <div className="rooms">
         <h2 className="room-title">Available Rooms & Suites</h2>
+        {user ? (
+        <p>Welcome,{user.email}!</p>
+      ) : (
+        <p>Please log in to see your room bookings.</p>)}
         <div className="room-sum">
           <p className="description">
             Indulge in the perfect blend of elegance and comfort with our
@@ -136,25 +177,30 @@ const Room = () => {
                     <h6 className="room-name">
                       {room.roomName}
                       <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleFavorite(room.id);
-                        }}
-                      >
-                        {favorites.has(room.id) ? (
-                          <BsHeartFill className="favorite-icon" />
-                        ) : (
-                          <BsHeart className="favorite-icon" />
-                        )}
-                      </span>
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleShare(room);
-                        }}
-                      >
-                        <BsShare className="share-icon" />
-                      </span>
+        onClick={(e) => {
+          e.stopPropagation();
+          if (user) { 
+            handleFavorite(room.id);
+          } else {
+            alert('You need to be logged in to add favorites.'); 
+          }
+        }}
+      >
+        {favorites.has(room.id) ? (
+          <BsHeartFill className="favorite-icon" />
+        ) : (
+          <BsHeart className="favorite-icon" />
+        )}
+      </span>
+
+      <span
+        onClick={(e) => {
+          e.stopPropagation();
+          handleShare(room);
+        }}
+      >
+        <BsShare className="share-icon" />
+      </span>
                     </h6>
                   </div>
                   {room.booked && <span className="booked-label">Booked</span>}

@@ -21,9 +21,10 @@ const authSlice = createSlice({
       state.error = null;
     },
     setUser(state, action) {
-      const { uid, email, role } = action.payload;
+      const {uid, email, role} = action.payload;
       console.log('Setting user in Redux:', action.payload);
-      state.user = { uid, email };
+      state.user = {uid, email};
+      state.name = action.payload.name; 
       state.role = role || 'user'; 
       state.isAdmin = role === 'admin'; 
       state.loading = false;
@@ -55,7 +56,6 @@ export const signUp = ({ email, password, name }) => async (dispatch) => {
     }
 
     const user = userCredential.user;
-    
   
     await updateProfile(user, { displayName: name });
 
@@ -65,6 +65,7 @@ export const signUp = ({ email, password, name }) => async (dispatch) => {
       name: user.displayName || name,
       role: 'user', 
     };
+    console.log('Serialized user:', serializedUser);
 
     dispatch(setUser(serializedUser));
   } catch (error) {
