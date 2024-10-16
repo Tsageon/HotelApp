@@ -1,12 +1,12 @@
 import React from "react";
 import "./Amenities.css";
-import Pool from "./istockphoto-1208302982-1024x1024.jpg";
-import Gym from "./istockphoto-515238274-1024x1024.jpg";
-import Spa from "./istockphoto-1590247969-1024x1024.jpg";
-import Staff from "./istockphoto-1448294355-1024x1024.jpg";
-import Buffet from "./istockphoto-1654917381-1024x1024 (1).jpg";
+import Pool from "../Components/images/istockphoto-1208302982-1024x1024.jpg";
+import Gym from "../Components/images/istockphoto-515238274-1024x1024.jpg";
+import Spa from "../Components/images/istockphoto-1590247969-1024x1024.jpg";
+import Staff from "../Components/images/istockphoto-1448294355-1024x1024.jpg";
+import Buffet from "../Components/images/istockphoto-1654917381-1024x1024 (1).jpg";
 import Contact from "./Contact";
-import WiFi from "./istockphoto-1146115827-1024x1024.jpg";
+import WiFi from "../Components/images/istockphoto-1146115827-1024x1024.jpg";
 
 
 const Amenities = () => {
@@ -49,7 +49,7 @@ const Amenities = () => {
           <img src={WiFi} alt="wifi"/>
         </div>
       </div>
-   <Contact/>
+ 
    </div>
   );
 };

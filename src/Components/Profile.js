@@ -4,7 +4,7 @@ import { useNavigate} from "react-router-dom";
 import { selectUser, setUser } from '../Redux/dbSlice';
 import { db, auth } from '../Config/Fire';
 import { collection, addDoc, getDocs, query, where, doc, onSnapshot } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged,signOut } from 'firebase/auth';
 import './Profile.css';
 
 const Profile = () => {
@@ -81,6 +81,7 @@ const Profile = () => {
   
         dispatch(setUser({
           name: userData.name,
+        
           email: userData.email,
           favorites: fetchedFavorites,  
           bookings: fetchedBookings,    
@@ -137,6 +138,16 @@ const Profile = () => {
     navigate("/home")
   }
 
+  const handlelogout = async () => {
+    try {
+      await signOut(auth); 
+      dispatch(setUser(null)); 
+      navigate("/login"); 
+    } catch (error) {
+      console.error("Error logging out: ", error);
+    }
+  };
+  
   return (
     <div className="profile-container">
     <h2>Profile</h2>
@@ -167,6 +178,7 @@ const Profile = () => {
         <p>No bookings made yet.</p>
       )}
     </ul>
+    <button className='logout' onClick={handlelogout}>Logout</button>
   </div>
 );};
 

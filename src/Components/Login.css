@@ -1,6 +1,7 @@
 
 .login {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     background-color: whitesmoke;
@@ -20,7 +21,7 @@
   .login__page{
     display: flex;
     align-items: center; 
- 
+    flex-wrap: wrap; 
   }
  
   .login__content {
@@ -43,11 +44,19 @@
     display: block; 
     margin: 10px auto;
   }
+
   .login p{
     font-size: 0.9rem;
     font-weight: 500;
     margin-bottom: 0.9rem;
   }
+
+.login a{
+display: inline-flex;
+justify-content: space-between;
+flex-wrap: wrap;
+margin-left: 0.2rem;
+}
 
   .login__forgot-txt {
     position: relative;
@@ -70,6 +79,6 @@
   
 
   .login__btn:hover {
-    background-color: grey; 
+    background-color: #e0b973; 
     color: white;
   }

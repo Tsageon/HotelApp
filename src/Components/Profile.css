@@ -11,10 +11,40 @@
 .BAK{
  width: 100%;
  display: flex; 
+ flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
-  
+
+.logout{
+  background-color: white; 
+  color: #333;               
+  border: 2px solid #e0b973;    
+  border-radius: 10px;       
+  padding: 6px 10px;         
+  font-size: 16px;             
+  font-weight: bold;           
+  cursor: pointer;             
+  transition: all 0.3s ease;   
+  z-index: 1000; 
+
+}
+
+.logout:hover {
+  background-color: #333;      
+  color: #fff;                
+  border-color: #f0f0f0;  }   
+
+.logout:active {
+  transform: scale(0.95);      
+}
+
+.logout:focus {
+  outline: none;             
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);  
+}
+
+
 .back { 
     background-color: white; 
     color: #333;               
@@ -61,6 +91,10 @@
     border-bottom: 0.1rem solid #e0b973;
     padding-bottom: 5px;
   }
+
+  .profile-container p{
+    text-align:start;
+  }
   
   .profile-container p, .profile-container h6 {
     margin-left: 1rem;  
@@ -84,7 +118,7 @@
       font-size: 1em;
     }
     @media (max-width: 768px) {
-      .back {
+      .back,.logout {
         right: 1rem; 
         font-size: 0.5rem; 
       }

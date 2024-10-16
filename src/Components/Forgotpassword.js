@@ -2,30 +2,22 @@ import "./Forgotpassword.css";
 import Img from "./mt.png";
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
-import { sendPasswordResetEmail } from 'firebase/auth'; 
-import { auth } from '../Config/Fire';
+import { resetPassword } from '../Redux/authSlice'; 
+import { useDispatch, useSelector } from "react-redux"
 
 const Forgotpassword = () => {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [message] = useState(null);
+ 
+  const [loading] = useState(false);
 
-  const handlePasswordReset = async (e) => {
-    e.preventDefault(); 
-    setLoading(true);
-    setError(null);
-    setMessage(null);
+ 
+  const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.auth);
 
-    try {
-      await sendPasswordResetEmail(auth, email);
-      setMessage('Password reset email sent successfully!');
-    } catch (error) {
-      console.error("Error resetting password: ", error.message);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
+  const handlePasswordReset = async () => {
+    dispatch(resetPassword({ email}));
+    alert("Link has been sent")
   };
 
   return (
@@ -33,13 +25,9 @@ const Forgotpassword = () => {
       <div><img className="forgotpassword__logo" src={Img} alt="Logo" /></div>
       <div className="forgotpassword__page">
         <div className="forgotpassword__content">
-          <h2><b>Forgot Your Password</b></h2>
-          <p>Enter the email address associated with your account to reset your password</p>
-
+          <h2><b>Forgot Your Password</b></h2><br/>
+          <p>Enter the email address associated with your account to reset your password</p><br/>
           {message && <p className="forgotpassword__success">{message}</p>}
-          {error && <p className="forgotpassword__error">{error}</p>}
-
-          <form onSubmit={handlePasswordReset}>
             <input
               type="email"
               id="email"
@@ -50,12 +38,11 @@ const Forgotpassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <button type="submit" className="forgotpassword__btn" disabled={loading}>
+            <button type="submit" className="forgotpassword__btn" disabled={loading} onClick={handlePasswordReset}>
               {loading ? 'Sending...' : 'Reset Password'}
             </button>
-          </form>
-
-          <p>Remember your password? <Link to="/login">Login</Link></p>
+            <br/>
+          <p>Remember your password?<i><Link to="/login">Login</Link></i></p>
         </div>
       </div>
     </div>

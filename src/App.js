@@ -14,6 +14,7 @@ import Contact from "./Components/Contact";
 import Admin from "./Components/Admin";
 import Reserve from "./Components/Reserve";
 import CheckoutPayment from "./Components/Checkout";
+import Loader from "./Components/Loader";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -22,25 +23,31 @@ function App() {
     "enable-funding": "venmo",
     currency: "USD",
   };
+  const {loading } = useSelector((state) => state.auth || {});
 
   return (
     <PayPalScriptProvider options={initialOptions}> 
       <Router>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={user ? <Home /> : <Register />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgotpassword" element={<Forgotpassword />} />
-            <Route path="/room" element={<Room />} />
-            <Route path="/amenities" element={<Amenities />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/reserve" element={<Reserve />} />
-            <Route path="/checkout" element={<CheckoutPayment />} />
-          </Routes>
-        </div>
+      {loading ? (  
+            <Loader />
+          ) : (
+            <div className="App">
+            <Routes>
+              <Route path="/" element={user ? <Home /> : <Register />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgotpassword" element={<Forgotpassword />} />
+              <Route path="/room" element={<Room />} />
+              <Route path="/amenities" element={<Amenities />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/reserve" element={<Reserve />} />
+              <Route path="/checkout" element={<CheckoutPayment />} />
+            </Routes>
+          </div>
+          )}
+     
       </Router>
     </PayPalScriptProvider>
   );

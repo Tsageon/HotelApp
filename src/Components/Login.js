@@ -1,5 +1,4 @@
 import "./Login.css"; 
-import Loader from "./Loader";
 import React, { useEffect, useState } from "react";
 import Img from "./mt.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,7 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user, loading, error, } = useSelector((state) => state.auth || {});
+  const { user, error, } = useSelector((state) => state.auth || {});
   const isAdmin = useSelector((state) => state.auth.isAdmin);
   const dispatch = useDispatch();
   
@@ -78,10 +77,6 @@ const Login = () => {
           <button type="submit" className="login__btn" onClick={handleLogin}>
             Login
           </button>
-
-          {loading ? (  
-            <Loader />
-          ) : (
             <>
               {error && <p>Error: {error}</p>}
               <p><br />
@@ -91,7 +86,6 @@ const Login = () => {
                 </b>
               </p>
             </>
-          )}
         </div>
       </div>
     </div>

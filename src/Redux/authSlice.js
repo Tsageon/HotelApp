@@ -147,16 +147,16 @@ export const signOut = () => async (dispatch) => {
     dispatch(setError(error.message));
   }
 };
-export const resetPassword = (email) => async (dispatch) => {
-  dispatch(setLoading());
+
+export const resetPassword = ({ email }) => async (dispatch) => {
   try {
-    await sendPasswordResetEmail(auth, email); // Firebase function to send the password reset email
-    dispatch(setPasswordResetSuccess(true)); // Update the state for success
+    await sendPasswordResetEmail(auth, email);
+    alert("jjjjjj")
+    dispatch(setUser());
   } catch (error) {
-    console.error('Error resetting password:', error.message);
-    dispatch(setError(error.message)); // Dispatch error if something goes wrong
-    dispatch(setPasswordResetSuccess(false));
+    console.error("Error sending password reset email:", error.message);
   }
 };
+
 
 export default authSlice.reducer;
