@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { fetchData, setUser } from "../Redux/dbSlice";
-import { db } from '../Config/Fire';
-import { updateDoc, doc,onSnapshot,} from 'firebase/firestore';
+import { db } from "../Config/Fire";
+import { updateDoc, doc, onSnapshot } from "firebase/firestore";
+import { auth } from "../Config/Fire";
 import { useNavigate, Link } from "react-router-dom";
 import { IoIosBed } from "react-icons/io";
 import { MdBedroomParent } from "react-icons/md";
@@ -14,21 +15,52 @@ import {
   BsShare,
 } from "react-icons/bs";
 import Img from "./mt.png";
-import Contact from "./Contact";
 import "./Room.css";
 
 const Room = () => {
-  const { user,data, loading, error } = useSelector((state) => state.db);
-  console.log("User object in Room component:", user); 
+  const [favorites, setFavorites] = useState(new Set());
+  const [activeItem, setActiveItem] = useState("Home");
+  const { user, data, loading, error } = useSelector((state) => state.db);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [favorites, setFavorites] = useState(new Set());
 
   useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
-   
+
+  useEffect(() => {
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(setUser({ uid: user.uid, email: user.email }));
+        const userDocRef = doc(db, "Users", user.uid);
+
+        const unsubscribeUserDoc = onSnapshot(userDocRef, (doc) => {
+          if (doc.exists()) {
+            const userData = doc.data();
+            setFavorites(new Set(userData.favorites || []));
+          }
+        });
+
+        return () => unsubscribeUserDoc();
+      } else {
+        dispatch(setUser(null));
+      }
+    });
+
+    return () => unsubscribeAuth();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!user || !user.uid) {
+      alert("Please log in to access the rooms.");
+      navigate("/home");
+    }
+  }, [user, navigate]);
+
+  const handleMenuClick = (item) => {
+    setActiveItem(item);
+  };
+
   const handleReserve = (index) => {
     const selectedRoom = rooms[index];
 
@@ -37,116 +69,91 @@ const Room = () => {
         ...selectedRoom,
         booked: true,
       };
-   
+
       navigate("/reserve", { state: { roomDetails: updatedRoom } });
     } else {
       navigate("/room");
     }
   };
 
-  useEffect(() => {
-    dispatch(fetchData());
-    if (user && user.uid) { 
-      const userDocRef = doc(db, 'Users', user.uid);
-      const unsubscribe = onSnapshot(userDocRef, (doc) => {
-        if (doc.exists()) {
-          const userData = doc.data();
-          if (userData.favorites) {
-            setFavorites(new Set(userData.favorites));
-          }
-        }
-      });
-      return () => unsubscribe();
-    }
-  }, [dispatch, user]);
-  
-  
   const handleFavorite = async (roomId) => {
-    console.log("User object:", user);
-    console.log("Favorite button clicked for roomId:", roomId);
-    
     if (!user || !user.uid) {
-      toast.error('You need to be logged in to add favorites.');
+      toast.error("You need to be logged in to add favorites.");
+      navigate("/login");
       return;
     }
 
     setFavorites((prevFavorites) => {
       const newFavorites = new Set(prevFavorites);
-  
-      if (newFavorites.has(roomId)) {
-        newFavorites.delete(roomId); 
-      } else {
-        newFavorites.add(roomId); 
-      }
-  
-      const updatedFavorites = Array.from(newFavorites); 
-      console.log("Updated favorites:", updatedFavorites);
-      
-      const userDocRef = doc(db, 'Users', user.uid); 
 
-      return updateDoc(userDocRef, { favorites: updatedFavorites })
+      if (newFavorites.has(roomId)) {
+        newFavorites.delete(roomId);
+      } else {
+        newFavorites.add(roomId);
+      }
+
+      const updatedFavorites = Array.from(newFavorites);
+
+      const userDocRef = doc(db, "Users", user.uid);
+
+      updateDoc(userDocRef, { favorites: updatedFavorites })
         .then(() => {
-          console.log("Favorites updated successfully.");
-        
           dispatch(setUser({ ...user, favorites: updatedFavorites }));
-          return updatedFavorites;
         })
         .catch((error) => {
           console.error("Error updating favorites:", error);
-          return prevFavorites;
         });
+
+      return newFavorites;
     });
-  };  
-  
+  };
+
   const handleShare = (room) => {
     if (navigator.share) {
       navigator.share({
         title: room.roomName,
-        text: `Check this out:${room.roomName}`,
-        url: window.location.href, 
+        text: `Check this out: ${room.roomName}`,
+        url: window.location.href,
       })
         .then(() => {
-          console.log('Room shared');
+          console.log("Room shared");
         })
         .catch((error) => {
-          console.error('Error sharing room:', error);
+          console.error("Error sharing room:", error);
         });
     } else {
-      alert('Sharing is not supported on this device');
+      alert("Sharing is not supported on this device");
     }
   };
-  
+
   const rooms = Array.isArray(data) && data.length > 0 ? data : [];
 
   return (
     <div>
-      <nav className="navbar">
-        <ul className="nav-links">
-          <img className="home_logo" src={Img} alt="Logo" />
-          <li>
-            <Link to="/home">Home</Link>
-          </li>
-          <li>
-            <Link to="/room">Rooms</Link>
-          </li>
-          <li>
-            <Link to="/amenities">Amenities</Link>
-          </li>
-          <li>
-            <Link to="/contact">Contact Us</Link>
-          </li>
-          <li>
-            <Link to="/profile">Profile</Link>
-          </li>
+      <div className="nav-container">
+        <div>
+          <img src={Img} alt="mage" className="Logo" />
+        </div>
+        <ul>
+          {["Home", "Room", "Amenities", "Contact", "Profile"].map((item) => (
+            <li
+              key={item}
+              className={activeItem === item ? "active" : ""}
+              onClick={() => handleMenuClick(item)}
+            >
+              <Link to={`/${item.toLowerCase()}`}>{item}</Link>
+            </li>
+          ))}
         </ul>
-      </nav>
+      </div>
 
       <div className="rooms">
         <h2 className="room-title">Available Rooms & Suites</h2>
         {user ? (
-        <p>Welcome,{user.email}!</p>
-      ) : (
-        <p>Please log in to see your room bookings.</p>)}
+          <p>Welcome, {user.email}!</p>
+        ) : (
+          <p>Please log in to see your room bookings.</p>
+        )}
         <div className="room-sum">
           <p className="description">
             Indulge in the perfect blend of elegance and comfort with our
@@ -177,30 +184,26 @@ const Room = () => {
                     <h6 className="room-name">
                       {room.roomName}
                       <span
-        onClick={(e) => {
-          e.stopPropagation();
-          if (user) { 
-            handleFavorite(room.id);
-          } else {
-            alert('You need to be logged in to add favorites.'); 
-          }
-        }}
-      >
-        {favorites.has(room.id) ? (
-          <BsHeartFill className="favorite-icon" />
-        ) : (
-          <BsHeart className="favorite-icon" />
-        )}
-      </span>
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFavorite(room.id);
+                        }}
+                      >
+                        {favorites.has(room.id) ? (
+                          <BsHeartFill className="favorite-icon" />
+                        ) : (
+                          <BsHeart className="favorite-icon" />
+                        )}
+                      </span>
 
-      <span
-        onClick={(e) => {
-          e.stopPropagation();
-          handleShare(room);
-        }}
-      >
-        <BsShare className="share-icon" />
-      </span>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleShare(room);
+                        }}
+                      >
+                        <BsShare className="share-icon" />
+                      </span>
                     </h6>
                   </div>
                   {room.booked && <span className="booked-label">Booked</span>}
@@ -218,7 +221,14 @@ const Room = () => {
                       <p className="text">{room.noofBeds}</p>
                     </div>
                   </div>
-                  <p>{room.descriptions.split(".").slice(0, 1).join(".")}.</p>
+                  <p>
+                    {(room.descriptions || "No description available.")
+                      .split(".")
+                      .slice(0, 1)
+                      .join(".")}
+                    .
+                  </p>
+
                   <p className="price">Price: R{room.price}</p>
                 </div>
               </div>
@@ -228,8 +238,6 @@ const Room = () => {
           )}
         </div>
       </div>
-      <br />
-      <Contact />
     </div>
   );
 };

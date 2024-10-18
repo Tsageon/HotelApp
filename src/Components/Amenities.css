@@ -16,6 +16,7 @@
   color:#e0b973;
   justify-content: center;
 }
+
 .wifi{
  text-align: center;
  margin: 0;
@@ -63,7 +64,13 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
-
+.amenities-container a {
+  display: block; 
+  width: 100%;    
+  height: 100%;  
+  border-radius: inherit;
+  text-decoration: none; 
+}
 @media (min-width: 768px) {
   .amenities-container {
     display: flex;

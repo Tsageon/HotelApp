@@ -44,7 +44,7 @@ const Login = () => {
           <h2>
             <b>Login</b>
           </h2>
-          <p>Welcome Back</p>
+          <p>Welcome</p>
 
           <input
             type="email"

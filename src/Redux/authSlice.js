@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import { auth, db } from '../Config/Fire';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc,setDoc } from 'firebase/firestore';
 
 const initialState = {
+  uid:null,
   user: null,
   isAdmin: false,
   role: 'user', 
@@ -19,6 +20,10 @@ const authSlice = createSlice({
     setLoading(state) {
       state.loading = true;
       state.error = null;
+    }, 
+    
+    setUserReviewStatus: (state, action) => {
+    state.hasLeftReview = action.payload;
     },
     setUser(state, action) {
       const {uid, email, role} = action.payload;
@@ -44,7 +49,32 @@ const authSlice = createSlice({
   },
 });
 
-export const { setLoading, setUser, setError, logout, setPasswordResetSuccess, } = authSlice.actions;
+
+export const { setLoading, setUser, setError, logout, setPasswordResetSuccess,setUserReviewStatus } = authSlice.actions;
+
+
+const addUserToFirestore = async (uid, email, name, role) => {
+  try {
+    const userRef = doc(db, 'Users', uid);
+    const userDoc = await getDoc(userRef);
+
+    if (!userDoc.exists()) {
+
+      await setDoc(userRef, {
+        email,
+        name, 
+        role,
+      
+      });
+      console.log('User added to Firestore:', { uid, email, role });
+    } else {
+      console.log('User already exists in Firestore:', { uid, email });
+    }
+  } catch (error) {
+    console.error('Error adding user to Firestore:', error);
+  }
+};
+
 
 export const signUp = ({ email, password, name }) => async (dispatch) => {
   dispatch(setLoading());
@@ -59,10 +89,12 @@ export const signUp = ({ email, password, name }) => async (dispatch) => {
   
     await updateProfile(user, { displayName: name });
 
+    await addUserToFirestore(user.uid, email,name, 'user');
+
     const serializedUser = {
       uid: user.uid,
       email: user.email,
-      name: user.displayName || name,
+      displayName: user.displayName || name,
       role: 'user', 
     };
     console.log('Serialized user:', serializedUser);
@@ -84,7 +116,7 @@ export const fetchUserRole = (uid) => async (dispatch) => {
       console.log('User data from Firestore:', userData);
 
       const role = userData.role || 'user'; 
-      const email = userData.email; 
+      const email = userData.email|| null; 
       dispatch(setUser({ uid, email, role })); 
       console.log(`Fetched role: ${role} for UID: ${uid}`);
       return role; 
@@ -120,6 +152,7 @@ export const signIn = ({ email, password }) => async (dispatch) => {
 
     const serializedUser = {
       uid: user.uid,
+      name: user.displayName,
       email: user.email,
       role,
       isAdmin,
@@ -135,8 +168,6 @@ export const signIn = ({ email, password }) => async (dispatch) => {
     dispatch(setError(error.message));
   }
 };
-
-
 
 export const signOut = () => async (dispatch) => {
   try {

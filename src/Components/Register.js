@@ -23,6 +23,7 @@ const Register = () => {
   const handleSignUp = () => {
     dispatch(signUp({ email, password,name }));
   };
+  
   useEffect(() => {
     if (user) {
       alert("Signup successfull");

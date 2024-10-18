@@ -6,6 +6,7 @@
 
 .room-name{
   display: flex;
+  flex-wrap: wrap;
   justify-content: center; 
   align-items: center; 
   font-size: 1rem;
@@ -25,6 +26,7 @@
 .navbar ul {
   list-style: none; 
   display: flex; 
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   margin: 0; 
@@ -80,6 +82,7 @@
 
 select.options {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   appearance: none;
@@ -173,6 +176,7 @@ select.options::after {
 .heading {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between; 
   padding: 10px; 
   background-color: #f8f9fa; 
@@ -186,6 +190,7 @@ select.options::after {
 
 .icon-group {
   display: inline-flex;
+  flex-wrap: wrap;
   margin-left: 3.1rem;
   gap: 1.4rem;
   text-align: center;
@@ -222,11 +227,13 @@ select.options::after {
 
 .text {
   display: inline-flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
 
 .rooms p{
+  flex-wrap: wrap;
 display: flex;
 justify-content: center;
 font-size: 0.9rem;}
@@ -240,6 +247,7 @@ font-size: 0.9rem;}
 .room-btn {
   margin: 10px auto;
   display: block;
+  flex-wrap: wrap;
   background-color: #e0b973;
   font-weight: bolder;
   color: #343131;
@@ -303,6 +311,7 @@ font-size: 0.9rem;}
 .select{width: 40%;}
 .button-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 

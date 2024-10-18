@@ -6,17 +6,18 @@ import { SiGmail } from "react-icons/si";
 import './Contact.css'
 import Logo from './mt.png'
 
+
 const Contact = () => {
   return (
 
-    <div><h5>Contact Us</h5>
+    <div>
       <div className="Contact ">
+      <h5>Contact Us</h5>
         <div className="location">
           <img className="contact-logo" src={Logo} alt="Logo" />
           <p>13 CNR TYALA &, Hulana, Galeshewe, Kimberley</p>
           <p>South Africa, Northern Cape</p>
           <p>Sol Plaatjie</p>
-         
           </div>
         <div className="connect">
           <h6 className="connect-heading">Get in touch with us</h6>
@@ -45,10 +46,11 @@ const Contact = () => {
         </div>
       </div>
       <div className="copyright">
-        <AiOutlineCopyright className="copyright-icon"/>
+        <AiOutlineCopyright className="COP-icon"/>
         <p>2024 The Matrix Hotel</p></div>
     </div>
 
   );
 };
+
 export default Contact

@@ -21,10 +21,13 @@ export const dbSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-     setUser: (state, action) => {
-      state.user = action.payload;
-      state.name = action.payload.name;
-      state.email = action.payload.email;
+    setUser: (state, action) => {
+      const { uid, name, email, role } = action.payload; 
+      state.user = { uid, name, email }; 
+      state.role = role || 'user';     
+      state.isAdmin = role === 'admin';  
+      state.loading = false;            
+      console.log('Setting user in Redux:', action.payload);
     },
     clearUser: (state) => {
       state.name = '';
@@ -86,7 +89,8 @@ export const {
   deleteRoomSuccess,
   updateRoomSuccess,
   setUser,
-  clearUser
+  clearUser,
+  setUserReviewStatus
 } = dbSlice.actions;
 
 export default dbSlice.reducer;
