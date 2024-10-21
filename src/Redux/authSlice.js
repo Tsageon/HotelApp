@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import { auth, db } from '../Config/Fire';
-import { doc, getDoc,setDoc } from 'firebase/firestore';
+import { doc, getDoc,setDoc,onSnapshot } from 'firebase/firestore';
 
 const initialState = {
   uid:null,
@@ -37,6 +37,9 @@ const authSlice = createSlice({
     setError(state, action) {
       state.error = action.payload;
       state.loading = false;
+    }
+    ,setFavourites: (state, action) => {
+      state.favourites = action.payload;
     },
     logout(state) {
       state.user = null;
@@ -50,8 +53,31 @@ const authSlice = createSlice({
 });
 
 
-export const { setLoading, setUser, setError, logout, setPasswordResetSuccess,setUserReviewStatus } = authSlice.actions;
+export const { setLoading, setFavourites ,setUser, setError, logout, setPasswordResetSuccess,setUserReviewStatus } = authSlice.actions;
 
+export const listenForAuthChanges = () => {
+  return (dispatch) => {
+      const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+          if (user) {
+              dispatch(setUser({ uid: user.uid, email: user.email }));
+              const userDocRef = doc(db, "Users", user.uid);
+
+              const unsubscribeUserDoc = onSnapshot(userDocRef, (doc) => {
+                  if (doc.exists()) {
+                      const userData = doc.data();
+                      dispatch(setFavourites(new Set(userData.favorites || []))); 
+                  }
+              });
+
+              return () => unsubscribeUserDoc();
+          } else {
+              dispatch(setUser(null));
+          }
+      });
+
+      return () => unsubscribeAuth();
+  };
+};
 
 const addUserToFirestore = async (uid, email, name, role) => {
   try {
@@ -134,7 +160,6 @@ export const fetchUserRole = (uid) => async (dispatch) => {
 };
 
 
-
 export const signIn = ({ email, password }) => async (dispatch) => {
   dispatch(setLoading());
   try {
@@ -154,7 +179,7 @@ export const signIn = ({ email, password }) => async (dispatch) => {
       uid: user.uid,
       name: user.displayName,
       email: user.email,
-      role,
+      role:'user',
       isAdmin,
     };
 
@@ -182,12 +207,13 @@ export const signOut = () => async (dispatch) => {
 export const resetPassword = ({ email }) => async (dispatch) => {
   try {
     await sendPasswordResetEmail(auth, email);
-    alert("jjjjjj")
+    alert("Email Sent")
     dispatch(setUser());
   } catch (error) {
     console.error("Error sending password reset email:", error.message);
   }
 };
+
 
 
 export default authSlice.reducer;

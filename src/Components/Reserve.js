@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
+import Footer from "./footer"
 import "react-datepicker/dist/react-datepicker.css";
 import "./Reserve.css";
 
@@ -74,11 +75,9 @@ const Reserve = () => {
           className="reserve-room-img"
           src={roomDetails.image}
           alt={roomDetails.roomName}/>
-     
       </div>
 
       <div className="date-fix">
-        {/* Date Picker Card */}
         <div className="date-picker-card">
           <h5>Select Dates</h5>
           <div className="date-picker-container">
@@ -127,7 +126,9 @@ const Reserve = () => {
     </div>
     <div className="room-description">
     <b><p className="room-p">{roomDetails.descriptions}</p></b></div>
+    <br/><br/><Footer />
     </div>
+  
   );
 };
 

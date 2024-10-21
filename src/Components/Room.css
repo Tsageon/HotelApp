@@ -177,7 +177,7 @@ select.options::after {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  justify-content: space-between; 
+  justify-content: center; 
   padding: 10px; 
   background-color: #f8f9fa; 
   border-radius: 5px;
@@ -191,7 +191,7 @@ select.options::after {
 .icon-group {
   display: inline-flex;
   flex-wrap: wrap;
-  margin-left: 3.1rem;
+  margin-left: 1.5rem;
   gap: 1.4rem;
   text-align: center;
   align-items: center;
@@ -315,36 +315,28 @@ font-size: 0.9rem;}
   gap: 0.5rem;
 }
 
-.filter-btn {
-  border-radius: 1px;
-  width: auto;
-  background-color: #f0f0f0;
-  border: none;
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.social-icons .icon {
   cursor: pointer;
 }
 
-.filter-btn.active {
-  background-color: #d8a25e ;
-  color: white;
+.room-display-share-icon {
+  font-size: 20px;
+  color: #555;
 }
 
-.filter-btn:hover {
-  background-color: #ddd;
+.room-display-share-icon:hover {
+  color: #d8a25e;
 }
 
-.filter-rooms {
-  margin-bottom: 30px;
-}
-.filter-rooms:hover .options {
-  top: -10px;
-  opacity: 1;
-  visibility: visible;
-  animation: goPopup 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-}
-
-.filter-rooms:hover .options p {
-  animation: bounce 2s ease-in-out infinite;
-}
 
 @keyframes goPopup {
   0% {

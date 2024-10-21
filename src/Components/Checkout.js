@@ -7,6 +7,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "../Config/Fire";
 import { selectUser } from '../Redux/dbSlice'
 import DatePicker from "react-datepicker";
+import Footer from "./footer"
 import "react-datepicker/dist/react-datepicker.css";
 import "./Checkout.css";
 
@@ -15,7 +16,7 @@ const CheckoutPayment = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  
+
 
   const {
     roomDetails = { roomName: "", image: "", price: 0 },
@@ -76,25 +77,34 @@ const CheckoutPayment = () => {
   return bookingDetails.roomName && bookingDetails.userEmail && bookingDetails.price;
 };
 
+
 const handleApprove = async (data, actions) => {
   try {
     const details = await actions.order.capture();
     const name = details.payer.name.given_name;
-    const userEmail = user.email || 'Unknown';
+    const emailFromPayPal = details.payer.email_address || 'Unknown';
+   
+    console.log("PayPal Payer Details:", details.payer);
+    console.log("User from Redux:", user);
 
+    const userEmail = user.email || emailFromPayPal ||'Unknown';
+
+    
     const bookingDetails = {
       roomName: roomDetails.roomName,
       image: roomDetails.image,
       price: totalPrice,
       guests: guests,
-      userEmail: userEmail || user.email || 'Unknown',
-      startDate: startDate,
-      endDate: endDate,
+      userEmail: userEmail,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
       paymentStatus: "Paid",
       transactionId: details.id,
       payerName: name,
       createdAt: new Date(),
     };
+    console.log("PayPal Details:", details);
+    console.log("Final Booking Details:", bookingDetails);
 
     if (!isBookingDataValid(bookingDetails)) {
       alert("Invalid booking data. Please check your details.");
@@ -104,13 +114,13 @@ const handleApprove = async (data, actions) => {
     dispatch(addBookings(bookingDetails));
     await addBookingToFirestore(bookingDetails);
     alert(`Transaction completed by ${name}. Booking confirmed!`);
-    navigate("/profile");
-  } catch (error) {
+    navigate("/profile")
+  } 
+  
+    catch (error) {
     console.error("Error during transaction approval:", error);
     alert("Transaction could not be completed. Please try again.");
-  }
-};
-
+  }};
 
   return (
     <div className="checkout-container">
@@ -171,6 +181,7 @@ const handleApprove = async (data, actions) => {
           <button className="checkout-btn" onClick={handleConfirm}>
             Reserve
           </button>
+          <br/><br/>
         </>
       ) : (
         <div className="confirmation-container">
@@ -204,7 +215,8 @@ const handleApprove = async (data, actions) => {
             />
           )}
         </div>
-      )}
+      )}<br/><br/>
+    <Footer/>
     </div>
   );
 };
