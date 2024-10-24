@@ -1,51 +1,31 @@
-import React from "react";
-import "./Gallery.css";
-import img1 from "./images/d4f581585cbe1db831d207ba9c24cc24.jpg";
-import img2 from "./images/kate-branch-BUXArnECLxg-unsplash.jpg";
-import img3 from "./images/pexels-pixabay-261181.jpg";
-import img4 from "./images/pexels-kelly-1179532-2869215.jpg";
-import img5 from "./images/pexels-pixabay-460537.jpg";
+import React from 'react';
+import './Gallery.css';
 
-function Gallery() {
+const images = [
+  '99e17a96a9c0471b8f19b53cc929f39f.jpg',
+  '99e17a96a9c0471b8f19b53cc929f39f.jpg',
+  '99e17a96a9c0471b8f19b53cc929f39f.jpg',
+  '99e17a96a9c0471b8f19b53cc929f39f.jpg',
+  '99e17a96a9c0471b8f19b53cc929f39f.jpg',
+  '99e17a96a9c0471b8f19b53cc929f39f.jpg',
+];
+
+const Gallery = () => {
   return (
     <div className="gallery-container">
-      <h4 className="Heading">The Gallery</h4>
+      <h2>Our Gallery</h2>
+      <p>Welcome to our gallery, where every image tells a story of luxury, comfort, and unforgettable experiences. Each photograph captures the essence of our offerings, from elegant accommodations and picturesque views to exceptional amenities designed to elevate your stay.
 
-      <div className="gallery">
-        <div className="top-gallery">
-          <div className="top-big">
-            <a href={img2} target="-blank" rel="noopener noreferrer">
-              <img src={img2} alt="mage" className="img-big" />
-            </a>
+Immerse yourself in the beauty of our meticulously designed spaces and the vibrant atmosphere that awaits you. Whether you’re seeking a tranquil retreat or an adventure-filled getaway, our gallery showcases the unique charm and exceptional service that set us apart.</p>
+      <div className="gallery-grid">
+        {images.map((image, index) => (
+          <div className="gallery-item" key={index}>
+            <img src={require(`../Components/images/${image}`)} alt={`Gallery Item ${index + 1}`} />
           </div>
-
-          <div className="top-small">
-            <a href={img1} target="-blank" rel="noopener noreferrer">
-              <img src={img1} alt="mage" className="img-big" />
-            </a>
-          </div>
-        </div>
-
-        <div className="bottom-gallery">
-          <div className="gallery-item">
-            <a href={img3} target="-blank" rel="noopener noreferrer">
-              <img src={img3} alt="mage" className="img-big" />
-            </a>
-          </div>
-          <div className="gallery-item">
-            <a href={img4} target="-blank" rel="noopener noreferrer">
-              <img src={img4} alt="mage" className="img-big" />
-            </a>
-          </div>
-          <div className="gallery-item">
-            <a href={img5} target="_blank" rel="noopener noreferrer">
-              <img src={img5} alt="mage" className="img-big" />
-            </a>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
-}
+};
 
 export default Gallery;

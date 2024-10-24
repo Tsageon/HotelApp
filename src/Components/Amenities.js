@@ -10,7 +10,10 @@ import WiFi from "../Components/images/istockphoto-1146115827-1024x1024.jpg";
 const Amenities = () => {
   return (
     <div>
-      <div className="title"></div>
+      <div className="title">
+        <h1>Indulge in Our Premium Amenities</h1>
+        <p className="paragraph">At The Matrix Hotel, we believe that comfort and convenience are paramount to an exceptional stay. Our thoughtfully curated amenities cater to your every need, ensuring a relaxing and enjoyable experience. From luxurious accommodations to state-of-the-art facilities, we provide a range of options designed to enhance your visit.</p>
+      </div>
       <div className="amenities-container">
         <div className="amenity-item">
           <h6>Spa</h6>

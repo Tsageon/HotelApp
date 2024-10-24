@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import { auth, db } from '../Config/Fire';
-import { doc, getDoc,setDoc,onSnapshot } from 'firebase/firestore';
+import { doc, getDoc,setDoc } from 'firebase/firestore';
 
 const initialState = {
   uid:null,
@@ -26,7 +26,7 @@ const authSlice = createSlice({
     state.hasLeftReview = action.payload;
     },
     setUser(state, action) {
-      const {uid, email, role} = action.payload;
+      const {uid, email, role,} = action.payload;
       console.log('Setting user in Redux:', action.payload);
       state.user = {uid, email};
       state.name = action.payload.name; 
@@ -37,9 +37,11 @@ const authSlice = createSlice({
     setError(state, action) {
       state.error = action.payload;
       state.loading = false;
-    }
-    ,setFavourites: (state, action) => {
-      state.favourites = action.payload;
+    },
+  
+    clearUser: (state) => {
+      state.name = "";
+      state.email = "";
     },
     logout(state) {
       state.user = null;
@@ -53,31 +55,9 @@ const authSlice = createSlice({
 });
 
 
-export const { setLoading, setFavourites ,setUser, setError, logout, setPasswordResetSuccess,setUserReviewStatus } = authSlice.actions;
+export const { setLoading ,setUser, setError, logout, setPasswordResetSuccess,setUserReviewStatus } = authSlice.actions;
 
-export const listenForAuthChanges = () => {
-  return (dispatch) => {
-      const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-          if (user) {
-              dispatch(setUser({ uid: user.uid, email: user.email }));
-              const userDocRef = doc(db, "Users", user.uid);
 
-              const unsubscribeUserDoc = onSnapshot(userDocRef, (doc) => {
-                  if (doc.exists()) {
-                      const userData = doc.data();
-                      dispatch(setFavourites(new Set(userData.favorites || []))); 
-                  }
-              });
-
-              return () => unsubscribeUserDoc();
-          } else {
-              dispatch(setUser(null));
-          }
-      });
-
-      return () => unsubscribeAuth();
-  };
-};
 
 const addUserToFirestore = async (uid, email, name, role) => {
   try {

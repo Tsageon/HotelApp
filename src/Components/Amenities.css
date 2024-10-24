@@ -71,6 +71,12 @@
   border-radius: inherit;
   text-decoration: none; 
 }
+
+.paragraph{
+  width: auto;
+  padding-left: 10%;
+  text-align: center;
+}
 @media (min-width: 768px) {
   .amenities-container {
     display: flex;

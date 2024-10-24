@@ -1,4 +1,4 @@
-import React, { useState,useEffect} from "react";
+import React, { useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {addReview} from '../Redux/dbSlice';
 import { AiOutlineCopyright } from "react-icons/ai";
@@ -10,6 +10,7 @@ import Logo from "./mt.png";
 import RatingReview from "./star";
 
 const Footer = () => {
+  const dispatch = useDispatch();
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [nameInput, setNameInput] = useState('');
@@ -20,12 +21,21 @@ const Footer = () => {
   const db = useSelector((state) => state.db);
   console.log("DB instance:", db);
 
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    dispatch((addReview));
-    console.log(addReview)
-  }, [dispatch]); 
+  const handleaddReview = () => {
+
+    const reviewData = {
+      name: user?.name || nameInput,     
+      email: user?.email || "KingRandy",   
+      review: reviewText,                  
+      rating,                              
+    };
+    console.log("Review data to be added:",reviewData)
+    dispatch(addReview(reviewData));
+    alert("Review added!Thank you?")
+
+    setReviewText("");
+    setRating(0);
+  };
   
   return (
     <div>
@@ -62,7 +72,7 @@ const Footer = () => {
             setRating={setRating}
           />
           <br />
-          <button className="Send-button" onClick={addReview}>
+          <button className="Send-button" onClick={handleaddReview}>
             Send
           </button>
         </div>
