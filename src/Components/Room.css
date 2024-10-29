@@ -1,11 +1,9 @@
-/* General Styles */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
 .rooms {
-  font-size: small;
   padding: 20px;
   text-align: center;
 }
@@ -15,14 +13,22 @@ body {
   margin-bottom: 20px;
 }
 
+.room-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  padding: 0;
+}
+
+
 .room-card {
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin: 15px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   transition: transform 0.2s;
+  cursor: pointer;
 }
 
 .room-card:hover {
@@ -36,6 +42,8 @@ body {
 .room-img {
   width: 100%;
   border-radius: 8px;
+  max-height: 200px;
+  object-fit: cover;
 }
 
 .room-info {
@@ -53,7 +61,8 @@ body {
   font-weight: bold;
 }
 
-.favorite-icon, .share-icon {
+.favorite-icon,
+.share-icon {
   cursor: pointer;
   margin-left: 10px;
 }
@@ -80,62 +89,18 @@ body {
   font-size: 0.8rem;
 }
 
-/* Price Label */
 .price {
   font-weight: bold;
-  color: green;
+  color: black;
 }
 
-/* Booked Label */
 .booked-label {
   color: red;
   font-weight: bold;
 }
 
-/* Navigation Styles */
-.nav-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #f0f0f0;
-  padding: 10px;
-}
 
-.nav-container .Logo {
-  height: 50px;
-}
-
-.nav-container ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-}
-
-.nav-container ul li {
-  margin: 0 15px;
-  cursor: pointer;
-}
-
-.nav-container ul li:hover {
-  text-decoration: underline;
-}
-
-/* Description Styles */
-.room-sum {
-  margin: 20px 0;
-}
-
-.description {
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
-
-/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
-  .rooms {
-    padding: 10px;
-  }
-
   .room-title {
     font-size: 1.2rem;
   }
@@ -148,7 +113,8 @@ body {
     font-size: 1rem;
   }
 
-  .favorite-icon, .share-icon {
+  .favorite-icon, 
+  .share-icon {
     margin-left: 5px;
   }
 
@@ -165,10 +131,6 @@ body {
 @media (max-width: 480px) {
   .room-title {
     font-size: 1rem;
-  }
-
-  .room-card {
-    padding: 5px;
   }
 
   .heading {

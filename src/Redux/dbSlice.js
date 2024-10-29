@@ -1,16 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   getDocs,
-  getDoc,
+
+  doc,
+
   collection,
-  setDoc,
   addDoc,
   deleteDoc,
-  doc,
   updateDoc,
   onSnapshot,
-  where,
-  query,
+ 
 } from "firebase/firestore";
 import { db,auth } from "../Config/Fire";
 
@@ -27,6 +26,10 @@ const initialState = {
   name: "",
   email: "",
   password: "",
+  clientsReviews : []  ,
+  likedRooms :[],
+  userBookings :[]
+
 };
 
 export const dbSlice = createSlice({
@@ -154,16 +157,36 @@ export const dbSlice = createSlice({
         state.data[roomIndex] = { id, roomName, price };
       }
     },
+
+    setReviews (state, action){
+      state.clientsReviews =action.payload
+
+    },
+
+    setLikeRooms (state, action){
+      state.likedRooms =action.payload
+
+    },
+    setLikedRooms: (state, action) => {
+      state.likedRooms = action.payload;
+      state.loading = false;
+    },
+
+    setUserBooking  (state , action){
+      state.userBooking = action.payload;
+    }
   },
 });
 
 export const {
   setLoading,
+  setUserBooking,
   setData,
   setUser,
   setError,
   setSuccess,
   setFavorites,
+  setLikedRooms,
   removeFavoriteFromState,
   removeFavorite,
   updateFavoritesFailure,
@@ -183,7 +206,10 @@ export const {
   clearUser,
   setUserReviewStatus,
   addFavoriteToState,
-  addFavorite
+  addFavorite ,
+  setReviews ,
+  setLikeRooms
+ 
 } = dbSlice.actions;
 
 export default dbSlice.reducer;
@@ -237,136 +263,49 @@ export const fetchData = () => async (dispatch) => {
   }
 };
 
-
-export const getFavorites = (uid) => async (dispatch) => {
+export const userLikedRooms = (likedData) => async (dispatch) => {
   dispatch(setLoading());
   try {
-    const globalFavorites = await fetchGlobalFavorites();
+    const likedRoomsRef = collection(db, "users", auth.currentUser.uid, "userLikeRooms");
+    const querySnapshot = await getDocs(likedRoomsRef);
+    const alreadyLiked = querySnapshot.docs.some(doc => doc.data().roomId === likedData.roomId);
 
-    const userFavorites = await fetchUserFavorites(uid);
-
-    const combinedFavorites = [...globalFavorites, ...userFavorites];
-
-    dispatch(setFavorites(combinedFavorites));
+    if (alreadyLiked) {
+      alert("You've already liked this room.");
+    } else {
+      const docRef = await addDoc(likedRoomsRef, {
+        ...likedData,
+      });
+      console.log("Liked Data:", likedData);
+      dispatch(setLikeRooms({ id: docRef.id, ...likedData }));
+      alert("Liked successfully");
+    }
   } catch (error) {
-    dispatch(setError(error.message));
+    dispatch(setError("Failed to add Like: " + error.message));
   }
 };
 
-export const toggleFavorite = (roomId) => {
-  return async (dispatch, getState) => {
-    dispatch(setLoading(true));
-    const state = getState();
-    const user = state.db.user; 
-
-    if (!user) {
-      dispatch(setError("User not logged in"));
-      return;
-    }
-
-    const { uid } = user;
-
-    try {
-      const favoriteDocRef = doc(db, "Users", uid, "favorites", roomId);
-
-      const favoriteSnapshot = await getDoc(favoriteDocRef);
-      if (favoriteSnapshot.exists()) {
-   
-        await deleteDoc(favoriteDocRef);
-        dispatch(removeFavorite({ roomId })); 
-      } else {
-       
-        await setDoc(favoriteDocRef, { roomId });
-        dispatch(addFavorite({ roomId })); 
-      }
-    } catch (error) {
-      console.error("Error toggling favorite: ", error);
-      dispatch(setError("Failed to update favorite"));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-};
-
-const fetchGlobalFavorites = async () => {
-  const globalQuerySnapshot = await getDocs(collection(db, "favorites"));
-  return globalQuerySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-};
-
-
-const fetchUserFavorites = async (uid) => {
-  const userQuerySnapshot = await getDocs(
-    collection(db, "Users", uid, "favorites")
-  );
-  return userQuerySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-};
-
-export const fetchFavorites = (uid) => async (dispatch) => {
+export const fetchUserLikedRooms = () => async (dispatch) => {
   dispatch(setLoading());
-
   try {
+    const likedRoomsRef = collection(db, "users", auth.currentUser.uid, "userLikeRooms");
+    const querySnapshot = await getDocs(likedRoomsRef);
+    
+    const likedRoomsData = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-    const favoritesCollection = collection(db, 'Users', uid, 'favorites');
-    const snapshot = await getDocs(favoritesCollection);
-  
-    const favorites = snapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        ...data,
-        createdAt: data.createdAt ? data.createdAt.toDate().toISOString() : null,
-      };
-    });
-
-  
-    const roomDetailsPromises = favorites.map(async (favorite) => {
-      try {
-          const roomDocRef = doc(db, 'Rooms', favorite.roomId);
-          const roomDoc = await getDoc(roomDocRef);
-          if (roomDoc.exists()) {
-              return { id: roomDoc.id, ...roomDoc.data() }; 
-          } else {
-              console.log(`Room not found for ID: ${favorite.roomId}`);
-              return null; 
-          }
-      } catch (error) {
-          console.error("Error fetching room details:", error);
-          return null; 
-      }
-  });
-  
-
-    const roomDetails = await Promise.all(roomDetailsPromises);
-    console.log("Room Details Fetched:", roomDetails);
-    const validRoomDetails = roomDetails.filter((room) => room); 
-
-   
-    const favoritesWithRoomDetails = favorites.map(favorite => {
-      const roomDetail = validRoomDetails.find(room => room.id === favorite.roomId);
-      return {
-        ...favorite,
-        roomDetail, 
-      };
-  
-    });
-
-    console.log("Fetched User Favorites with Room Details:", favoritesWithRoomDetails);
-    dispatch(setFavorites(favoritesWithRoomDetails));
+    dispatch(setLikedRooms(likedRoomsData));
   } catch (error) {
-    dispatch(setError(error.message));
-    console.error("Error fetching favorites:", error);
-    return null;
+    dispatch(setError("Failed to fetch liked rooms: " + error.message));
   }
 };
+
 
 export const fetchReviews = () => async (dispatch) => {
-  dispatch(fetchReviewsStart());
+  dispatch(setLoading());
+ 
   console.log("Fetching reviews...");
 
   try {
@@ -382,7 +321,7 @@ export const fetchReviews = () => async (dispatch) => {
       console.log('Warning: No documents found in the "Reviews" collection!');
     }
 
-    dispatch(fetchReviewsSuccess(data));
+    dispatch(setReviews(data));
   } catch (error) {
     dispatch(fetchReviewsFailure("Failed to fetch reviews: " + error.message));
     console.error("Error fetching documents from Firebase:", error);
@@ -435,58 +374,43 @@ export const getBookings = (uid) => async (dispatch) => {
   }
 };
 
-export const getUserBookings = (userId, userEmail) => async (dispatch) => {
-  dispatch(setLoading());
-
-  try {
-    let userBookings = [];
-
-    if (userId) {
-      const userIdQuery = query(
-        collection(db, "bookings"),
-        where("userId", "==", userId)
-      );
-      const userIdSnapshot = await getDocs(userIdQuery);
-      userBookings = userIdSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+export const deleteBooking = createAsyncThunk(
+  'bookings/deleteBooking',
+  async (transactionId, { dispatch }) => {
+    dispatch(setLoading(true));
+    try {
+      const bookingRef = doc(db, "bookings", transactionId);
+      await deleteDoc(bookingRef);
+      dispatch(setLoading(false));
+      console.log("Booking deleted successfully");
+      return transactionId;
+    } catch (error) {
+      dispatch(setError("Error deleting booking: " + error.message));
+      dispatch(setLoading(false));
+      throw error;
     }
-
-    if (userBookings.length === 0 && userEmail) {
-      const userEmailQuery = query(
-        collection(db, "bookings"),
-        where("userEmail", "==", userEmail)
-      );
-      const userEmailSnapshot = await getDocs(userEmailQuery);
-      userBookings = userEmailSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-    }
-
-    if (userBookings.length === 0) {
-      console.warn("No bookings found for this user.");
-    }
-
-    dispatch(setBookings(userBookings));
-  } catch (error) {
-    console.error("Error fetching user bookings:", error);
-    dispatch(setError(error.message));
   }
-};
+);
 
-export const getAllBookings = () => async (dispatch) => {
-  dispatch(setLoading());
+
+export const fetchBookings = () => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
-    const querySnapshot = await getDocs(collection(db, "bookings"));
-    const bookingsData = querySnapshot.docs.map((doc) => ({
+    const bookingsCollection = collection(db, "bookings");
+    const bookingsSnapshot = await getDocs(bookingsCollection);
+    
+    const bookingsData = bookingsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    dispatch(setBookings(bookingsData));
+
+    const uniqueBookings = Array.from(new Map(bookingsData.map(item => [item.transactionId, item])).values());
+
+    dispatch(setBookings(uniqueBookings));
   } catch (error) {
-    dispatch(setError(error.message));
+    dispatch(setError("Error fetching data: " + error.message));
+  } finally {
+    dispatch(setLoading(false)); 
   }
 };
 
@@ -535,3 +459,87 @@ export const updateRoom = (updatedRoom) => async (dispatch) => {
     dispatch(fetchRoomsFailure("Failed to update room"));
   }
 };
+
+
+export const userBookings = (bookingData) => async (dispatch) => {
+  dispatch(setLoading());
+  try {
+    const bookingsRef = collection(db, "users", auth.currentUser.uid, "bookings");
+    const docRef = await addDoc(bookingsRef, {
+      ...bookingData,
+    });
+
+    dispatch(setLikeRooms({ id: docRef.id, ...bookingData }));
+    alert("Booked successfully");
+  } catch (error) {
+    dispatch(setError("Failed to book: " + error.message));
+  }
+};
+
+
+
+// export const fetchUserBookings = (profileEmail) => async (dispatch) => {
+//   dispatch(setLoading());
+//   try {
+//     const authEmail = auth.currentUser?.email;
+
+//     let querySnapshot = await getDocs(query(collection(db, "bookings"), where("userEmail", "==", authEmail)));
+//     let emailUsed = authEmail;
+
+ 
+//     if (querySnapshot.empty && profileEmail) {
+//       console.log("No bookings found with auth email, trying profile email as fallback.");
+      
+//       querySnapshot = await getDocs(query(collection(db, "bookings"), where("userEmail", "==", profileEmail)));
+//       emailUsed = profileEmail;
+//     }
+
+//     if (querySnapshot.empty) {
+//       console.log("No bookings found for both auth and profile emails.");
+//       alert("No bookings found for your account. Please ensure you're logged in with the correct email and profile information.");
+//       dispatch(setBookings([]));
+//       return;
+//     }
+
+//     const bookingsData = querySnapshot.docs.map((doc) => {
+//       const data = doc.data();
+//       return {
+//         id: doc.id,
+//         ...data,
+//         endDate: data.endDate ? new Date(data.endDate) : null,
+//         createdAt: data.createdAt ? new Date(data.createdAt) : null,
+//       };
+//     });
+
+//     console.log("Fetched Bookings:", bookingsData);
+
+   
+//     alert(`Bookings successfully retrieved using email: ${emailUsed}`);
+    
+//     dispatch(setBookings(bookingsData));
+//   } catch (error) {
+//     console.error("Error fetching bookings:", error);
+//     dispatch(setError("Error fetching bookings: " + error.message));
+//   }
+// };
+
+
+export const fetchUserBookings = () => async (dispatch) => {
+  //dispatch(fetchRoomsStart());
+  try {
+    const roomsCollection = collection(db, "users", auth.currentUser.uid, "userBookings");
+    const roomSnapshot = await getDocs(roomsCollection);
+    const roomList = roomSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log(roomList)
+   dispatch(setUserBooking(roomList));
+  } catch (error) {
+    dispatch(fetchRoomsFailure("Failed to fetch rooms"));
+  }
+};
+
+
+
+

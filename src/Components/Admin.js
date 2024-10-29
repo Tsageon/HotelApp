@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate} from "react-router-dom";
 import { Fade } from "react-awesome-reveal";
 import { useDispatch, useSelector } from "react-redux";
-import { collection, getDocs, deleteDoc, doc  } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { addRoom, deleteRoom, updateRoom, fetchRooms, selectRooms } from "../Redux/dbSlice";
-import { db, storage } from "../Config/Fire";
+import { addRoom, deleteRoom, updateRoom, fetchBookings, selectRooms,deleteBooking } from "../Redux/dbSlice";
+import {  storage } from "../Config/Fire";
 import "./Admin.css";
 
 
 const Admin = () => {
-  const [bookings, setBookings] = useState([]);
+  const [bookings] = useState([]);
   const [activePage, setActivePage] = useState("rooms");
   const dispatch = useDispatch();
   const rooms = useSelector(selectRooms);
@@ -24,7 +23,7 @@ const Admin = () => {
   const [image, setImage] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(true);
   const [uploading, setUploading] = useState(false); 
   const navigate = useNavigate();
 
@@ -34,29 +33,9 @@ const Admin = () => {
     return `${parsedDate.getDate()}/${parsedDate.getMonth() + 1}/${parsedDate.getFullYear()}`;
   };
 
+ 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); 
-      try {
-        const bookingsCollection = collection(db, "bookings");
-        const bookingsSnapshot = await getDocs(bookingsCollection);
-        const bookingsData = bookingsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        const uniqueBookings = Array.from(new Map(bookingsData.map(item => [item.transactionId, item])).values());
-
-        setBookings(bookingsData, uniqueBookings);
-        dispatch(fetchRooms());
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false); 
-      }
-    };
-  
-    fetchData();
+    dispatch(fetchBookings());
   }, [dispatch]);
 
   const uploadImage = async (file) => {
@@ -106,24 +85,12 @@ const Admin = () => {
     setActivePage("rooms");
   };
   
-  const handleDeleteBooking = async (transactionId) => {
-    try {
-      const bookingRef = doc(db, "bookings", transactionId); 
-      await deleteDoc(bookingRef);
-      setBookings((prevBookings) => prevBookings.filter(booking => booking.transactionId !== transactionId));
-      console.log("Booking deleted successfully");
-    } catch (error) {
-      console.error("Error deleting booking:", error);
-    }
+  const handleDeleteBooking = (transactionId) => {
+    dispatch(deleteBooking(transactionId));
   };
 
-  const handleDeleteRoom = async (roomId) => {
-    try {
-      await dispatch(deleteRoom(roomId));  
-      console.log("Room deleted successfully");
-    } catch (error) {
-      console.error("Error deleting room:", error);
-    }
+  const handleDeleteRoom = (roomId) => {
+    dispatch(deleteRoom(roomId));
   };
 
   const handleImageChange = (e) => {

@@ -5,7 +5,7 @@ import StarRating from './star'
 import './Reviews.css'; 
 
 const Reviews = () => {
-  const reviews = useSelector((state) => state.db.data);
+  const reviews = useSelector((state) => state.db);
   const loading = useSelector((state) => state.db.loading);
   const dispatch = useDispatch();
   

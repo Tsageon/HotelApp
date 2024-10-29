@@ -2,7 +2,7 @@ import React, { useState, useEffect,useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useDispatch,useSelector } from "react-redux";
-import { addBookings } from "../Redux/dbSlice";
+import { userBookings} from "../Redux/dbSlice";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../Config/Fire";
 import { selectUser } from '../Redux/dbSlice'
@@ -111,7 +111,7 @@ const handleApprove = async (data, actions) => {
       return;
     }
 
-    dispatch(addBookings(bookingDetails));
+    dispatch(userBookings(bookingDetails));
     await addBookingToFirestore(bookingDetails);
     alert(`Transaction completed by ${name}. Booking confirmed!`);
     navigate("/profile")

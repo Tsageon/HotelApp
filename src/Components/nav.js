@@ -1,60 +1,69 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Logo from './mt.png';
 import './nav.css';
+
 const NavBar = () => {
-  const [activeItem, setActiveItem] = useState('Home'); // Set 'Home' as default active item
-  const [menuOpen, setMenuOpen] = useState(false); // State to track if the menu is open
-  const handleMenuClick = (item) => {
-    setActiveItem(item); // Update active item when clicked
-    setMenuOpen(false);  // Close the menu after an item is clicked (for mobile view)
+  const [activeItem, setActiveItem] = useState('Home');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate(); 
+
+  const handleMenuClick = (item, path) => {
+    setActiveItem(item);
+    setMenuOpen(false);
+    navigate(path); 
   };
+
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen); // Toggle the menu state
+    setMenuOpen(!menuOpen);
   };
+
   return (
     <div className="nav-container">
       <div>
-        <h1>Logo</h1>
+        <img className='logo' src={Logo} alt='logo' />
       </div>
-      {/* Hamburger Icon */}
+      
       <div className="hamburger" onClick={toggleMenu}>
         <div></div>
         <div></div>
         <div></div>
       </div>
-      {/* Menu Items */}
+     
       <ul className={menuOpen ? 'open' : ''}>
         <li
           className={activeItem === 'Home' ? 'active' : ''}
-          onClick={() => handleMenuClick('Home')}
+          onClick={() => handleMenuClick('Home', '/home')}
         >
-          Explore
+          Home
         </li>
         <li
-          className={activeItem === 'About' ? 'active' : ''}
-          onClick={() => handleMenuClick('About')}
+          className={activeItem === 'Gallery' ? 'active' : ''}
+          onClick={() => handleMenuClick('Gallery', '/gallery')}
         >
-          Review
+          Gallery
         </li>
         <li
-          className={activeItem === 'Services' ? 'active' : ''}
-          onClick={() => handleMenuClick('Services')}
+          className={activeItem === 'Profile' ? 'active' : ''}
+          onClick={() => handleMenuClick('Profile', '/profile')}
         >
-          Blog
+          Profile
         </li>
         <li
-          className={activeItem === 'Contact' ? 'active' : ''}
-          onClick={() => handleMenuClick('Contact')}
+          className={activeItem === 'Amenities' ? 'active' : ''}
+          onClick={() => handleMenuClick('Amenities', '/amenities')}
         >
-          Contact
+         Amenities
         </li>
         <li
-          className={activeItem === 'Blog' ? 'active' : ''}
-          onClick={() => handleMenuClick('Blog')}
+          className={activeItem === 'Rooms' ? 'active' : ''}
+          onClick={() => handleMenuClick('Rooms', '/room')}
         >
-          Blog
+          Rooms
         </li>
       </ul>
     </div>
   );
 };
+
 export default NavBar;

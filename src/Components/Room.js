@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchData, listenForAuthChanges, setFavorites, addFavorite, removeFavoriteFromState } from "../Redux/dbSlice";
-import { useNavigate, Link } from "react-router-dom";
-import { FaFacebook, FaTwitter, FaTelegram, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { fetchData, listenForAuthChanges } from "../Redux/dbSlice";
+import { useNavigate } from "react-router-dom";
 import { IoIosBed } from "react-icons/io";
 import { MdBedroomParent } from "react-icons/md";
 import { BsFillPeopleFill, BsHeart, BsHeartFill, BsShare } from "react-icons/bs";
-import Img from "./mt.png";
+import Nav from './nav'
 import "./Room.css";
+
+import { userLikedRooms } from "../Redux/dbSlice";
 
 const Room = () => {
   const favorites = useSelector((state) => state.db?.favorites || []);
   const { data, loading, error } = useSelector((state) => state.db || { favorites: [] });
   const user = useSelector((state) => state.auth.user);
+  const [isSharing, setIsSharing] = useState(false); 
+  const [messageVisible, setMessageVisible] = useState(false);
+  const [shareMessage, setShareMessage] = useState('');
 
   const rooms = Array.isArray(data) && data.length > 0 ? data : [];
-  const [activeItem, setActiveItem] = useState("");
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [visibleIconsRoomId, setVisibleIconsRoomId] = useState(null);
+
 
   useEffect(() => {
     if (rooms.length === 0 && !loading) {
@@ -42,57 +46,59 @@ const Room = () => {
     }
   }, [user, navigate]);
 
-  const handleMenuClick = (item) => {
-    setActiveItem(item);
-  };
+
 
   const handleReserve = (index) => {
     const selectedRoom = rooms[index];
-
+  
     if (!selectedRoom.booked) {
       const updatedRoom = {
         ...selectedRoom,
         booked: true,
       };
-
+      
+  
       navigate("/reserve", { state: { roomDetails: updatedRoom } });
     } else {
       navigate("/room");
     }
   };
 
-  const handleShare = (room) => {
-    const { roomName, descriptions, price, image } = room;
+  const handleShare = async (room) => {
+    const { roomName, descriptions, price } = room;
 
-    const encodedRoomName = encodeURIComponent(roomName);
-    const encodedDescription = encodeURIComponent(descriptions);
-    const encodedPrice = encodeURIComponent(`Price: R${price}`);
-    const shareUrl = `http://localhost:3000/room/${room.id}`;
-
-    return {
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${encodedRoomName} - ${encodedDescription} - ${encodedPrice}`,
-      twitter: `https://twitter.com/intent/tweet?text=${encodedRoomName} - ${encodedDescription} - ${encodedPrice}&url=${shareUrl}`,
-      whatsapp: `https://wa.me/?text=${encodedRoomName} - ${encodedDescription} - ${encodedPrice} ${shareUrl}`,
-      instagram: `https://www.instagram.com/`,
-      telegram: `https://telegram.me/share/url?url=${shareUrl}&text=${encodedRoomName} - ${encodedDescription} - ${encodedPrice}`,
+    const shareData = {
+      title: roomName,
+      text: `${descriptions} - Price: R${price}`,
+      url: `http://localhost:3000/room/${room.id}`,
     };
-  };
 
-  const handleAddFavorite = (roomId, e) => {
-    e.stopPropagation();
-
-    const isFavorite = favorites.some((fav) => fav.roomId === roomId);
-
-    if (isFavorite) {
-      dispatch(removeFavoriteFromState(roomId));
+    if (navigator.share) {
+      setIsSharing(true);
+      try {
+        await navigator.share(shareData);
+        setShareMessage('Share Successful!'); // Set message on success
+        setMessageVisible(true); // Show the message
+        setTimeout(() => {
+          setMessageVisible(false); // Hide the message after 3 seconds
+        }, 3000);
+      } catch (error) {
+        console.error('Error sharing:', error);
+      } finally {
+        setIsSharing(false);
+      }
     } else {
-      dispatch(addFavorite(user.uid || user.email, user.email, roomId));
+      console.error('Web Share API is not supported in this browser.');
     }
+  };
+  
+  const handleAddFavorite = (room) => {
+   dispatch(userLikedRooms(room));
   };
 
   return (
     <div>
-      
+      <Nav/>
 
       <div className="rooms">
         <h2 className="room-title">Available Rooms & Suites</h2>
@@ -125,7 +131,11 @@ const Room = () => {
                   <div className="heading">
                     <h6 className="room-name">
                       {room.roomName}
-                      <span onClick={(e) => handleAddFavorite(room.id, e)}>
+                      <span
+      onClick={(e) => {
+        e.stopPropagation(); 
+        handleAddFavorite(room);
+      }}>
                         {favorites.some((favorite) => favorite.id === room.id) ? (
                           <BsHeartFill className="favorite-icon" />
                         ) : (
@@ -133,34 +143,16 @@ const Room = () => {
                         )}
                       </span>
                       <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setVisibleIconsRoomId(prevRoomId => (prevRoomId === room.id ? null : room.id));
-                        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!isSharing) {
+            handleShare(room);
+          }
+        }}
                       >
                         <BsShare className="share-icon" />
                       </span>
-                    </h6>
-
-                    {visibleIconsRoomId === room.id && (
-                      <div className="social-icons">
-                        <a href={handleShare(room).facebook} target="_blank" rel="noopener noreferrer" className="icon facebook">
-                          <FaFacebook className="room-display-share-icon" />
-                        </a>
-                        <a href={handleShare(room).twitter} target="_blank" rel="noopener noreferrer" className="icon twitter">
-                          <FaTwitter className="room-display-share-icon" />
-                        </a>
-                        <a href={handleShare(room).whatsapp} target="_blank" rel="noopener noreferrer" className="icon whatsapp">
-                          <FaWhatsapp className="room-display-share-icon" />
-                        </a>
-                        <a href={handleShare(room).instagram} target="_blank" rel="noopener noreferrer" className="icon instagram">
-                          <FaInstagram className="room-display-share-icon" />
-                        </a>
-                        <a href={handleShare(room).telegram} target="_blank" rel="noopener noreferrer" className="icon telegram">
-                          <FaTelegram className="room-display-share-icon" />
-                        </a>
-                      </div>
-                    )}
+                    </h6>     
                   </div>
 
                   {room.booked && <span className="booked-label">Booked</span>}

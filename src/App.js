@@ -60,7 +60,6 @@ function App() {
             <div className="App">
             <Routes>
               <Route path="/" element={user ? <Home /> : <Register />} />
-
               <Route path ="/reviews" element={<Reviews/>}/>
               <Route path="/footer" element={<Footer/>}/>
               <Route path="/gallery" element={<Gallery />}/>

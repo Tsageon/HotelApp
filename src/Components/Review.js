@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Review.css';
+
+import {fetchReviews} from '../Redux/dbSlice';
+import {useDispatch,useSelector} from 'react-redux';
 
 const reviews = [
   {
@@ -26,28 +29,63 @@ const reviews = [
     rating: 4,
     comment: 'Great location and comfortable stay. Would love to come back!',
   },
+  {
+    id: 5,
+    name: 'Fatty Wab',
+    rating: 5,
+    comment: '1738! RGF! SQWAAAAAAAAAAAA!',
+  },
+
 ];
 
 const Review = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+
+
+  const {clientsReviews } = useSelector((state) => state.db);
+ 
+  const dispatch = useDispatch();
+
+ 
+  
+  const [startIndex, setStartIndex] = useState(0);
+  const reviewsPerPage = 4;
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % reviews.length);
+    setStartIndex((prevIndex) => (prevIndex + reviewsPerPage) % reviews.length);
   };
 
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + reviews.length) % reviews.length);
+    setStartIndex((prevIndex) =>
+      (prevIndex - reviewsPerPage + reviews.length) % reviews.length
+    );
   };
 
-  const { name, rating, comment } = reviews[currentIndex];
+ 
+  const displayedReviews = clientsReviews.slice(
+    startIndex,
+    startIndex + reviewsPerPage > reviews.length ? reviews.length : startIndex + reviewsPerPage
+  );
+
+
+  useEffect(() => {
+    dispatch(fetchReviews());
+  }, [dispatch]); 
+
+
+ console.log(clientsReviews);
 
   return (
     <div className="review-container">
       <h2>Guest Reviews</h2>
-      <div className="review-card">
-        <h3>{name}</h3>
-        <div className="rating">{'⭐'.repeat(rating)}</div>
-        <p>{comment}</p>
+      <div className="reviews-wrapper">
+        {displayedReviews.map(({ id, name,email, rating, review }) => (
+          <div key={id} className="review-card">
+            <h3>{name}</h3>
+            <p>{email}</p>
+            <div className="rating">{'⭐'.repeat(rating)}</div>
+            <p>{review}</p>
+          </div>
+        ))}
       </div>
       <div className="navigation-buttons">
         <button onClick={handlePrevious}>&lt; Previous</button>

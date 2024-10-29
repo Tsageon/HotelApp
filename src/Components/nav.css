@@ -6,6 +6,11 @@
     background-color: #F8F8F8;
     width: 100%;
 }
+
+.logo{
+    border-radius: 10rem;
+    width: 5rem;
+  }
 ul {
     display: flex;
     gap: 1.5rem;

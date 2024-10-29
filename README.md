@@ -1,70 +1,51 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Hotel App
+A full-featured hotel booking application with user and admin functionalities. The app enables users to search, view, and book accommodations, while admins can manage listings, reservations, and user profiles. State management is handled with Redux, Firebase is used for authentication, and Firebase Firestore for data storage.
+## Table of Contents
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Data Storage](#data-storage)
+- [Security & Compliance](#security--compliance)
+- [License](#license)
+## Features
+### User Authentication
+- **User Registration/Login**: Secure authentication for users with Firebase Authentication.
+### Accommodation Listings
+- **Available Accommodations**: Users can browse accommodations with the following details:
+  - **Photo Gallery**: Display hotel images.
+  - **Map**: Location on an interactive map.
+  - **Price Details**: Pricing per night and total cost.
+  - **Basic Information**: Address, star rating, and description.
+  - **Hotel Facilities & Policies**: List of amenities and policies.
+  - **Call-to-Action Button**: Book or view more details.
+  - **Sharing & Favourites**: Share details or add to favourites.
+### Booking Functionality
+- **Booking**: Users can book accommodations with customizable options:
+  - **Booking Details**: Select check-in/check-out dates, number of rooms, and guests.
+  - **Payment Gateway**: Secure payment processing for bookings.
+### User Profile
+- **Profile Management**: Users can edit their profile, view bookings, and saved accommodations.
+### Admin Panel
+- **Admin Functions**:
+  - **Add New Accommodations**: Add room types, capacity, pricing, and availability.
+  - **Manage Reservations**: Approve, modify, or cancel bookings.
+  - **Update Accommodation Details**: Modify room availability, prices, and descriptions.
+  - **Reservation Management**: View reservation details including check-in/out dates, guest information, etc.
+### Additional Features
+- **Search & Filter**: Users can search based on location, price, and more.
+- **Reviews & Ratings**: Users can leave reviews and ratings for accommodations.
+- **Notifications**: Booking confirmations, updates, and promotional notifications.
+- **Responsive Design**: Optimized for mobile, tablet, and desktop.
+## Technologies Used
+- **Frontend**: React.js, Redux for state management
+- **Authentication**: Firebase Authentication
+- **Database**: Firebase Firestore or Firebase Realtime Database for storage
+- **Payment Processing**: Stripe or PayPal (or your choice of gateway)
+- **Notifications**: Firebase Cloud Messaging or local notifications
+- **UI/UX Design**: CSS, Bootstrap, Material UI
+## Setup
+1. **Clone the Repository**:
+   ```bash
+   git clone hhttps://github.com/Tsageon/HotelApp.git
+## NPM Install/npm i for all the depedencies after clonining

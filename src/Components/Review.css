@@ -1,13 +1,10 @@
 .review-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
     padding: 2rem;
     background-color: #f8f8f8;
     text-align: center;
-  }
-  
-  .review-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
   }
   
   .review-card {
@@ -23,13 +20,32 @@
   }
   
   .rating {
-    color: #f39c12; /* Gold color for stars */
+    color: #e0b973;
     font-size: 1.5rem;
   }
   
   h2 {
     margin-bottom: 1rem;
     font-size: 2rem;
+  }
+  
+  .navigation-buttons {
+    margin-top: 1rem;
+  }
+  
+  .navigation-buttons button {
+    padding: 0.5rem 1rem;
+    margin: 0 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .navigation-buttons button:hover {
+    background-color: #e0b973;
   }
   
   @media (max-width: 768px) {
@@ -48,5 +64,8 @@
     .rating {
       font-size: 1.2rem;
     }
-  }
   
+    .navigation-buttons button {
+      padding: 0.5rem;
+    }
+  }
