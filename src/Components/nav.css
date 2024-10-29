@@ -2,71 +2,102 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 1rem;
+    padding: 1rem; 
     background-color: #F8F8F8;
     width: 100%;
-}
-
-.logo{
-    border-radius: 10rem;
-    width: 5rem;
   }
-ul {
+  
+  .logo {
+    border-radius: 10rem;
+    width: 5rem; 
+  }
+  
+  ul {
     display: flex;
     gap: 1.5rem;
     margin: 0;
     padding: 0;
-}
-li {
+  }
+  
+  li {
     padding: 1rem;
     list-style: none;
-    font-size: 1.2rem;
+    font-size: 1.2rem; 
     cursor: pointer;
-}
-li.active {
+  }
+  
+  li.active {
     background-color: blue;
     color: white;
-    border-radius: 8px;
-}
-/* Media queries for responsiveness */
-@media (max-width: 768px) {
+    border-radius: 0.5rem; 
+  }
+  
+  li:hover {
+    background-color: #e0b973;
+    color: white;
+    border-radius: 0.5rem; 
+  }
+  
+
+  @media (max-width: 75rem) { 
     .nav-container {
-        flex-direction: column;
-        align-items: flex-start;
+      justify-content: space-between; 
     }
+  
     ul {
-        flex-direction: column;
-        width: 100%;
-        gap: 0;
-        display: none; /* Hidden by default for mobile view */
+      gap: 1rem; 
     }
-    ul.open {
-        display: flex; /* Show the menu when hamburger is clicked */
-    }
+  
     li {
-        width: 100%;
-        text-align: left;
-        padding: 0.8rem 1.5rem;
-        border-bottom: 1px solid #E0E0E0;
+      font-size: 1.1rem;
     }
+  }
+
+  @media (max-width: 48rem) {
+    .nav-container {
+      flex-direction: column; 
+      align-items: flex-start;
+    }
+  
+    ul {
+      flex-direction: column; 
+      width: 100%; 
+      gap: 0; 
+      display: none; 
+    }
+  
+    ul.open {
+      display: flex;
+    }
+  
+    li {
+      width: 100%; 
+      text-align: left; 
+      padding: 0.8rem 1.5rem;
+      border-bottom: 1px solid #E0E0E0; 
+    }
+  
     li:last-child {
-        border-bottom: none;
+      border-bottom: none; 
     }
-}
-/* Hamburger Icon */
-.hamburger {
-    display: none;
+  }
+  
+  .hamburger {
+    display: none; 
     cursor: pointer;
-}
-.hamburger div {
-    width: 25px;
-    height: 3px;
+  }
+  
+  .hamburger div {
+    width: 1.5625rem; 
+    height: 0.1875rem; 
     background-color: #333;
-    margin: 5px;
-    transition: all 0.3s ease;
-}
-@media (max-width: 768px) {
+    margin: 0.3125rem; 
+    transition: all 0.3s ease; 
+  }
+  
+  @media (max-width: 48rem) {
     .hamburger {
-        display: block;
+      display: block; 
     }
-}
+  }
+  

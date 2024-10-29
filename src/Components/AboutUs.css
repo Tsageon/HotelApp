@@ -1,0 +1,120 @@
+.about-us {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    color: #333;
+    background-color: whitesmoke;
+  }
+  
+  .about-us h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .about-us h2 {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .about-us p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  .about-us ul {
+    list-style-type: square;
+    margin-left: 20px;
+  }
+  
+  .about-us li {
+    margin-bottom: 5px;
+  }
+  
+  .Amenities-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.2rem; 
+  }
+  
+  .Amenity-card {
+    text-align: center;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 1.2rem;
+    transition: transform 0.2s;
+    width: 200px;
+    height: 240px; 
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between; 
+  }
+  
+  .Amenity-card img {
+    border-radius: 0.6rem;
+    max-width: 100%; 
+    height: 150px; 
+    width: 100%;
+    object-fit: cover; 
+  }
+  
+  .Amenity-card h3, .Amenity-card p {
+    margin: 0.5rem 0;
+  }
+  
+  .Amenity-card:hover {
+    transform: translateY(-5px); 
+  }
+  
+  @media (min-width: 900px) {
+    .about-us {
+        padding: 40px;
+    }
+
+    .about-us h1 {
+        font-size: 3rem;
+    }
+
+    .about-us h2 {
+        font-size: 2rem;
+    }
+
+    .Amenity-card {
+        width: 240px;
+    }
+
+    .Amenities-list {
+        justify-content: space-around; 
+    }
+}
+
+
+@media (min-width: 1200px) {
+    .about-us {
+        padding: 50px;
+        max-width: 1000px; 
+    }
+
+    .about-us h1 {
+        font-size: 3.5rem;
+    }
+
+    .about-us h2 {
+        font-size: 2.2rem;
+    }
+
+    .Amenity-card {
+        width: 260px;
+    }
+
+    .Amenities-list {
+        justify-content: center;
+    }
+}

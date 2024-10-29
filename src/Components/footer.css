@@ -6,11 +6,11 @@
     margin: 0 auto;
     background-color: black;
     gap: 1rem;
-    padding: 2rem 0; 
+    padding: 2rem 0;
 }
 
 .Footer h5 {
-    font-size: 28px;
+    font-size: 1.75rem;
     text-align: center;
     color: #e0b973;
 }
@@ -21,35 +21,34 @@
 }
 
 .footer-logo {
-    width: 150px; 
-    border-radius: 50%; 
+    width: 9.375rem;
+    border-radius: 50%;
     margin-bottom: 1rem;
 }
 
 .Details {
     text-align: center;
-   
-    padding: 20px;
-    border-radius: 20px;
-    width: 350px;
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+    width: 21.875rem;
 }
 
 .Details-heading {
-    font-size: 18px;
+    font-size: 1.125rem;
     color: white;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
 }
 
 .footer-icon {
     display: inline-block;
-    margin: 0 10px;
+    margin: 0 0.625rem;
     color: white;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .footer-icon:hover {
-    color: #e0b973; 
-    transform: scale(1.1); 
+    color: #e0b973;
+    transform: scale(1.1);
 }
 
 .LOcation {
@@ -58,36 +57,35 @@
 }
 
 .LOcation h5 {
-    font-size: 22px;
+    font-size: 1.375rem;
     color: white;
 }
 
 .LOcation p {
-    font-size: 16px;
+    font-size: 1rem;
     color: white;
 }
 
 .map iframe {
     max-width: 100%;
-    width: 350px;
-    height: 300px;
+    width: 21.875rem;
+    height: 18.75rem;
     border: none;
-    margin-top: 30px;
-    border-radius: 10px;
+    margin-top: 1.875rem;
+    border-radius: 0.625rem;
 }
 
 .CoPyright {
     display: flex;
     justify-content: center;
-   
-    gap: 0.3rem;
-    margin-top: 0.5rem;
+    gap: 0.1875rem;
+    margin-top: 0.3125rem;
     color: black;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .COP-icon {
-    font-size: 18px;
+    font-size: 1.125rem;
 }
 
 .review-content {
@@ -95,86 +93,112 @@
     flex-direction: column;
     align-items: center;
     width: 50%;
-    max-width: 350px;
+    max-width: 21.875rem;
     margin: 0 auto;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .review-content h4 {
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+}
+
+.review-content h4 {
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
     color: white;
-  }
-  
-  .review-content input {
+}
+
+.review-content input {
     width: 100%;
     padding: 0.625rem;
-    margin-bottom: 0.938rem;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
+    margin-bottom: 0.625rem;
+    border: 0.0625rem solid #ccc;
+    border-radius: 0.125rem;
     font-size: 1rem;
-  }
-  
-  .review-content input:focus {
+}
+
+.review-content input:focus {
     border-color: #007bff;
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
-  
-  .review-content .INput-2 {
+    box-shadow: 0 0 0.3125rem rgba(0, 123, 255, 0.5);
+}
+
+.review-content .INput-2 {
     height: 2.5rem;
     resize: none;
-  }
-  
+}
 
-  .Send-button {
+.Send-button {
     width: 100%;
     padding: 0.625rem;
     background-color: #007bff;
     border: none;
-    border-radius:0.25rem;
+    border-radius: 0.125rem;
     color: white;
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .Send-button:hover {
+}
+
+.Send-button:hover {
     background-color: #e0b973;
-  }
-  
-  .Send-button:active {
+}
+
+.Send-button:active {
     background-color: #e0b973;
-  }
-  
-  
-@media (max-width: 768px) {
+}
+
+
+@media (max-width: 1024px) {
     .Footer {
         flex-direction: column;
         text-align: center;
     }
-
     .Footer h5 {
-        font-size: 24px;
+        font-size: 1.5rem;
     }
-
-    .Footer p {
-        font-size: 16px;
+    .Details,
+    .LOcation {
+        padding: 1rem;
+        width: 90%;
     }
+    .map iframe {
+        width: 90%;
+        height: 15.625rem;
+    }
+}
 
-    .Details, .LOcation {
-        padding: 15px;
+@media (max-width: 768px) {
+    .Footer h5 {
+        font-size: 1.25rem;
+    }
+    .Details {
+        padding: 0.9375rem;
         width: 100%;
     }
-
     .footer-logo {
-        width: 100px; 
+        width: 6.25rem;
     }
-
     .map iframe {
-        width: 100%; 
-        height: 250px;
+        height: 13.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .Footer h5,
+    .LOcation h5 {
+        font-size: 1.125rem;
+    }
+    .Footer p,
+    .LOcation p {
+        font-size: 0.875rem;
+    }
+    .review-content,
+    .Details,
+    .LOcation {
+        padding: 0.75rem;
+        width: 100%;
+    }
+    .Send-button,
+    .review-content input {
+        font-size: 0.875rem;
     }
 }

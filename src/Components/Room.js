@@ -77,10 +77,10 @@ const Room = () => {
       setIsSharing(true);
       try {
         await navigator.share(shareData);
-        setShareMessage('Share Successful!'); // Set message on success
-        setMessageVisible(true); // Show the message
+        setShareMessage('Share Successful!');
+        setMessageVisible(true);
         setTimeout(() => {
-          setMessageVisible(false); // Hide the message after 3 seconds
+          setMessageVisible(false); 
         }, 3000);
       } catch (error) {
         console.error('Error sharing:', error);

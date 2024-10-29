@@ -61,6 +61,12 @@ const NavBar = () => {
         >
           Rooms
         </li>
+        <li
+          className={activeItem === 'AboutUs' ? 'active' : ''}
+          onClick={() => handleMenuClick('AboutUs', '/about')}
+        >
+          AboutUs
+        </li>
       </ul>
     </div>
   );

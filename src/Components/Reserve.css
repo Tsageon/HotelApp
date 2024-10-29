@@ -1,212 +1,161 @@
 .reserve-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start; 
   justify-content: center;
-  flex-wrap: wrap;
   margin: 0 auto;
-  padding: 20px;
-  border-radius: 8px;
-  height: 50vh;
-  gap: 2rem;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9; 
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  gap: 2rem; 
 }
 
 .reserve-room-img {
-  width: 300px;
-  height: 300px;
-  border-radius: 8px;
+  width: 30rem;
+  height: 20rem; 
+  border-radius: 0.5rem;
   object-fit: cover;
-  border-radius: 8px; 
 }
 
 .reserve-info {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: space-between;
-  margin-top: 5rem;
-  flex: 1; 
+  flex: 1;
+  margin-top: 2rem;
 }
 
-.room-p{
+.room-p {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
   width: 80%;
-  font-size: 0.8rem;
-  margin-top: 1rem;
-  margin-left: 9rem;
+  color: white;
+  background-color: black;
+  font-size: 1.2rem;
+  margin: 1rem auto; 
+  padding: 1rem; 
+  border-radius: 0.5rem; 
 }
 
-
-.room-price {
-  font-size: smaller;
-  font-weight: bold;
-}
-
-.room-info-flex {
-  display: flex;
-  justify-content: center;
-  gap: 10px; 
-}
-
-.room-item {
-  white-space: nowrap;
-}
-
-.room-name
- {
+.room-name {
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.room-price{
-  display: inline-flex;
-  font-size: smaller;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.room {
-  white-space: nowrap; 
-}
-
-.input1-containe{
-  border-radius: 0.3rem;
-  border: 1px solid #ccc;
+  margin-bottom: 0.5rem; 
 }
 
 .date-picker-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px;
+  padding: 1.5rem; 
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 500px;
-  margin-top: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  width: 100%; 
+  max-width: 30rem;
 }
 
 .date-picker-container {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem
-}
-
-.date-picker-container p {
-  display: flex;
-  justify-content: flex-start;
-  margin: 0;
-  font-size: small;
-  font-weight: bold;
-  color: #555;
+  gap: 0.5rem; 
 }
 
 .reserve-actions {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 1rem; 
 }
 
 .checkout-btn,
 .cancel-btn1 {
-  padding: 10px ;
-  font-size: 16px;
+  padding: 0.75rem 1rem; 
+  font-size: 1rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 0.5rem; 
   cursor: pointer;
+  width: 48%;
 }
 
 .checkout-btn {
   background-color: #e0b973;
   color: white;
+  transition: background-color 0.3s;
+}
+
+.checkout-btn:hover {
+  background-color: #d1a060; 
 }
 
 .cancel-btn1 {
   background-color: #f44336;
   color: white;
+  transition: background-color 0.3s;
 }
 
-.confirmation-modal {
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.cancel-btn1:hover {
+  background-color: #d32f2f; 
 }
 
 .modal-content {
   background-color: white;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 1.5rem; 
+  border-radius: 0.625rem;
   width: 90%;
-  max-width: 600px;
+  max-width: 40rem;
   text-align: center;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 
-.modal-content img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-}
-
-.confirm-btn,
-.goback-btn {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.confirm-btn {
-  background-color: #4caf50;
-  color: white;
-}
-
-.goback-btn {
-  background-color: #f44336;
-  color: white;
-}
-
-
-.reserve-details,
-.date-picker-card {
-  height: auto;
-}
-
-@media screen and (max-width: 768px) {
+@media (max-width: 37.5rem) {
   .reserve-container {
     flex-direction: column;
-  }
-
-  .reserve-details {
-    flex-direction: column;
+    padding: 1rem;
   }
 
   .reserve-room-img {
     width: 100%;
+    height: auto;
+  }
+
+  .reserve-info {
+    margin-top: 1rem;
+    text-align: center;
   }
 
   .date-picker-card {
-    margin-top: 20px;
-    width: 50%;
+    width: 100%;
+  }
+
+  .checkout-btn,
+  .cancel-btn1 {
+    width: 100%;
   }
 }
 
-.select1 {
-  border-radius: 1rem;
-  width: 36%;
-  border-radius: 0.3rem;
-  border: 1px solid #ccc;
+@media (min-width: 37.5rem) and (max-width: 48rem) {
+  .reserve-container {
+    padding: 1.5rem;
+  }
+
+  .reserve-room-img {
+    width: 40%;
+  }
+
+  .date-picker-card {
+    width: 80%; 
+  }
+
+  .room-name {
+    font-size: 1.4rem; 
+  }
+
+  .checkout-btn,
+  .cancel-btn1 {
+    width: 48%; /* Maintain button width */
+  }
 }

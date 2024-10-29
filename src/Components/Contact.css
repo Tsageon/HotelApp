@@ -1,122 +1,169 @@
 .Contact {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  margin: 0 auto;
-  background-color: black;
-  gap: 1rem;
-  height: 50vh;
+  display: flex; /* Flexbox layout */
+  flex-wrap: wrap; /* Allow wrapping of items */
+  justify-content: space-around; /* Space items evenly */
+  align-items: center; /* Center items vertically */
+  margin: 0 auto; /* Center container */
+  background-color: black; /* Background color */
+  gap: 1rem; /* Gap between items */
+  height: 31.25rem; /* Set height of the container (50vh = ~31.25rem) */
+  padding: 1.25rem; /* Padding around the container */
 }
 
 .Contact h5 {
-  font-size: 28px;
-  text-align: center;
-  color: white;
+  font-size: 1.75rem; /* Font size for headings */
+  text-align: center; /* Center text */
+  color: white; /* Text color */
 }
 
 .connect p {
-  display: flex;
-  justify-content: center;
-  color: white;
+  display: flex; /* Flexbox layout */
+  justify-content: center; /* Center text */
+  color: white; /* Text color */
 }
 
 .contact-logo {
-  border-radius: 2rem;
-  width: 100%;
-  max-width: 200px;
-  height: auto;
+  border-radius: 2rem; /* Rounded corners */
+  width: 100%; /* Full width */
+  max-width: 12.5rem; /* Maximum width */
+  height: auto; /* Maintain aspect ratio */
 }
 
 .copyright {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap:0.3rem;
-  margin-top: 1rem;
+  display: flex; /* Flexbox layout */
+  flex-wrap: wrap; /* Allow wrapping */
+  justify-content: center; /* Center items */
+  gap: 0.1875rem; /* Gap between items */
+  margin-top: 1rem; /* Space above */
 }
 
-.copyright p{
-  margin-bottom: 1rem;
-  text-align: center;
+.copyright p {
+  margin-bottom: 1rem; /* Space below paragraphs */
+  text-align: center; /* Center text */
 }
 
-.COPY-icon{
-  height: auto;
-  width: auto;
+.COPY-icon {
+  height: auto; /* Maintain height */
+  width: auto; /* Maintain width */
 }
 
 .footer-icon {
-  display: inline;
-  justify-content: center;
-  width: 19px;
-  height: 17px;
-  color: white;
+  display: inline; /* Inline display */
+  justify-content: center; /* Center items */
+  width: 1.1875rem; /* Set width (19px = 1.1875rem) */
+  height: 1.0625rem; /* Set height (17px = 1.0625rem) */
+  color: white; /* Icon color */
 }
 
 .footer-icon a {
-  margin: 0 10px;
-  font-size: 24px;
-  background-color:#e0b973;
-  transition: color 0.3s;
+  margin: 0 0.625rem; /* Horizontal spacing */
+  font-size: 1.5rem; /* Font size for icons */
+  background-color: #e0b973; /* Background color */
+  transition: color 0.3s; /* Transition effect */
 }
-.footer-icon :hover {
-  color:#e0b973;
-  transform: scale(1.1);
+
+.footer-icon a:hover {
+  color: #e0b973; /* Hover color */
+  transform: scale(1.1); /* Scale effect on hover */
 }
 
 .location,
 .connect {
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  width: 350px;
+  padding: 1.25rem; /* Padding inside sections */
+  border-radius: 1.25rem; /* Rounded corners */
+  text-align: center; /* Center text */
+  width: 21.875rem; /* Fixed width for larger screens (350px = ~21.875rem) */
 }
 
 .location h5 {
-  font-size: 22px;
-  color: white;
+  font-size: 1.375rem; /* Font size for location heading */
+  color: white; /* Text color */
 }
 
 .location p {
-  font-size: 10px;
-  color: white;
+  font-size: 0.625rem; /* Font size for location text (10px = ~0.625rem) */
+  color: white; /* Text color */
 }
 
 .connect h6 {
-  margin-top: 12.5rem;
-  font-size: 15px;
-  color: white;
+  margin-top: 7.5rem; /* Space above heading (12.5rem = ~12.5rem) */
+  font-size: 0.9375rem; /* Font size for connect heading */
+  color: white; /* Text color */
 }
+
 .contact-icon {
-  background-color: white;
+  background-color: white; /* Background color for icons */
 }
 
 .phone {
-  background-color: white;
-  width: 22.88px;
-  height: 23.25px;
+  background-color: white; /* Background color for phone icon */
+  width: 1.4375rem; /* Set width (22.88px = ~1.4375rem) */
+  height: 1.4375rem; /* Set height (23.25px = ~1.4375rem) */
 }
 
 .map iframe {
-  max-width: 100%;
-  width: 350px;
-  height: 300px;
-  border: none;
-  margin-top: 30px;
-  border-radius: 10px;
+  max-width: 100%; /* Responsive width */
+  width: 21.875rem; /* Fixed width (350px = ~21.875rem) */
+  height: 18.75rem; /* Fixed height (300px = ~18.75rem) */
+  border: none; /* No border */
+  margin-top: 1.875rem; /* Space above iframe (30px = ~1.875rem) */
+  border-radius: 0.625rem; /* Rounded corners */
 }
 
+/* Media Queries for Responsiveness */
+
+/* Large screens */
+@media (min-width: 1024px) {
+  .Contact {
+    height: 50vh; /* Set height for large screens */
+  }
+}
+
+/* Medium screens */
 @media (max-width: 768px) {
   .Contact h5 {
-    font-size: 24px;
+    font-size: 1.5rem; /* Adjust font size for headings */
   }
 
   .Contact p {
-    font-size: 16px;
+    font-size: 1rem; /* Adjust font size for paragraphs */
   }
 
   .location,
   .connect {
-    padding: 15px;
-  }}
+    padding: 0.9375rem; /* Reduce padding for smaller screens */
+    width: 100%; /* Full width on smaller screens */
+  }
+
+  .map iframe {
+    width: 100%; /* Full width for map iframe */
+    height: 12.5rem; /* Adjust height for smaller screens (200px = ~12.5rem) */
+  }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  .Contact {
+    flex-direction: column; /* Stack items vertically */
+    height: auto; /* Allow height to adjust automatically */
+    padding: 0.625rem; /* Reduced padding */
+  }
+
+  .location,
+  .connect {
+    width: 90%; 
+    margin: 0 auto;
+  }
+
+  .footer-icon a {
+    font-size: 1.25rem;
+  }
+
+  .copyright p {
+    font-size: 0.75rem; /* Smaller font size for copyright */
+  }
+
+  .connect h6 {
+    margin-top: 3.125rem; /* Adjust spacing (5rem = ~3.125rem) */
+  }
+}

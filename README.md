@@ -48,4 +48,7 @@ A full-featured hotel booking application with user and admin functionalities. T
 1. **Clone the Repository**:
    ```bash
    git clone hhttps://github.com/Tsageon/HotelApp.git
-## NPM Install/npm i for all the depedencies after clonining
+   
+2. **Install all the depedencies after clonining**
+   ```bash
+   npm install

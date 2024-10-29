@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Footer from "./footer"
+import Nav from './nav'
 import "react-datepicker/dist/react-datepicker.css";
 import "./Reserve.css";
 
@@ -64,19 +65,60 @@ const Reserve = () => {
     });
     alert(`Reservation confirmed for ${roomDetails.roomName}.`);
   };
+
+  const generateRoomFeatures = (description) => {
+    const features = [
+      "Free Wi-Fi",
+      "Air Conditioning",
+      "Ocean View",
+      "Mini Bar",
+      "Smart TV",
+      "Room Service",
+      "Breakfast Included",
+      "Swimming Pool Access",
+      "Gym Access",
+      "Balcony",
+      "Pet-Friendly",
+    ];
+    
+
+    const numFeatures = Math.floor(Math.random() * 5) + 1; 
+    const selectedFeatures = new Set();
+    
+    while (selectedFeatures.size < numFeatures) {
+      const randomFeature = features[Math.floor(Math.random() * features.length)];
+      selectedFeatures.add(randomFeature);
+    }
+    
+    return Array.from(selectedFeatures);
+  };
+  
+  
+  const roomFeatures = generateRoomFeatures(roomDetails.descriptions);
   
 
   return (
-    <div>
-    <div className="reserve-container">
-      <div className="reserve-details">
-      <p className="room-name">{roomDetails.roomName}</p>
-        <img
-          className="reserve-room-img"
-          src={roomDetails.image}
-          alt={roomDetails.roomName}/>
-      </div>
-
+    <div><Nav/>
+   <div className="reserve-container">
+  <div className="room-title">
+    <p className="room-name">{roomDetails.roomName}</p>
+  </div>
+  <div className="reserve-details">
+    <img
+      className="reserve-room-img"
+      src={roomDetails.image}
+      alt={roomDetails.roomName}
+    />
+  </div>
+  <div className="room-description">
+    <b><p className="room-p">{roomDetails.descriptions}</p></b>
+    <h5>Room Features:</h5>
+    <ul>
+      {roomFeatures.map((feature, index) => (
+        <li key={index}>{feature}</li>
+      ))}
+    </ul>
+  </div>
       <div className="date-fix">
         <div className="date-picker-card">
           <h5>Select Dates</h5>
@@ -124,8 +166,7 @@ const Reserve = () => {
         </div>  
       </div>
     </div>
-    <div className="room-description">
-    <b><p className="room-p">{roomDetails.descriptions}</p></b></div>
+
     <br/><br/><Footer />
     </div>
   

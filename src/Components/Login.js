@@ -29,7 +29,6 @@ const Login = () => {
     }
   }, [user, isAdmin, navigate]);
   
-  
   const handleLogin = () => {
     dispatch(signIn({ email, password }));
   };

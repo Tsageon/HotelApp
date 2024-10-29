@@ -1,177 +1,231 @@
 .admin-container {
-    padding: 1rem;
-    max-width: 400rem;
-    margin: 0 auto;
-    background-color: #f9f9f9;
-    border-radius: 1rem;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 1rem;
+  box-shadow: 0px 0.4rem 1rem rgba(0, 0, 0, 0.1);
+  overflow: hidden; 
+}
+
+.admin-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-nav button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border: none;
+  background-color: whitesmoke;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+  font-size: 1rem; 
+  flex: 1; 
+  min-width: 8rem;
+}
+
+.admin-nav button:hover {
+  background-color: grey;
+  color: #fff;
+  border-color: black;  
+}  
+
+.admin-nav button.active {
+  background-color: #e0b973;
+  color: white;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.back1 {
+  position: absolute;
+  font-size: 1rem; 
+  font-weight: bold;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  right: 1rem;
+  top: 1rem;
+}
+
+.back1:hover {
+  background-color: #e0b973;
+}
+
+.form input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem; 
+  margin-bottom: 0.625rem; 
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  font-size: 1rem; }
+
+.form label {
+  margin-bottom: 0.3125rem; 
+  font-weight: bold;
+}
+
+.form img {
+  margin-top: 0.625rem; 
+  border-radius: 0.25rem;
+}
+
+.button, .button1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 10rem;
+  padding: 0.625rem; 
+  gap: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #0056b3;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem; 
+}
+
+button:hover {
+  background-color: #e0b973;
+}
+
+table {
+  width: 100%;
+  margin-top: 1.25rem;
+  border-collapse: collapse;
+}
+
+table img {
+  border-radius: 0.25rem;
+}
+
+table th, table td {
+  padding: 0.625rem;
+  border: 1px solid whitesmoke;
+}
+
+table th {
+  background-color: #f4f4f4;
+}
+
+table td {
+  text-align: center;
+}
+
+table button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.3125rem; 
+  width: 4rem;
+  padding: 0.3125rem; 
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #0056b3;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem; 
+}
+
+table button:first-child {
+  background-color: #007bff;
+  color: white;
+}
+
+table button:first-child:hover {
+  background-color: #e0b973;
+}
+
+table button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+table button:last-child:hover {
+  background-color: #c82333;
+}
+
+
+@media (max-width: 1200px) {
+  .admin-container {
+      padding: 1rem;
+      max-width: 80%; 
+  }
+}
+
+@media (max-width: 992px) {
+  .admin-nav {
+      flex-direction: column; 
+  }
+
+  .admin-nav button {
+      width: 100%; 
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+      padding: 0.75rem; 
+  }
+
+  .button, .button1 {
+      width: 100%; 
+  }
+
+  table {
+      font-size: 0.875rem;  
+  }
+
+  .back1 {
+      font-size: 0.875rem;
+  }
+
+  h2 {
+      font-size: 1.5rem; 
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-container {
+      padding: 0.5rem; 
   }
 
   .admin-nav {
-    display: flex;
-    flex-wrap:wrap ;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+      flex-direction: column;
   }
-  
+
   .admin-nav button {
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    border: none;
-    background-color: whitesmoke;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .admin-nav button:hover {
-    background-color: grey;      
-    color: #fff;                
-    border-color: black;  }  
-
-  .admin-nav button.active {
-    background-color: #e0b973;
-    color: white;
-  }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 1rem;
-    color: #333;
-  }
-  
-  form {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 3rem;
-  }
-
-  .back1{
-  position: absolute;
-  font-size: medium;
-  font-weight: bold;
-  border-radius: 1rem;
-  padding: 0.5rem ;
-  right: 1rem;
-  top: 1rem;
-  }
-
-  .back1:hover{
-    background-color: #e0b973;
+      padding: 0.4rem 0.8rem; 
+      font-size: 0.875rem; 
   }
 
   .form input {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  .form label {
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .form img {
-    margin-top: 10px;
-    border-radius: 4px;
+      padding: 0.4rem; 
   }
 
-  .button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 10rem;
-    padding: 10px 10px;
-    gap: 1rem;
-    border: none;
-    border-radius: 5px;
-    background-color:#0056b3;
-    color: white;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-
-  .button1 {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    width: 10rem;
-    padding: 10px 10px;
-    gap: 1rem;
-    border: none;
-    border-radius: 5px;
-    background-color:#0056b3;
-    color: white;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  button:hover {
-    background-color: #e0b973;
-  }
-  
-  table {
-    width: 100%;
-    margin-top: 20px;
-  }
-  
-  table img {
-    border-radius: 4px;
-  }
-
-  table th, table td {
-    padding: 10px;
-    border: 1px solid whitesmoke;
-  }
-  
-  table th {
-    background-color: #f4f4f4;
-  }
-  
-  table td {
-    text-align: center;
-
-  }
-  
   table button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
-    width: 4rem;
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
-    background-color:#0056b3;
-    color: white;
-    cursor: pointer;
-    font-size: 1rem;
+      width: 3rem;
   }
-  
-  table button:first-child {
-    background-color: #007bff;
-    color: white;
+
+  table {
+      font-size: 0.8rem;
   }
-  
-  table button:first-child:hover {
-    background-color:#e0b973 ;
-  }
-  
-  table button:last-child {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  table button:last-child:hover {
-    background-color: #c82333;
-  }  
+}

@@ -33,17 +33,6 @@ li.active {
 }
 
 
-.home {
-  background-image: url(../Components/images/edits.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-color: #f4f4f400;
-  width: 100%;
-  height: 65vh;
-  padding: 20px;
-  text-align: center;
-}
 
 .home_h2 {
   color: #000;

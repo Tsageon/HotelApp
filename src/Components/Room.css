@@ -4,27 +4,26 @@ body {
 }
 
 .rooms {
-  padding: 20px;
+  padding: 1.25rem; /* 20px */
   text-align: center;
 }
 
 .room-title {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+  font-size: 1.5rem; /* 24px */
+  margin-bottom: 1.25rem; /* 20px */
 }
 
 .room-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr)); /* 250px */
+  gap: 0.9375rem; /* 15px */
   padding: 0;
 }
 
-
 .room-card {
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
+  border-radius: 0.5rem; /* 8px */
+  padding: 0.625rem; /* 10px */
   display: flex;
   flex-direction: column;
   transition: transform 0.2s;
@@ -41,13 +40,13 @@ body {
 
 .room-img {
   width: 100%;
-  border-radius: 8px;
-  max-height: 200px;
+  border-radius: 0.5rem; /* 8px */
+  max-height: 12.5rem; /* 200px */
   object-fit: cover;
 }
 
 .room-info {
-  margin-top: 10px;
+  margin-top: 0.625rem; /* 10px */
 }
 
 .heading {
@@ -57,26 +56,26 @@ body {
 }
 
 .room-name {
-  font-size: 1.25rem;
+  font-size: 1.25rem; /* 20px */
   font-weight: bold;
 }
 
 .favorite-icon,
 .share-icon {
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 0.625rem; /* 10px */
 }
 
 .social-icons {
   display: flex;
   justify-content: space-around;
-  margin-top: 10px;
+  margin-top: 0.625rem; /* 10px */
 }
 
 .icon-group {
   display: flex;
   justify-content: space-around;
-  margin: 10px 0;
+  margin: 0.625rem 0; /* 10px */
 }
 
 .icon {
@@ -86,7 +85,7 @@ body {
 }
 
 .text {
-  font-size: 0.8rem;
+  font-size: 0.8rem; 
 }
 
 .price {
@@ -99,23 +98,22 @@ body {
   font-weight: bold;
 }
 
-
-@media (max-width: 768px) {
+@media (max-width: 48rem) { 
   .room-title {
-    font-size: 1.2rem;
+    font-size: 1.2rem; 
   }
 
   .room-card {
-    margin: 10px 0;
+    margin: 0.625rem 0;
   }
 
   .room-name {
-    font-size: 1rem;
+    font-size: 1rem; 
   }
 
   .favorite-icon, 
   .share-icon {
-    margin-left: 5px;
+    margin-left: 0.3125rem; 
   }
 
   .social-icons {
@@ -128,9 +126,9 @@ body {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 30rem) { 
   .room-title {
-    font-size: 1rem;
+    font-size: 1rem; 
   }
 
   .heading {
@@ -143,6 +141,6 @@ body {
   }
 
   .description {
-    font-size: 0.8rem;
+    font-size: 0.8rem; 
   }
 }

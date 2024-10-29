@@ -15,12 +15,13 @@ import Register from "./Components/Register";
 import Profile from "./Components/Profile";
 import Room from "./Components/Room";
 import Amenities from "./Components/Amenities";
-import Contact from "./Components/Contact";
+
 import Admin from "./Components/Admin";
 import Reserve from "./Components/Reserve";
 import CheckoutPayment from "./Components/Checkout";
 import Loader from "./Components/Loader";
-import Reviews from "./Components/reviews";
+import Reviews from "./Components/Review";
+import AboutUs from "./Components/AboutUs"
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -60,7 +61,8 @@ function App() {
             <div className="App">
             <Routes>
               <Route path="/" element={user ? <Home /> : <Register />} />
-              <Route path ="/reviews" element={<Reviews/>}/>
+              <Route path ="/review" element={<Reviews/>}/>
+              <Route path="/about" element={<AboutUs/>}/>
               <Route path="/footer" element={<Footer/>}/>
               <Route path="/gallery" element={<Gallery />}/>
               <Route path="/home" element={<Home />} />
@@ -69,7 +71,7 @@ function App() {
               <Route path="/room" element={<Room />} />
               <Route path="/amenities" element={<Amenities />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/contact" element={<Contact />} />
+          
               <Route path="/admin" element={<Admin />} />
               <Route path="/reserve" element={<Reserve />} />
               <Route path="/checkout" element={<CheckoutPayment />} />

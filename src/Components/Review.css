@@ -9,14 +9,14 @@
   
   .review-card {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 0.5rem; 
     padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
   }
   
   .review-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.3125rem);
   }
   
   .rating {
@@ -37,7 +37,7 @@
     padding: 0.5rem 1rem;
     margin: 0 1rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.3125rem;
     background-color: #007bff;
     color: white;
     cursor: pointer;
@@ -47,25 +47,54 @@
   .navigation-buttons button:hover {
     background-color: #e0b973;
   }
-  
-  @media (max-width: 768px) {
+
+  @media (max-width: 37.5rem) {
     .review-container {
       padding: 1rem;
     }
   
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.5rem; 
     }
   
     .review-card {
-      padding: 1rem;
+      padding: 1rem; 
     }
   
     .rating {
-      font-size: 1.2rem;
+      font-size: 1.2rem; 
     }
   
     .navigation-buttons button {
-      padding: 0.5rem;
+      padding: 0.5rem; 
+      font-size: 0.875rem; 
     }
   }
+  
+
+@media (min-width: 37.5rem) and (max-width: 48rem) { 
+  .review-container {
+    padding: 1.5rem; 
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  .review-card {
+    padding: 1.25rem; 
+  }
+
+  .rating {
+    font-size: 1.4rem; 
+  }
+
+  .navigation-buttons {
+    margin-top: 1.5rem;
+  }
+
+  .navigation-buttons button {
+    padding: 0.625rem 1.25rem; 
+    font-size: 1rem; 
+  }
+}

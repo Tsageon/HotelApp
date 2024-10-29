@@ -1,5 +1,4 @@
-import Img from "./mt.png";
-import React, { useState } from "react";
+import React from "react";
 import Reviews from "./Review";
 import Footer from './footer'
 import Gallery from "./Gallery";
@@ -17,11 +16,8 @@ const Home = () => {
   return (
     <>
 <NavBar />
-
       <Hero />
-        
       <Amenities />
-    
       <Gallery/>
       <Reviews />
       <Footer/>
