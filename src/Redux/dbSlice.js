@@ -1,17 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   getDocs,
-
+  query,
+  where,
   doc,
-
   collection,
   addDoc,
   deleteDoc,
   updateDoc,
   onSnapshot,
- 
+  Timestamp
+
 } from "firebase/firestore";
-import { db,auth } from "../Config/Fire";
+import { db, auth } from "../Config/Fire";
+
 
 
 const initialState = {
@@ -26,10 +28,9 @@ const initialState = {
   name: "",
   email: "",
   password: "",
-  clientsReviews : []  ,
-  likedRooms :[],
-  userBookings :[]
-
+  clientsReviews: [],
+  likedRooms: [],
+  userBookings: []
 };
 
 export const dbSlice = createSlice({
@@ -40,8 +41,8 @@ export const dbSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-  
-    setSuccess(state){
+
+    setSuccess(state) {
       state.success = true;
       state.loading = false;
     },
@@ -64,36 +65,21 @@ export const dbSlice = createSlice({
     setError(state, action) {
       state.error = action.payload;
       state.loading = false;
-    },  
-    addFavorite(state, action) {
-      const isFavorite = state.favorites.some((fav) => fav.roomId === action.payload.roomId);
-      if (!isFavorite) {
-        state.favorites.push({ roomId: action.payload.roomId });
+    },
+    userLikedRooms: (state, action) => {
+      const room = action.payload;
+     
+      const isAlreadyFavorited = state.favorites.some(favorite => favorite.roomId === room.roomId);
+
+      if (isAlreadyFavorited) {
+        state.favorites = state.favorites.filter(favorite => favorite.roomId !== room.roomId);
+      } else {
+        state.favorites = [...state.favorites, room];
       }
     },
-    addFavoriteToState(state, action) {
-      const newFavorite = {
-        ...action.payload,
-        createdAt: action.payload.createdAt ? action.payload.createdAt.toDate().toISOString() : null,
-      };
-      state.favorites.push(newFavorite);
-      state.loading = false;
-    },
-    setFavorites(state, action) {
-      state.favorites = action.payload.map(fav => ({
-        ...fav,
-        createdAt: fav.createdAt ? fav.createdAt.toDate().toISOString() : null, 
-      }));
-      state.loading = false;
-    },
-      removeFavorite(state, action) {
-      state.favorites = state.favorites.filter((fav) => fav.roomId !== action.payload.roomId);
-    },
-    removeFavoriteFromState(state, action) {
-      state.favorites = state.favorites.filter(
-        (favorite) => favorite.id !== action.payload
-      );
-      state.loading = false;
+    removeLikedRoom: (state, action) => {
+      const roomId = action.payload;  
+      state.favorites = state.favorites.filter(room => room.roomId !== roomId);
     },
     fetchReviewsStart(state) {
       state.loading = true;
@@ -123,13 +109,9 @@ export const dbSlice = createSlice({
     addBookingToState(state, action) {
       state.bookings.push(action.payload);
     },
-
     setBookings(state, action) {
-      state.bookings = action.payload.map(booking => ({
-        ...booking,
-        startDate: booking.startDate ? booking.startDate.toDate().toISOString() : null,
-        endDate: booking.endDate ? booking.endDate.toDate().toISOString() : null,
-      }));
+      console.log("Setting bookings to:", action.payload);
+      state.bookings = action.payload;
     },
 
     fetchRoomsStart(state) {
@@ -157,38 +139,31 @@ export const dbSlice = createSlice({
         state.data[roomIndex] = { id, roomName, price };
       }
     },
-
-    setReviews (state, action){
-      state.clientsReviews =action.payload
+    setFavorites: (state, action) => {
+      state.favorites = action.payload;
+    },
+    setReviews(state, action) {
+      state.clientsReviews = action.payload
 
     },
 
-    setLikeRooms (state, action){
-      state.likedRooms =action.payload
 
-    },
-    setLikedRooms: (state, action) => {
-      state.likedRooms = action.payload;
-      state.loading = false;
-    },
-
-    setUserBooking  (state , action){
-      state.userBooking = action.payload;
+    setUserBookings(state, action) {
+      state.userBookings = action.payload;
     }
   },
 });
 
 export const {
   setLoading,
-  setUserBooking,
+  setUserBookings,
   setData,
   setUser,
+  setFavorites,
   setError,
   setSuccess,
-  setFavorites,
   setLikedRooms,
-  removeFavoriteFromState,
-  removeFavorite,
+  removeLikedRoom ,
   updateFavoritesFailure,
   updateFavoritesSuccess,
   fetchReviewsStart,
@@ -205,11 +180,9 @@ export const {
   updateRoomSuccess,
   clearUser,
   setUserReviewStatus,
-  addFavoriteToState,
-  addFavorite ,
-  setReviews ,
+  setReviews,
   setLikeRooms
- 
+
 } = dbSlice.actions;
 
 export default dbSlice.reducer;
@@ -217,30 +190,42 @@ export default dbSlice.reducer;
 export const selectRooms = (state) => state.db.data;
 export const selectUser = (state) => state.db;
 
-
 export const listenForAuthChanges = () => {
-  return (dispatch) => {
-      const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-          if (user) {
-              dispatch(setUser({ uid: user.uid, email: user.email }));
-              const userDocRef = doc(db, "Users", user.uid);
+  return (dispatch, getState) => {
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(setUser({ uid: user.uid, email: user.email }));
 
-              const unsubscribeUserDoc = onSnapshot(userDocRef, (doc) => {
-                  if (doc.exists()) {
-                      const userData = doc.data();
-                      dispatch(setFavorites(Array.isArray(userData.favorites) ? userData.favorites : Array.from(new Set(userData.favorites || []))));
-                  }
-              });
+        const userDocRef = doc(db, "Users", user.uid);
+        
+        const unsubscribeUserDoc = onSnapshot(userDocRef, (doc) => {
+          if (doc.exists()) {
+            const userData = doc.data();
+            const favorites = Array.isArray(userData.favorites)
+              ? userData.favorites
+              : Array.from(new Set(userData.favorites || []));
 
-              return () => unsubscribeUserDoc();
-          } else {
-              dispatch(setUser(null));
+            const currentFavorites = getState().user.favorites;
+
+            
+            if (JSON.stringify(favorites) !== JSON.stringify(currentFavorites)) {
+              dispatch(setFavorites(favorites)); 
+            }
           }
-      });
+        });
 
-      return () => unsubscribeAuth();
+        return () => unsubscribeUserDoc();
+      } else {
+        dispatch(setUser(null));
+        dispatch(setFavorites([])); 
+      }
+    });
+
+    return () => unsubscribeAuth();
   };
 };
+
+
 
 
 export const fetchData = () => async (dispatch) => {
@@ -263,34 +248,49 @@ export const fetchData = () => async (dispatch) => {
   }
 };
 
-export const userLikedRooms = (likedData) => async (dispatch) => {
+export const userLikedRooms = (likedData) => async (dispatch, getState) => {
   dispatch(setLoading());
   try {
     const likedRoomsRef = collection(db, "users", auth.currentUser.uid, "userLikeRooms");
-    const querySnapshot = await getDocs(likedRoomsRef);
-    const alreadyLiked = querySnapshot.docs.some(doc => doc.data().roomId === likedData.roomId);
+    console.log("Liked Data before dispatch:", likedData);
 
-    if (alreadyLiked) {
-      alert("You've already liked this room.");
+    const querySnapshot = await getDocs(likedRoomsRef);
+    const existingRoomDoc = querySnapshot.docs.find(
+      (doc) => doc.data().roomId === likedData.roomId
+    );
+
+    if (existingRoomDoc) {
+      await deleteDoc(doc(likedRoomsRef, existingRoomDoc.id));
+      dispatch(removeLikedRoom(existingRoomDoc.id));
+      alert("Removed from favorites");
     } else {
       const docRef = await addDoc(likedRoomsRef, {
         ...likedData,
       });
-      console.log("Liked Data:", likedData);
       dispatch(setLikeRooms({ id: docRef.id, ...likedData }));
       alert("Liked successfully");
     }
+
+    const updatedFavorites = await fetchUpdatedFavorites();
+    dispatch(setFavorites(updatedFavorites));
   } catch (error) {
-    dispatch(setError("Failed to add Like: " + error.message));
+    dispatch(setError("Failed to toggle like: " + error.message));
   }
 };
+
+const fetchUpdatedFavorites = async () => {
+  const likedRoomsRef = collection(db, "users", auth.currentUser.uid, "userLikeRooms");
+  const querySnapshot = await getDocs(likedRoomsRef);
+  return querySnapshot.docs.map(doc => doc.data());
+};
+
 
 export const fetchUserLikedRooms = () => async (dispatch) => {
   dispatch(setLoading());
   try {
     const likedRoomsRef = collection(db, "users", auth.currentUser.uid, "userLikeRooms");
     const querySnapshot = await getDocs(likedRoomsRef);
-    
+
     const likedRoomsData = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
@@ -305,7 +305,7 @@ export const fetchUserLikedRooms = () => async (dispatch) => {
 
 export const fetchReviews = () => async (dispatch) => {
   dispatch(setLoading());
- 
+
   console.log("Fetching reviews...");
 
   try {
@@ -331,18 +331,20 @@ export const fetchReviews = () => async (dispatch) => {
 export const addReview = (reviewData) => async (dispatch) => {
   dispatch(setLoading());
   try {
-    
+
     await addDoc(collection(db, "Reviews"), {
-      name: reviewData.name,    
-      email: reviewData.email,   
+      name: reviewData.name,
+      email: reviewData.email,
       review: reviewData.review,
-      rating: reviewData.rating, 
+      rating: reviewData.rating,
     });
 
-    dispatch(setSuccess()); 
+    dispatch(setSuccess());
   } catch (error) {
     dispatch(setError("Failed to add review: " + error.message));
     console.error("Error adding review to Firebase: ", error);
+  } finally {
+    dispatch(setLoading(false));
   }
 };
 
@@ -392,25 +394,36 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
+export const selectBookings = (state) => state.db.bookings;
 
 export const fetchBookings = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
     const bookingsCollection = collection(db, "bookings");
     const bookingsSnapshot = await getDocs(bookingsCollection);
-    
-    const bookingsData = bookingsSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+
+    const bookingsData = bookingsSnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+
+        startDate: data.startDate instanceof Timestamp ? data.startDate.toDate() : data.startDate,
+        endDate: data.endDate instanceof Timestamp ? data.endDate.toDate() : data.endDate,
+      };
+    });
+
+    console.log("Bookings Data:", bookingsData);
 
     const uniqueBookings = Array.from(new Map(bookingsData.map(item => [item.transactionId, item])).values());
+
+    console.log("Unique Bookings:", uniqueBookings);
 
     dispatch(setBookings(uniqueBookings));
   } catch (error) {
     dispatch(setError("Error fetching data: " + error.message));
   } finally {
-    dispatch(setLoading(false)); 
+    dispatch(setLoading(false));
   }
 };
 
@@ -464,7 +477,7 @@ export const updateRoom = (updatedRoom) => async (dispatch) => {
 export const userBookings = (bookingData) => async (dispatch) => {
   dispatch(setLoading());
   try {
-    const bookingsRef = collection(db, "users", auth.currentUser.uid, "bookings");
+    const bookingsRef = collection(db, "users", auth.currentUser.uid, "userBookings");
     const docRef = await addDoc(bookingsRef, {
       ...bookingData,
     });
@@ -477,69 +490,54 @@ export const userBookings = (bookingData) => async (dispatch) => {
 };
 
 
-
-// export const fetchUserBookings = (profileEmail) => async (dispatch) => {
-//   dispatch(setLoading());
-//   try {
-//     const authEmail = auth.currentUser?.email;
-
-//     let querySnapshot = await getDocs(query(collection(db, "bookings"), where("userEmail", "==", authEmail)));
-//     let emailUsed = authEmail;
-
- 
-//     if (querySnapshot.empty && profileEmail) {
-//       console.log("No bookings found with auth email, trying profile email as fallback.");
-      
-//       querySnapshot = await getDocs(query(collection(db, "bookings"), where("userEmail", "==", profileEmail)));
-//       emailUsed = profileEmail;
-//     }
-
-//     if (querySnapshot.empty) {
-//       console.log("No bookings found for both auth and profile emails.");
-//       alert("No bookings found for your account. Please ensure you're logged in with the correct email and profile information.");
-//       dispatch(setBookings([]));
-//       return;
-//     }
-
-//     const bookingsData = querySnapshot.docs.map((doc) => {
-//       const data = doc.data();
-//       return {
-//         id: doc.id,
-//         ...data,
-//         endDate: data.endDate ? new Date(data.endDate) : null,
-//         createdAt: data.createdAt ? new Date(data.createdAt) : null,
-//       };
-//     });
-
-//     console.log("Fetched Bookings:", bookingsData);
-
-   
-//     alert(`Bookings successfully retrieved using email: ${emailUsed}`);
-    
-//     dispatch(setBookings(bookingsData));
-//   } catch (error) {
-//     console.error("Error fetching bookings:", error);
-//     dispatch(setError("Error fetching bookings: " + error.message));
-//   }
-// };
-
-
 export const fetchUserBookings = () => async (dispatch) => {
-  //dispatch(fetchRoomsStart());
+  dispatch(setLoading(true));
+
+  if (!auth.currentUser) {
+    dispatch(fetchRoomsFailure("User is not authenticated"));
+    return;
+  }
+
   try {
+    const userEmail = auth.currentUser.email;
     const roomsCollection = collection(db, "users", auth.currentUser.uid, "userBookings");
     const roomSnapshot = await getDocs(roomsCollection);
-    const roomList = roomSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    console.log(roomList)
-   dispatch(setUserBooking(roomList));
+    let roomList = roomSnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt.toDate().toISOString(),
+        startDate: data.startDate.toDate().toISOString(),
+        endDate: data.endDate.toDate().toISOString(),
+      };
+    });
+
+
+    if (roomList.length === 0) {
+      const bookingsCollection = collection(db, "users", auth.currentUser.uid, "bookings");
+
+      const bookingsQuery = query(bookingsCollection, where("userEmail", "==", userEmail));
+      const bookingsSnapshot = await getDocs(bookingsQuery);
+
+      roomList = bookingsSnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt.toDate().toISOString(),
+          startDate: data.startDate.toDate().toISOString(),
+          endDate: data.endDate.toDate().toISOString(),
+        };
+      });
+    }
+
+    console.log(roomList);
+    dispatch(setUserBookings(roomList));
   } catch (error) {
-    dispatch(fetchRoomsFailure("Failed to fetch rooms"));
+    console.error("Error fetching user bookings: ", error);
+    dispatch(fetchRoomsFailure("Failed to fetch bookings: " + error.message));
+  } finally {
+    dispatch(setLoading(false));
   }
 };
-
-
-
-

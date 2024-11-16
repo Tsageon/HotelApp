@@ -50,12 +50,6 @@ const NavBar = () => {
           Profile
         </li>
         <li
-          className={activeItem === 'Amenities' ? 'active' : ''}
-          onClick={() => handleMenuClick('Amenities', '/amenities')}
-        >
-         Amenities
-        </li>
-        <li
           className={activeItem === 'Rooms' ? 'active' : ''}
           onClick={() => handleMenuClick('Rooms', '/room')}
         >

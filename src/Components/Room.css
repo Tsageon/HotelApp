@@ -1,33 +1,52 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  text-align:center;
 }
 
-.rooms {
-  padding: 1.25rem; /* 20px */
+.rooom-name{
+  font-weight: bold;
+  font-size: x-large;
+  margin: 0 auto;
   text-align: center;
 }
 
+.rooms {
+  padding: 1.25rem; 
+  max-width: 1400px;
+  text-align: center;
+  margin: 0 auto; 
+}
+
 .room-title {
-  font-size: 1.5rem; /* 24px */
-  margin-bottom: 1.25rem; /* 20px */
+  font-size: 1.5rem; 
+  margin-bottom: 1.25rem; 
 }
 
 .room-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr)); /* 250px */
-  gap: 0.9375rem; /* 15px */
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 2rem;
+  padding: 0;
+}
+
+
+.room-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 2rem;
   padding: 0;
 }
 
 .room-card {
   border: 1px solid #ddd;
-  border-radius: 0.5rem; /* 8px */
-  padding: 0.625rem; /* 10px */
+  border-radius: 0.5rem; 
+  padding: 0.625rem;
   display: flex;
   flex-direction: column;
   transition: transform 0.2s;
   cursor: pointer;
+  flex-grow: 1; 
 }
 
 .room-card:hover {
@@ -35,18 +54,38 @@ body {
 }
 
 .img-div {
-  text-align: center;
+  position: relative;  
+}
+
+.favorite-icon,
+.share-icon {
+  cursor: pointer;
+  margin-left: 0.625rem;
+  color: #d32f2f
+
+}
+
+.favorite-icon-wrapper,
+.share-icon-wrapper {
+  position: absolute;  
+  top: 10px;  
+  right: 10px; 
+  cursor: pointer;
+}
+
+.favorite-icon-wrapper {
+  margin-right: 30px; 
 }
 
 .room-img {
   width: 100%;
-  border-radius: 0.5rem; /* 8px */
-  max-height: 12.5rem; /* 200px */
-  object-fit: cover;
+  border-radius: 0.5rem; 
+  object-fit: cover;   
+  height: 11.5rem; 
 }
 
 .room-info {
-  margin-top: 0.625rem; /* 10px */
+  flex-grow: 1; 
 }
 
 .heading {
@@ -56,26 +95,22 @@ body {
 }
 
 .room-name {
-  font-size: 1.25rem; /* 20px */
+  font-size: 1.25rem;
   font-weight: bold;
 }
 
-.favorite-icon,
-.share-icon {
-  cursor: pointer;
-  margin-left: 0.625rem; /* 10px */
-}
+
 
 .social-icons {
   display: flex;
   justify-content: space-around;
-  margin-top: 0.625rem; /* 10px */
+  margin-top: 0.625rem;
 }
 
 .icon-group {
   display: flex;
   justify-content: space-around;
-  margin: 0.625rem 0; /* 10px */
+  margin: 0.625rem 0;
 }
 
 .icon {
@@ -96,6 +131,15 @@ body {
 .booked-label {
   color: red;
   font-weight: bold;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 @media (max-width: 48rem) { 

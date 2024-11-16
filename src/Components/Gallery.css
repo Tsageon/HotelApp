@@ -1,6 +1,11 @@
 .gallery-container {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  text-align: center; 
   padding: 2rem;
-  text-align: center;
+  background-color: #f8f8f8;
 }
 
 .gallery-container h2 {
@@ -9,10 +14,20 @@
   animation: fadeIn 1s ease-in;
 }
 
+.gallery-container p {
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  width: 60rem;
+  color: #555;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); 
   gap: 1rem;
+  width: 100%;
+  margin-left: 13%; 
 }
 
 .gallery-item {
@@ -28,10 +43,10 @@
 
 .gallery-item img {
   width: 100%;
-  height: auto;
+  height: 15rem; 
+  object-fit: cover; 
   display: block;
 }
-
 
 @keyframes fadeIn {
   from {
@@ -42,7 +57,6 @@
   }
 }
 
-
 @media (max-width: 48rem) { 
   .gallery-container {
     padding: 1rem;
@@ -50,6 +64,10 @@
 
   .gallery-container h2 {
     font-size: 1.5rem; 
+  }
+
+  .gallery-container p {
+    font-size: 0.875rem;
   }
 
   .gallery-grid {

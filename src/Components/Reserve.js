@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import Footer from "./footer"
-import Nav from './nav'
+import Footer from "./footer";
+import Nav from "./nav";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Reserve.css";
 
@@ -13,9 +13,30 @@ const Reserve = () => {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [, setIsConfirmed] = useState(false);
   const [data, setData] = useState("");
-  const options = ["1","2", "3","4","5","6","7","8","9","10"];
+  const options = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+  ];
 
   const onOptionChangeHandler = (event) => {
     setData(event.target.value);
@@ -57,10 +78,10 @@ const Reserve = () => {
     setIsConfirmed(false);
     navigate("/checkout", {
       state: {
-        roomDetails,   
-        startDate,     
-        endDate,     
-        guests: data,  
+        roomDetails,
+        startDate,
+        endDate,
+        guests: data,
       },
     });
     alert(`Reservation confirmed for ${roomDetails.roomName}.`);
@@ -79,97 +100,168 @@ const Reserve = () => {
       "Gym Access",
       "Balcony",
       "Pet-Friendly",
+      "Coffee Maker",
+      "Refrigerator",
+      "Microwave",
+      "Complimentary Toiletries",
+      "In-Room Safe",
+      "Hair Dryer",
+      "Iron and Ironing Board",
+      "Daily Housekeeping",
+      "Laundry Service",
+      "Concierge Service",
+      "Spa Services Available",
+      "Private Bathroom",
+      "Shower or Bathtub",
+      "Walk-in Shower",
+      "Non-Smoking Room",
+      "Smoke Detector",
+      "Fire Alarm System",
+      "Cable/Satellite TV",
+      "DVD Player",
+      "Soundproof Rooms",
+      "Wake-Up Service",
+      "Flat-Screen TV",
+      "Business Center Access",
+      "Free Parking",
+      "Airport Shuttle Service",
+      "Fitness Classes",
+      "Yoga Studio",
+      "Rooftop Terrace",
+      "Outdoor Seating Area",
+      "Dining Area",
+      "Kitchenette",
+      "Dining Table",
+      "Wardrobe or Closet Space",
+      "Luggage Storage",
+      "24-Hour Front Desk",
+      "Free Bottled Water",
+      "Tea/Coffee Station",
+      "Room Temperature Control",
+      "Emergency Lighting",
+      "Electric Kettle",
+      "Cooking Utensils",
+      "Dishware",
+      "Cleaning Supplies",
+      "Local Tourist Information",
+      "Entertainment System",
+      "Free Daily Newspapers",
+      "Complimentary Snacks",
+      "Special Requests (e.g., hypoallergenic bedding)",
+      "Personal Check-In/Check-Out",
+      "Electric Vehicle Charging Station",
+      "Bicycle Rentals",
+      "Beach Towels",
+      "Free Use of Poolside Cabanas",
+      "Access to Game Room",
+      "Library or Reading Room",
+      "Barbecue Grills",
+      "Picnic Area",
+      "Eco-Friendly Products",
+      "Seasonal Outdoor Activities",
+      "Themed Room Decor",
+      "Romantic Setup Options (rose petals, candles,etc)",
+      "Family-Friendly Amenities (cribs, high chairs,etc)",
+      "Babysitting Services",
+      "Evening Turndown Service",
+      "Free Local Calls",
+      "Business Amenities (e.g., fax machine, photocopier)",
+      "Specialty Linens",
+      "Room Size Options (e.g., king, queen, suites)",
+      "Multi-Lingual Staff",
     ];
-    
 
-    const numFeatures = Math.floor(Math.random() * 5) + 1; 
+    const numFeatures = Math.floor(Math.random() * 5) + 1;
     const selectedFeatures = new Set();
-    
+
     while (selectedFeatures.size < numFeatures) {
-      const randomFeature = features[Math.floor(Math.random() * features.length)];
+      const randomFeature =
+        features[Math.floor(Math.random() * features.length)];
       selectedFeatures.add(randomFeature);
     }
-    
+
     return Array.from(selectedFeatures);
   };
-  
-  
+
   const roomFeatures = generateRoomFeatures(roomDetails.descriptions);
-  
 
   return (
-    <div><Nav/>
-   <div className="reserve-container">
-  <div className="room-title">
-    <p className="room-name">{roomDetails.roomName}</p>
-  </div>
-  <div className="reserve-details">
-    <img
-      className="reserve-room-img"
-      src={roomDetails.image}
-      alt={roomDetails.roomName}
-    />
-  </div>
-  <div className="room-description">
-    <b><p className="room-p">{roomDetails.descriptions}</p></b>
-    <h5>Room Features:</h5>
-    <ul>
-      {roomFeatures.map((feature, index) => (
-        <li key={index}>{feature}</li>
-      ))}
-    </ul>
-  </div>
-      <div className="date-fix">
-        <div className="date-picker-card">
-          <h5>Select Dates</h5>
-          <div className="date-picker-container">
-            <p>Check-in Date:</p>
-            <DatePicker className="input1-containe"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              selectsStart
-              startDate={startDate}
-              endDate={endDate}
-              placeholderText="Select check-in date"
-            />
-            <p>Check-out Date:</p>
-            <DatePicker className="input1-containe"
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate}
-              placeholderText="Select check-out date"
-            />
-            <p>Number of guests:</p>
-            <select className="select1" onChange={onOptionChangeHandler}>
-              <option value="" disabled selected>
-                Select Amount of guests
-              </option>
-              {options.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <p className="room-price">
-            Total Price: R{calculateTotalPrice()}
-          </p>
-          </div>
-         
+    <div>
+      <Nav />
+      <div className="Container">
+        <div className="room-title">
+          <p className="room-name">{roomDetails.roomName}</p>
         </div>
-        <div className="reserve-actions">
-          <button className="checkout-btn" onClick={handleCheckout}>
-            Reserve
-          </button>    
-        </div>  
-      </div>
-    </div>
+        <div className="reserve-container">
+          <img
+            className="reserve-room-img"
+            src={roomDetails.image}
+            alt={roomDetails.roomName}
+          />
 
-    <br/><br/><Footer />
+          <div></div>
+
+          <div className="room-stuff">
+            <div className="date-fix">
+              <b>
+                <p className="room-p">{roomDetails.descriptions}</p>
+              </b>
+              <div className="room-features">
+                <h5>Room Features:</h5>
+                <ul>
+                  {roomFeatures.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="date-picker-card">
+              <h5>Select Dates</h5>
+              <div className="date-picker-container">
+                <DatePicker
+                  className="input1-container"
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Select check-in date"
+                />
+                <DatePicker
+                  className="input1-container"
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  placeholderText="Select check-out date"
+                />
+                <select className="select1" onChange={onOptionChangeHandler}>
+                  <option value="" disabled selected>
+                    Select Amount of guests
+                  </option>
+                  {options.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+                <p className="room-price">
+                  Total Price: R{calculateTotalPrice()}
+                </p>
+                <button className="checkout-btn" onClick={handleCheckout}>
+                  Reserve
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
+      <Footer />
     </div>
-  
   );
 };
 

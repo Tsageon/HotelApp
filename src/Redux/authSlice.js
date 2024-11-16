@@ -1,11 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice ,  createAsyncThunk } from '@reduxjs/toolkit';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import { auth, db } from '../Config/Fire';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { doc, getDoc,setDoc } from 'firebase/firestore';
 
 const initialState = {
   uid:null,
-  user: null,
+  user: { name: '',
+    phone: '',
+    username: '',
+    address: '',
+     preferences: [] }, 
   isAdmin: false,
   role: 'user', 
   loading: false,
@@ -17,31 +22,38 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setLoading(state) {
-      state.loading = true;
-      state.error = null;
-    }, 
-    
-    setUserReviewStatus: (state, action) => {
-    state.hasLeftReview = action.payload;
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    updateUser(state, action) {
+      if (state.user) {
+        state.user.name = action.payload.name;
+      }
+    },
+    setUserPreferences(state, action) {
+      if (state.user) {
+        state.user.preferences = action.payload; 
+      }
+    },    
+    setUserReviewStatus(state, action) {
+      state.hasLeftReview = action.payload;
     },
     setUser(state, action) {
-      const {uid, email, role,} = action.payload;
-      console.log('Setting user in Redux:', action.payload);
-      state.user = {uid, email};
-      state.name = action.payload.name; 
-      state.role = role || 'user'; 
-      state.isAdmin = role === 'admin'; 
+      const {uid, email, name, role = 'user'} = action.payload; 
+      state.user = { uid, email, name: name || '' };
+      state.role = role;
+      state.isAdmin = role === 'admin';
       state.loading = false;
     },
     setError(state, action) {
       state.error = action.payload;
       state.loading = false;
     },
-  
-    clearUser: (state) => {
+    clearUser(state) {
       state.name = "";
       state.email = "";
+      state.role = 'user';
+      state.isAdmin = false;
     },
     logout(state) {
       state.user = null;
@@ -52,16 +64,30 @@ const authSlice = createSlice({
       state.passwordResetSuccess = false;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = { ...state.user, ...action.payload }; 
+      })
+      .addCase(fetchUserProfile.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
+  },
 });
 
 
-export const { setLoading ,setUser, setError, logout, setPasswordResetSuccess,setUserReviewStatus } = authSlice.actions;
+export const { setLoading,setUserPreferences ,setUser, updateUser, setError, logout, setPasswordResetSuccess,setUserReviewStatus } = authSlice.actions;
 
 
 
 const addUserToFirestore = async (uid, email, name, role) => {
   try {
-    const userRef = doc(db, 'Users', uid);
+    const userRef = doc(db, 'users', uid);
     const userDoc = await getDoc(userRef);
 
     if (!userDoc.exists()) {
@@ -95,7 +121,7 @@ export const signUp = ({ email, password, name }) => async (dispatch) => {
   
     await updateProfile(user, { displayName: name });
 
-    await addUserToFirestore(user.uid, email,name, 'user');
+    await addUserToFirestore(user.uid, email,name, 'users');
 
     const serializedUser = {
       uid: user.uid,
@@ -115,7 +141,7 @@ export const signUp = ({ email, password, name }) => async (dispatch) => {
 
 export const fetchUserRole = (uid) => async (dispatch) => {
   try {
-    const userDoc = await getDoc(doc(db, 'Users', uid));
+    const userDoc = await getDoc(doc(db, 'users', uid));
 
     if (userDoc.exists()) {
       const userData = userDoc.data();
@@ -153,7 +179,7 @@ export const signIn = ({ email, password }) => async (dispatch) => {
 
     const role = await dispatch(fetchUserRole(user.uid));
     
-    const isAdmin = role === 'admin' || email === "kb@gmail.com"; 
+    const isAdmin = role === 'admin' || email === "kb@gmail.com" || email === "sagaetshepo@gmail.com"; 
 
     const serializedUser = {
       uid: user.uid,
@@ -194,6 +220,82 @@ export const resetPassword = ({ email }) => async (dispatch) => {
   }
 };
 
+export const fetchUserProfile = createAsyncThunk(
+  'auth/fetchUserProfile',
+  async (uid) => {
+    const userDoc = await getDoc(doc(db, 'users', uid));
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      console.log('Fetched user data:', userData);  
+      return userData;
+    }
+    throw new Error('User not found');
+  }
+);
+
+
+
+export const editUserProfile = ({ uid, name, phone, profilePictureFile, username, address, preferences }) => async (dispatch) => {
+  dispatch(setLoading()); 
+  
+  try {
+    let profilePictureUrl = null;
+    if (profilePictureFile) {
+      profilePictureUrl = await uploadProfilePicture(uid, profilePictureFile);
+    }
+
+    const updatedData = {
+      name,
+      phone,
+      username,
+      address,
+      preferences: preferences || [],
+    };
+
+    if (profilePictureUrl) {
+      updatedData.profilePicture = profilePictureUrl;
+    }
+
+    await updateUserInFirestore(uid, updatedData); 
+    dispatch(updateUser(updatedData));  
+    dispatch(setUserPreferences(updatedData.preferences)); 
+
+    alert("Profile updated successfully!"); 
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    dispatch(setError(error.message)); 
+  } finally {
+    dispatch(setLoading(false));  
+  }
+};
+
+
+
+const uploadProfilePicture = async (uid, file) => {
+  try {
+    const storage = getStorage();
+    const storageRef = ref(storage, `profilePictures/${uid}`);
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    console.log('Profile picture uploaded successfully:', downloadURL);
+    return downloadURL;
+  } catch (error) {
+    console.error('Error uploading profile picture:', error);
+    throw new Error("Failed to upload profile picture");
+  }
+};
+
+
+const updateUserInFirestore = async (uid, userData) => {
+  try {
+    const userRef = doc(db, 'users', uid);
+    await setDoc(userRef, userData, { merge: true });
+    console.log('User profile updated in Firestore:', userData);
+  } catch (error) {
+    console.error('Error updating user profile in Firestore:', error);
+    throw new Error("Failed to update user profile");
+  }
+};
 
 
 export default authSlice.reducer;

@@ -16,7 +16,7 @@ const Home = () => {
   return (
     <>
 <NavBar />
-      <Hero />
+      <Hero /><br/><br/>
       <Amenities />
       <Gallery/>
       <Reviews />

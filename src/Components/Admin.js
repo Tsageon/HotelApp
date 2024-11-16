@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate} from "react-router-dom";
 import { Fade } from "react-awesome-reveal";
+import { Timestamp } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { addRoom, deleteRoom, updateRoom, fetchBookings, selectRooms,deleteBooking } from "../Redux/dbSlice";
+import { addRoom, deleteRoom, updateRoom, fetchData,fetchBookings, selectRooms,deleteBooking ,selectBookings} from "../Redux/dbSlice";
 import {  storage } from "../Config/Fire";
+import BookingForm from "./BookingForm";
 import "./Admin.css";
 
 
 const Admin = () => {
-  const [bookings] = useState([]);
+  const bookings = useSelector(selectBookings);
+  console.log("Bookings from Redux:", bookings)
   const [activePage, setActivePage] = useState("rooms");
   const dispatch = useDispatch();
   const rooms = useSelector(selectRooms);
@@ -23,35 +26,58 @@ const Admin = () => {
   const [image, setImage] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [loading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false); 
   const navigate = useNavigate();
 
   const formatDate = (date) => {
-    if (!date || !date.toDate) return "Invalid Date";
-    const parsedDate = date.toDate();
-    return `${parsedDate.getDate()}/${parsedDate.getMonth() + 1}/${parsedDate.getFullYear()}`;
-  };
+    if (!date) return "Invalid Date"; 
 
+    let parsedDate;
+
+    if (date instanceof Timestamp) {
+        parsedDate = date.toDate();
+    } 
+   
+    else if (typeof date === "string") {
+        parsedDate = new Date(date);
+    } 
+  
+    else {
+        parsedDate = date; 
+    }
+
+
+    if (!(parsedDate instanceof Date) || isNaN(parsedDate.getTime())) {
+        return "Invalid Date";
+    }
+
+    return `${parsedDate.getDate()}/${parsedDate.getMonth() + 1}/${parsedDate.getFullYear()}`;
+};
+
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      dispatch(fetchData());
+      setLoading(false); 
+    };
+  
+    if (rooms.length === 0) {
+      fetchDataAsync();
+    } else {
+      setLoading(false); 
+    }
+  }, [dispatch, rooms.length]);
  
   useEffect(() => {
-    dispatch(fetchBookings());
+    const fetchBookingsAsync = async () => {
+     dispatch(fetchBookings());
+      setLoading(false); 
+    };
+
+    fetchBookingsAsync();
   }, [dispatch]);
 
-  const uploadImage = async (file) => {
-    setUploading(true);
-    try {
-      const storageRef = ref(storage, `rooms/${file.name}`);
-      const snapshot = await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      return downloadURL;
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      return null;
-    } finally {
-      setUploading(false);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,29 +87,38 @@ const Admin = () => {
       return;
     }
   
-    const imageUrl = await uploadImage(image);
-    if (!imageUrl) return;
+    setUploading(true);
   
-    const roomData = {
-      roomName,
-      guests,
-      price,
-      duration,
-      roomType,   
-      descriptions, 
-      amenities,  
-      imageUrl,     
-    };
-    
-    if (editingId) {
-      dispatch(updateRoom({ id: editingId, ...roomData }));
-    } else {
-      dispatch(addRoom(roomData));
+    try {
+      const storageRef = ref(storage, `rooms/${image.name}`);
+      const snapshot = await uploadBytes(storageRef, image);
+      const imageUrl = await getDownloadURL(snapshot.ref);
+
+      const roomData = {
+        roomName,
+        guests,
+        price,
+        duration,
+        roomType,
+        descriptions,
+        amenities,
+        imageUrl,  
+      };
+      if (editingId) {
+        dispatch(updateRoom({ id: editingId, ...roomData }));
+      } else {
+        dispatch(addRoom(roomData));
+      }
+  
+      clearForm();
+      setActivePage("rooms");
+    } catch (error) {
+      console.error("Error uploading image or saving room data:", error);
+    } finally {
+      setUploading(false);
     }
-  
-    clearForm();
-    setActivePage("rooms");
   };
+  
   
   const handleDeleteBooking = (transactionId) => {
     dispatch(deleteBooking(transactionId));
@@ -182,9 +217,9 @@ const Admin = () => {
                       <tr key={room.id}>
                         <td>{room.roomName}</td>
                         <td>
-                          {room.imageUrl ? (
+                          {room.image ? (
                             <img
-                              src={room.imageUrl}
+                              src={room.image}
                               alt={room.roomName}
                               style={{ width: "50px", height: "auto" }}
                             />
@@ -289,6 +324,7 @@ const Admin = () => {
                 {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: "100px", height: "auto" }} />}
                 <button type="submit">{editingId ? "Update Room" : "Add Room"}</button>
               </form>
+              <BookingForm />
             </>
           </Fade>
         ) : activePage === "bookings" ? (
@@ -309,7 +345,7 @@ const Admin = () => {
                 </thead>
                 <tbody>
                 {bookings.length > 0 ? (
-              bookings.map((booking) => (
+                bookings.map((booking) => (
                 <tr key={booking.transactionId}>
                   <td>{booking.roomName}</td>
                   <td>{booking.payerName}</td>

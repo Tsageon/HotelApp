@@ -75,9 +75,10 @@ const Review = () => {
  console.log(clientsReviews);
 
   return (
-    <div className="review-container">
+    <div className="review-Parent">
       <h2>Guest Reviews</h2>
-      <div className="reviews-wrapper">
+      <p className='The-p '>Discover what our guests have to say about their unforgettable experiences at our hotel. From the impeccable service to the luxurious accommodations, our guests consistently share their admiration for the attention to detail and the welcoming atmosphere that defines every stay. Whether it's the serene ambiance, our world-class amenities, or the personalized care provided by our dedicated staff, each review reflects the exceptional standards we uphold. We take pride in creating memorable moments for every guest, and their words inspire us to continually exceed expectations.</p>
+      <div className="review-container">
         {displayedReviews.map(({ id, name,email, rating, review }) => (
           <div key={id} className="review-card">
             <h3>{name}</h3>

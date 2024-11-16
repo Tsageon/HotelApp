@@ -1,76 +1,98 @@
+.review-Parent {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  text-align: center; 
+  padding: 2rem;
+  background-color: #f8f8f8;
+}
+
 .review-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); 
+  gap: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px; 
+  background-color: #f8f8f8;
+}
+
+.The-p {
+  margin-bottom: 2rem;
+  width: 60rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.review-card {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-    padding: 2rem;
-    background-color: #f8f8f8;
-    text-align: center;
-  }
-  
-  .review-card {
-    background-color: white;
-    border-radius: 0.5rem; 
-    padding: 1.5rem;
-    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-  }
-  
-  .review-card:hover {
-    transform: translateY(-0.3125rem);
-  }
-  
-  .rating {
-    color: #e0b973;
-    font-size: 1.5rem;
-  }
-  
-  h2 {
-    margin-bottom: 1rem;
-    font-size: 2rem;
-  }
-  
-  .navigation-buttons {
-    margin-top: 1rem;
-  }
-  
-  .navigation-buttons button {
-    padding: 0.5rem 1rem;
-    margin: 0 1rem;
-    border: none;
-    border-radius: 0.3125rem;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .navigation-buttons button:hover {
-    background-color: #e0b973;
+  align-items: center;
+  justify-content: center; 
+  background: white; 
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.review-card:hover {
+  transform: translateY(-0.3125rem);
+}
+
+.rating {
+  color: #e0b973;
+  font-size: 1.5rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.navigation-buttons {
+  margin-top: 1rem;
+}
+
+.navigation-buttons button {
+  padding: 0.5rem 1rem;
+  margin: 0 1rem;
+  border: none;
+  border-radius: 0.3125rem;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.navigation-buttons button:hover {
+  background-color: #e0b973;
+}
+
+@media (max-width: 37.5rem) {
+  .review-container {
+    padding: 1rem;
   }
 
-  @media (max-width: 37.5rem) {
-    .review-container {
-      padding: 1rem;
-    }
-  
-    h2 {
-      font-size: 1.5rem; 
-    }
-  
-    .review-card {
-      padding: 1rem; 
-    }
-  
-    .rating {
-      font-size: 1.2rem; 
-    }
-  
-    .navigation-buttons button {
-      padding: 0.5rem; 
-      font-size: 0.875rem; 
-    }
+  h2 {
+    font-size: 1.5rem; 
   }
-  
+
+  .review-card {
+    padding: 1rem; 
+  }
+
+  .rating {
+    font-size: 1.2rem; 
+  }
+
+  .navigation-buttons button {
+    padding: 0.5rem; 
+    font-size: 0.875rem; 
+  }
+}
 
 @media (min-width: 37.5rem) and (max-width: 48rem) { 
   .review-container {
