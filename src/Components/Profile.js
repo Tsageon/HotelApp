@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Profile.css';
+import Loader from './Loader';
 import Footer from './footer';
 import Nav from './nav'
 import { Timestamp } from "firebase/firestore";
@@ -85,7 +86,9 @@ const Profile = () => {
     }
   }, [dispatch, user?.uid]);
 
-  if (authStatus === 'loading') return <p>Loading profile...</p>;
+  console.log('Favorites from Redux:', likedRooms);
+
+  if (authStatus === 'loading') return <Loader/>;
   if (authStatus === 'failed') return <p>Error: {error}</p>;
 
   return (
@@ -169,7 +172,7 @@ const Profile = () => {
       <div className="favorite-rooms">
         <h2>Your Liked Rooms</h2>
         {loading ? (
-          <p>Loading liked rooms...</p>
+          <Loader/>
         ) : error ? (
           <p>Error fetching liked rooms: {error}</p>
         ) : likedRooms.length > 0 ? (

@@ -5,19 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { IoIosBed } from "react-icons/io";
 import { MdBedroomParent } from "react-icons/md";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import {BsFillPeopleFill} from "react-icons/bs"
+import { BsFillPeopleFill } from "react-icons/bs"
 import { FaShareAlt } from "react-icons/fa";
 import { debounce } from "lodash";
+import Loader from "./Loader";
 import Nav from "./nav";
 import "./Room.css";
 import Footer from "./footer";
 import { userLikedRooms } from "../Redux/dbSlice";
+import { useAlert } from "./Alerts";
 
 const Room = () => {
   const favorites = useSelector((state) => state.db?.favorites || []);
-  const { data, loading, error } = useSelector(
-    (state) => state.db || { favorites: [] }
-  );
+  const { data, loading, error } = useSelector((state) => state.db || { favorites: [] });
   const user = useSelector((state) => state.auth.user);
   const [isSharing, setIsSharing] = useState(false);
   const [, setMessageVisible] = useState(false);
@@ -27,9 +27,10 @@ const Room = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const showAlert = useAlert(); 
 
-
-
+  console.log('Favorites from Redux:', favorites);
+ 
   useEffect(() => {
     if (rooms.length === 0 && !loading) {
       dispatch(fetchData());
@@ -62,8 +63,10 @@ const Room = () => {
       };
 
       navigate("/reserve", { state: { roomDetails: updatedRoom } });
+      showAlert("success", `Reservation confirmed for ${selectedRoom.roomName}!`);
     } else {
       navigate("/room");
+      showAlert("warning", `Sorry, ${selectedRoom.roomName} is already booked.`);
     }
   };
 
@@ -85,34 +88,37 @@ const Room = () => {
         setTimeout(() => {
           setMessageVisible(false);
         }, 3000);
+        showAlert("success", `Successfully shared ${roomName}!`);
       } catch (error) {
         console.error("Error sharing:", error);
+        showAlert("error", "Error occurred while sharing the room.");
       } finally {
         setIsSharing(false);
       }
     } else {
       console.error("Web Share API is not supported in this browser.");
+      showAlert("info", "Web Share API is not supported in this browser.");
     }
   };
 
   const handleAddFavorite = debounce((room) => {
-    console.log("Room object received: ", room); 
-  
     const likedData = {
-      roomId: room.id || "",               
-      roomName: room.roomName || "Unknown", 
-      price: room.price || 0,            
-      image: room.image || "",           
-      descriptions: room.descriptions || "No description available", 
+      roomId: room.id || "",
+      roomName: room.roomName || "Unknown",
+      price: room.price || 0,
+      image: room.image || "",
+      descriptions: room.descriptions || "No description available",
     };
-  
+
     if (!favorites.some(favorite => favorite.roomId === room.id)) {
-      console.log("Adding to favorites: ", likedData);
       dispatch(userLikedRooms(likedData));
+      showAlert("success", `${room.roomName} added to favorites!`);
     } else {
-      alert("Room is already in your favorites!");
+      showAlert("warning", "Room is already in your favorites!");
     }
   }, 300);
+
+
   
 
   return (
@@ -144,7 +150,7 @@ const Room = () => {
                 key={index}
                 onClick={() => handleReserve(index)}
               >
-                 <div className="img-div">
+                <div className="img-div">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -153,7 +159,7 @@ const Room = () => {
                     }}
                     className="favorite-icon-wrapper"
                   >
-               
+
                     {favorites.some(favorite => favorite.roomId === room.id) ? (
                       <FaHeart className="favorite-icon" />
                     ) : (

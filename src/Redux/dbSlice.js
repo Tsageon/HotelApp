@@ -13,13 +13,14 @@ import {
 
 } from "firebase/firestore";
 import { db, auth } from "../Config/Fire";
+import { useAlert } from "../Components/Alerts";
 
 
 
 const initialState = {
   data: [],
-  roomDetails: [],
   favorites: [],
+  roomDetails: [],
   bookings: [],
   success: false,
   loading: false,
@@ -41,7 +42,9 @@ export const dbSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-
+    setLoaded: (state) => {
+      state.loading = false; 
+    },
     setSuccess(state) {
       state.success = true;
       state.loading = false;
@@ -66,19 +69,24 @@ export const dbSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    setFavorites: (state, action) => {
+      console.log('Dispatching favorites:', action.payload);
+      state.favorites = action.payload;
+    },
+    setLikedRooms: (state, action) => {
+      state.favorites = action.payload;  
+    },
     userLikedRooms: (state, action) => {
       const room = action.payload;
-     
       const isAlreadyFavorited = state.favorites.some(favorite => favorite.roomId === room.roomId);
-
       if (isAlreadyFavorited) {
         state.favorites = state.favorites.filter(favorite => favorite.roomId !== room.roomId);
       } else {
-        state.favorites = [...state.favorites, room];
+        state.favorites.push(room);
       }
     },
     removeLikedRoom: (state, action) => {
-      const roomId = action.payload;  
+      const roomId = action.payload;
       state.favorites = state.favorites.filter(room => room.roomId !== roomId);
     },
     fetchReviewsStart(state) {
@@ -139,15 +147,9 @@ export const dbSlice = createSlice({
         state.data[roomIndex] = { id, roomName, price };
       }
     },
-    setFavorites: (state, action) => {
-      state.favorites = action.payload;
-    },
     setReviews(state, action) {
       state.clientsReviews = action.payload
-
     },
-
-
     setUserBookings(state, action) {
       state.userBookings = action.payload;
     }
@@ -156,6 +158,7 @@ export const dbSlice = createSlice({
 
 export const {
   setLoading,
+  setLoaded,
   setUserBookings,
   setData,
   setUser,
@@ -196,7 +199,7 @@ export const listenForAuthChanges = () => {
       if (user) {
         dispatch(setUser({ uid: user.uid, email: user.email }));
 
-        const userDocRef = doc(db, "Users", user.uid);
+        const userDocRef = doc(db, "users", user.uid);
         
         const unsubscribeUserDoc = onSnapshot(userDocRef, (doc) => {
           if (doc.exists()) {
@@ -227,7 +230,6 @@ export const listenForAuthChanges = () => {
 
 
 
-
 export const fetchData = () => async (dispatch) => {
   dispatch(fetchRoomsStart());
 
@@ -248,7 +250,19 @@ export const fetchData = () => async (dispatch) => {
   }
 };
 
-export const userLikedRooms = (likedData) => async (dispatch, getState) => {
+const fetchUpdatedFavorites = async () => {
+  try {
+    const response = await fetch("/api/favorites");
+    const data = await response.json();
+    return data || [];  
+  } catch (error) {
+    console.error("Error fetching liked rooms:", error);
+    return [];  
+  }
+};
+
+export const userLikedRooms = (likedData) => async (dispatch) => {
+  const showAlert = useAlert();
   dispatch(setLoading());
   try {
     const likedRoomsRef = collection(db, "users", auth.currentUser.uid, "userLikeRooms");
@@ -262,31 +276,28 @@ export const userLikedRooms = (likedData) => async (dispatch, getState) => {
     if (existingRoomDoc) {
       await deleteDoc(doc(likedRoomsRef, existingRoomDoc.id));
       dispatch(removeLikedRoom(existingRoomDoc.id));
-      alert("Removed from favorites");
+      showAlert("success", "Removed from favorites");  
     } else {
       const docRef = await addDoc(likedRoomsRef, {
         ...likedData,
       });
       dispatch(setLikeRooms({ id: docRef.id, ...likedData }));
-      alert("Liked successfully");
+      showAlert("success", "Liked successfully");
     }
 
-    const updatedFavorites = await fetchUpdatedFavorites();
+    const updatedFavorites = await fetchUpdatedFavorites();  
     dispatch(setFavorites(updatedFavorites));
+
   } catch (error) {
+    showAlert("error", "Failed to toggle like: " + error.message);
     dispatch(setError("Failed to toggle like: " + error.message));
   }
 };
 
-const fetchUpdatedFavorites = async () => {
-  const likedRoomsRef = collection(db, "users", auth.currentUser.uid, "userLikeRooms");
-  const querySnapshot = await getDocs(likedRoomsRef);
-  return querySnapshot.docs.map(doc => doc.data());
-};
 
 
 export const fetchUserLikedRooms = () => async (dispatch) => {
-  dispatch(setLoading());
+  dispatch(setLoading()); 
   try {
     const likedRoomsRef = collection(db, "users", auth.currentUser.uid, "userLikeRooms");
     const querySnapshot = await getDocs(likedRoomsRef);
@@ -296,9 +307,10 @@ export const fetchUserLikedRooms = () => async (dispatch) => {
       ...doc.data(),
     }));
 
-    dispatch(setLikedRooms(likedRoomsData));
+    dispatch(setFavorites(likedRoomsData)); 
+    dispatch(setLoaded());  
   } catch (error) {
-    dispatch(setError("Failed to fetch liked rooms: " + error.message));
+    dispatch(setError("Failed to fetch liked rooms: " + error.message)); 
   }
 };
 
@@ -476,6 +488,7 @@ export const updateRoom = (updatedRoom) => async (dispatch) => {
 
 export const userBookings = (bookingData) => async (dispatch) => {
   dispatch(setLoading());
+  const showAlert = useAlert();
   try {
     const bookingsRef = collection(db, "users", auth.currentUser.uid, "userBookings");
     const docRef = await addDoc(bookingsRef, {
@@ -483,9 +496,10 @@ export const userBookings = (bookingData) => async (dispatch) => {
     });
 
     dispatch(setLikeRooms({ id: docRef.id, ...bookingData }));
-    alert("Booked successfully");
+    showAlert("success", "Booked successfully");
   } catch (error) {
     dispatch(setError("Failed to book: " + error.message));
+    showAlert("error", "Failed to book: " + error.message);
   }
 };
 

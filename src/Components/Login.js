@@ -4,12 +4,15 @@ import Img from "./mt.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signIn } from "../Redux/authSlice";
+import { useAlert } from "./Alerts";
 
 const Login = () => {
   const navigate = useNavigate();
+  const showAlert = useAlert();
+  const loading = useSelector((state) => state.auth.loading);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user, error, } = useSelector((state) => state.auth || {});
+  const { user, error } = useSelector((state) => state.auth || {});
   const isAdmin = useSelector((state) => state.auth.isAdmin);
   const dispatch = useDispatch();
   
@@ -19,15 +22,15 @@ const Login = () => {
       
       if (isAdmin) {
         console.log('User is admin');
-        alert("Admin detected!Redirecting...");
+        showAlert("success", "Admin detected! Redirecting...");
         navigate("/admin");
       } else {
         console.log('User is not admin');
-        alert("Login successful!");
+        showAlert("success", "Login successful!");
         navigate("/home");
       }
     }
-  }, [user, isAdmin, navigate]);
+  }, [user, isAdmin, navigate, showAlert]);
   
   const handleLogin = () => {
     dispatch(signIn({ email, password }));
@@ -35,7 +38,11 @@ const Login = () => {
 
   return (
     <div className="login">
-      <div className="login__page">
+         {loading ? (
+        <div className="loader">Loading...</div>
+      ) : (
+        <div>
+           <div className="login__page">
         <div>
           <img className="login__logo" src={Img} alt="Logo" />
         </div>
@@ -87,6 +94,8 @@ const Login = () => {
             </>
         </div>
       </div>
+        </div>
+      )}
     </div>
   );
 };

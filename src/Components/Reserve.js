@@ -199,8 +199,6 @@ const Reserve = () => {
             alt={roomDetails.roomName}
           />
 
-          <div></div>
-
           <div className="room-stuff">
             <div className="date-fix">
               <b>

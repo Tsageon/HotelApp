@@ -17,19 +17,18 @@ const Register = () => {
   const [confirmpassword, setconfirmpassword] = useState("");
   const { user, loading, error } = useSelector((state) => state.auth || {});
 
-
   const dispatch = useDispatch();
 
   const handleSignUp = () => {
-    dispatch(signUp({ email, password,name }));
+    dispatch(signUp({ email, password, name }));
   };
-  
+
   useEffect(() => {
     if (user) {
-      alert("Signup successfull");
+      alert("Signup successful");
       navigate("/home");
     }
-  },[user, navigate]);
+  }, [user, navigate]);
 
   return (
     <div className="register">
@@ -124,19 +123,29 @@ const Register = () => {
           >
             Create Account
           </button>
+
           {loading && (
-            <Bars
-              height="80"
-              width="80"
-              radius="9"
-              color="green"
-              ariaLabel="loading"
-              wrapperStyle
-              wrapperClass
-            />
+            <div className="register__loader">
+              <Bars
+                height="80"
+                width="80"
+                radius="9"
+                color="green"
+                ariaLabel="loading"
+                wrapperStyle={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            </div>
           )}
-          {error && <p>Error:{error}</p>}
-          <p><br/>
+
+          {error && <p className="register__error">Error: {error}</p>}
+
+          <p>
+            <br />
             Already have an account?
             <b>
               <Link to="/login">Login here!</Link>
