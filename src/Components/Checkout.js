@@ -1,39 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useDispatch, useSelector } from "react-redux";
 import { userBookings } from "../Redux/dbSlice";
 import { selectUser } from '../Redux/dbSlice'
 import { useAlert } from "./Alerts";
+import Swal from 'sweetalert2'
 import DatePicker from "react-datepicker";
 import Footer from "./footer"
 import "react-datepicker/dist/react-datepicker.css";
 import "./Checkout.css";
 
-const sendConfirmationEmail = async (emailData) => {
-  try {
-    const response = await fetch('https://hotelbackside.onrender.com/send-confirmation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(emailData),
-    });
 
-    if (!response.ok) {
-      throw new Error('Error sending confirmation email.');
-    }
-
-    const data = await response.json();
-    console.log('Email sent successfully:', data);
-  } catch (error) {
-    console.error('Error sending email:', error);
-    alert('Failed to send confirmation email. Please check your inbox later.');
-  }
-};
 
 const CheckoutPayment = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
@@ -65,6 +45,29 @@ const CheckoutPayment = () => {
     return roomDetails.price;
   }, [startDate, endDate, roomDetails.price,showAlert]);
 
+
+
+  const sendConfirmationEmail = async (emailData) => {
+    try {
+      const response = await fetch('https://hotelbackside.onrender.com/send-confirmation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error sending confirmation email.');
+      }
+  
+      const data = await response.json();
+      console.log('Email sent successfully:', data);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      showAlert("warning",'Failed to send confirmation email. Please check your inbox later.');
+    }
+  };
   useEffect(() => {
     setTotalPrice(calculateTotalPrice());
   }, [startDate, endDate, calculateTotalPrice]);
@@ -114,9 +117,14 @@ const CheckoutPayment = () => {
       }
 
       dispatch(userBookings(bookingDetails));
-      showAlert('success', `Transaction completed by ${bookingDetails.payerName}. Booking confirmed!`);
-      navigate("/profile");
 
+
+      Swal.fire({
+        title: 'Feature Coming Soon!',
+        text: 'Transaction completed by ' + bookingDetails.payerName + '. Booking confirmed!',
+        icon: 'success',
+        confirmButtonText: 'Okay',
+      });
       const emailData = {
         recipientEmail: userEmail,
         subject: 'Booking Confirmation',
@@ -141,12 +149,7 @@ const CheckoutPayment = () => {
         subject: 'Additional - Booking Confirmation',
       };
 
-
       await sendConfirmationEmail(additionalEmailData)
-      console.log("Sending email data:", emailData);
-      console.log("Sending admin email data:", adminEmailData);
-      console.log("Sending additional email data:", additionalEmailData);
-
 
     } catch (error) {
       console.error("Error during transaction approval:", error);
@@ -154,109 +157,112 @@ const CheckoutPayment = () => {
     }
   };
 
-
-
-
-
-
   return (
-    <div>
-      <div className="checkout-container">
-        {!reservationConfirmed ? (
-          <>
-            <h3>Confirm Reservation</h3>
-            <div className="room-summary">
-              <img
-                className="room-img1"
-                src={roomDetails.image}
-                alt={roomDetails.roomName}
-              />
-              <div className="summary-details">
-                <h3>{roomDetails.roomName}</h3>
-                <p>Guests: {guests}</p>
-                <p>Total Price: R{calculateTotalPrice()}</p>
-              </div>
-            </div>
-
-            <div className="editable-section">
-              <h6>Edit Reservation Details</h6>
-              <label>Check-in Date:</label> <br />
-              <DatePicker
-                className="dateP"
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                selectsStart
-                startDate={startDate}
-                endDate={endDate}
-                placeholderText="Select check-in date"
-              />
-              <br />
-              <label>Check-out Date:</label> <br />
-              <DatePicker
-                className="dateP"
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                selectsEnd
-                startDate={startDate}
-                endDate={endDate}
-                minDate={startDate}
-                placeholderText="Select check-out date"
-              />
-              <br />
-              <label>Number of Guests:</label>
-              <br />
-              <input
-                className="input1"
-                type="number"
-                value={guests}
-                onChange={(e) =>
-                  setGuests(Math.min(Math.max(Number(e.target.value), 1), 10))
-                }
-                min="1"
-                max="100"
-              />
-            </div>
-            <button className="checkout-btn" onClick={handleConfirm}>
-              Reserve
-            </button>
-            <br /><br />
-          </>
-        ) : (
-          <div className="confirmation-container">
-            <h2>Booking Confirmation</h2>
-            <h3>Details</h3>
-            <p>Room: {roomDetails.roomName}</p>
-            <p>
-              Duration: {Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24))}{" "}
-              day(s)
-            </p>
+    <div className="checkout-container">
+    {!reservationConfirmed ? (
+      <>
+        <h3 className="title">Confirm Reservation</h3>
+  
+        <div className="room-summary">
+          <img
+            className="room-img1"
+            src={roomDetails.image}
+            alt={roomDetails.roomName}
+          />
+          <div className="summary-details">
+            <h3>{roomDetails.roomName}</h3>
             <p>Guests: {guests}</p>
-            <p>Total Price: R{totalPrice.toFixed(2)}</p>
-            {totalPrice > 0 && (
-              <PayPalButtons
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    purchase_units: [
-                      {
-                        amount: {
-                          value: totalPrice.toString(),
-                        },
-                      },
-                    ],
-                  });
-                }}
-                onApprove={handleApprove}
-                onError={(err) => {
-                  console.error(err);
-                  alert("An error occurred during the transaction.");
-                }}
-              />
-            )}
+            <p>Total Price: R{calculateTotalPrice()}</p>
           </div>
-        )}<br /><br />
-
+        </div>
+  
+        <div className="editable-section">
+          <h6>Edit Reservation Details</h6>
+  
+          <div className="form-group">
+            <label>Check-in Date:</label>
+            <DatePicker
+              className="dateP"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              placeholderText="Select check-in date"
+            />
+          </div>
+  
+          <div className="form-group">
+            <label>Check-out Date:</label>
+            <DatePicker
+              className="dateP"
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              placeholderText="Select check-out date"
+            />
+          </div>
+  
+          <div className="checkout-form-group">
+            <label>Number of Guests:</label>
+            <input
+              className="input1"
+              type="number"
+              value={guests}
+              onChange={(e) =>
+                setGuests(Math.min(Math.max(Number(e.target.value), 1), 10))
+              }
+              min="1"
+              max="100"
+            />
+          </div>
+        </div>
+  
+        <button className="checkout-btn" onClick={handleConfirm}>
+          Reserve
+        </button>
+      </>
+    ) : (
+      <div className="confirmation-container">
+        <h2>Booking Confirmation</h2>
+        <h3>Details</h3>
+        <p>Room: {roomDetails.roomName}</p>
+        <p>
+          Duration: {Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24))}{" "}
+          day(s)
+        </p>
+        <p>Guests: {guests}</p>
+        <p>Total Price: R{totalPrice.toFixed(2)}</p>
+        {totalPrice > 0 && (
+          <div className="paypal-buttons-container">
+            <PayPalButtons
+              createOrder={(data, actions) => {
+                return actions.order.create({
+                  purchase_units: [
+                    {
+                      amount: {
+                        value: totalPrice.toString(),
+                      },
+                    },
+                  ],
+                });
+              }}
+              onApprove={handleApprove}
+              onError={(err) => {
+                console.error(err);
+                showAlert("error", "An error occurred during the transaction.");
+              }}
+            />
+          </div>
+        )}
       </div>
-      <Footer /></div>
+    )}<br/>
+    <Footer />
+  </div>
+  
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAlert } from "./Alerts";
 import DatePicker from "react-datepicker";
 import Footer from "./footer";
 import Nav from "./nav";
@@ -9,6 +10,7 @@ import "./Reserve.css";
 const Reserve = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const showAlert = useAlert(); 
   const roomDetails = location.state?.roomDetails;
 
   const [startDate, setStartDate] = useState(null);
@@ -68,11 +70,11 @@ const Reserve = () => {
 
   const handleCheckout = () => {
     if (!startDate || !endDate) {
-      alert("Select both start and end dates for your stay.");
+      showAlert("Select both start and end dates for your stay.");
       return;
     }
     if (!data || data === "Amount of guests") {
-      alert("Select the number of guests.");
+      showAlert("Select the number of guests.");
       return;
     }
     setIsConfirmed(false);
@@ -84,7 +86,7 @@ const Reserve = () => {
         guests: data,
       },
     });
-    alert(`Reservation confirmed for ${roomDetails.roomName}.`);
+   showAlert("success", `Reservation confirmed for ${roomDetails.roomName}.`);
   };
 
   const generateRoomFeatures = (description) => {
@@ -187,79 +189,82 @@ const Reserve = () => {
 
   return (
     <div>
-      <Nav />
-      <div className="Container">
-        <div className="room-title">
-          <p className="room-name">{roomDetails.roomName}</p>
-        </div>
-        <div className="reserve-container">
-          <img
-            className="reserve-room-img"
-            src={roomDetails.image}
-            alt={roomDetails.roomName}
-          />
+  <Nav />
+  <div className="Container">
+    <div className="room-title">
+      <p className="room-name">{roomDetails.roomName}</p>
+    </div>
 
-          <div className="room-stuff">
-            <div className="date-fix">
-              <b>
-                <p className="room-p">{roomDetails.descriptions}</p>
-              </b>
-              <div className="room-features">
-                <h5>Room Features:</h5>
-                <ul>
-                  {roomFeatures.map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="date-picker-card">
-              <h5>Select Dates</h5>
-              <div className="date-picker-container">
-                <DatePicker
-                  className="input1-container"
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
-                  selectsStart
-                  startDate={startDate}
-                  endDate={endDate}
-                  placeholderText="Select check-in date"
-                />
-                <DatePicker
-                  className="input1-container"
-                  selected={endDate}
-                  onChange={(date) => setEndDate(date)}
-                  selectsEnd
-                  startDate={startDate}
-                  endDate={endDate}
-                  minDate={startDate}
-                  placeholderText="Select check-out date"
-                />
-                <select className="select1" onChange={onOptionChangeHandler}>
-                  <option value="" disabled selected>
-                    Select Amount of guests
-                  </option>
-                  {options.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                <p className="room-price">
-                  Total Price: R{calculateTotalPrice()}
-                </p>
-                <button className="checkout-btn" onClick={handleCheckout}>
-                  Reserve
-                </button>
-              </div>
-            </div>
+    <div className="reserve-container">
+      <img
+        className="reserve-room-img"
+        src={roomDetails.image}
+        alt={roomDetails.roomName}
+      />
+
+      <div className="room-stuff">
+        <div className="date-fix">
+          <b>
+            <p className="room-p">{roomDetails.descriptions}</p>
+          </b>
+          <div className="room-features">
+            <h5>Room Features:</h5>
+            <ul>
+              {roomFeatures.map((feature, index) => (
+                <li key={index}>{feature}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="date-picker-card">
+          <h5>Select Dates</h5>
+          <div className="date-picker-container">
+            <DatePicker
+              className="input1-container"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              placeholderText="Select check-in date"
+            />
+            <DatePicker
+              className="input1-container"
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              placeholderText="Select check-out date"
+            />
+            <select className="select1" onChange={onOptionChangeHandler}>
+              <option value="" disabled selected>
+                Select Amount of guests
+              </option>
+              {options.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+
+            <p className="room-price">
+              Total Price: R{calculateTotalPrice()}
+            </p>
+            <button className="checkout-btn" onClick={handleCheckout}>
+              Reserve
+            </button>
           </div>
         </div>
       </div>
-      <br />
-      <br />
-      <Footer />
     </div>
+  </div>
+  <br /><br/>
+  <Footer />
+</div>
+
   );
 };
 

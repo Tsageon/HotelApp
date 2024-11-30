@@ -177,3 +177,14 @@ button {
     font-size: 0.4rem;
   }
 }
+@media (min-width: 48rem) {
+  .swal-popup-responsive {
+    width: 40%;
+  }
+}
+
+@media (min-width: 64rem) {
+  .swal-popup-responsive {
+    width: 25%; 
+  }
+}

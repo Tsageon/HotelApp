@@ -1,0 +1,96 @@
+.tcs-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  
+  .tcs-button {
+    background-color: #14addf;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .tcs-button:hover {
+    background-color: #0f8bb5;
+  }
+  
+  .tcs-button.tcs-agreed {
+    background-color: #28a745;
+    cursor: not-allowed;
+  }
+  
+  .tcs-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .tcs-modal-content {
+    background: white;
+    color: black;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 80%;
+    max-width: 600px;
+    text-align: left;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: "Arial", sans-serif;
+  }
+  
+  .tcs-modal-content h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #14274a;
+  }
+  
+  .tcs-modal-content ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+  
+  .tcs-modal-content ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .tcs-close-btn,
+  .tcs-agree-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+  
+  .tcs-close-btn {
+    background-color: #d33;
+    color: white;
+    margin-right: 1rem;
+  }
+  
+  .tcs-close-btn:hover {
+    background-color: #b02a2a;
+  }
+  
+  .tcs-agree-btn {
+    background-color: #14addf;
+    color: white;
+  }
+  
+  .tcs-agree-btn:hover {
+    background-color: #0f8bb5;
+  }
+  

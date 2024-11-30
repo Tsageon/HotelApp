@@ -164,6 +164,101 @@ table button:last-child:hover {
   background-color: #c82333;
 }
 
+.room-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+
+.form-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  border-color: #007bff;
+}
+
+.form-input[type="textarea"] {
+  resize: vertical;
+  min-height: 100px;
+}
+
+
+.uploading-text {
+  font-size: 0.9rem;
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+
+.image-preview {
+  display: block;
+  margin: 1rem 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  max-width: 100px;
+  height: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+  opacity: 0.9;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+@media (max-width: 768px) {
+  .room-form {
+    padding: 1rem;
+  }
+}
+
 
 @media (max-width: 1200px) {
   .admin-container {

@@ -1,6 +1,7 @@
 import "./Register.css";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAlert } from "./Alerts";
 import Img from "./mt.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,7 +17,8 @@ const Register = () => {
   const [password, setpassword] = useState("");
   const [confirmpassword, setconfirmpassword] = useState("");
   const { user, loading, error } = useSelector((state) => state.auth || {});
-
+  
+  const showAlert = useAlert();
   const dispatch = useDispatch();
 
   const handleSignUp = () => {
@@ -25,10 +27,10 @@ const Register = () => {
 
   useEffect(() => {
     if (user) {
-      alert("Signup successful");
+      showAlert("success","Signup successful");
       navigate("/home");
     }
-  }, [user, navigate]);
+  }, [user, navigate,showAlert]);
 
   return (
     <div className="register">

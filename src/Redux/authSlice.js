@@ -195,6 +195,12 @@ export const signIn = ({ email, password }) => async (dispatch) => {
     return isAdmin;
   } catch (error) {
     console.error('Error during sign-in:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: error.message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
     dispatch(setError(error.message));
   } finally {
     dispatch(setLoading(false)); 
@@ -208,6 +214,12 @@ export const signOut = () => async (dispatch) => {
     dispatch(logout());
   } catch (error) {
     console.error('Error during sign-out:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: error.message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
     dispatch(setError(error.message));
   }
 };

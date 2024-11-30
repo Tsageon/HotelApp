@@ -11,6 +11,8 @@ export const AlertProvider = ({ children }) => {
       title: severity.charAt(0).toUpperCase() + severity.slice(1), 
       text: message,
       icon: severity,
+      width: "90%",
+      padding: "1.25rem",
       confirmButtonText: "OK",
       timer: 4000,
     });

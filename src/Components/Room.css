@@ -151,6 +151,10 @@ button {
     margin: 0.625rem 0;
   }
 
+  .room-cards{
+    grid-template-columns: repeat(3, 1fr); 
+  }
+
   .room-name {
     font-size: 1rem; 
   }
@@ -180,6 +184,10 @@ button {
     align-items: flex-start;
   }
 
+ .room-cards{
+  grid-template-columns: repeat(2, 1fr); 
+
+ }
   .price {
     font-size: 0.9rem;
   }

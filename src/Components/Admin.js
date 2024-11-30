@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate} from "react-router-dom";
 import { Fade } from "react-awesome-reveal";
 import { Timestamp } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { addRoom, deleteRoom, updateRoom, fetchData,fetchBookings, selectRooms,deleteBooking ,selectBookings} from "../Redux/dbSlice";
 import {  storage } from "../Config/Fire";
+import Loader from "./Loader";
 import BookingForm from "./BookingForm";
+import Nav from "./nav";
+import Swal from 'sweetalert2'
 import "./Admin.css";
 
 
@@ -28,7 +30,7 @@ const Admin = () => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false); 
-  const navigate = useNavigate();
+ 
 
   const formatDate = (date) => {
     if (!date) return "Invalid Date"; 
@@ -55,6 +57,15 @@ const Admin = () => {
     return `${parsedDate.getDate()}/${parsedDate.getMonth() + 1}/${parsedDate.getFullYear()}`;
 };
 
+
+useEffect(() => {
+  Swal.fire({
+    title: 'Features Coming Soon!',
+    text: 'Route protection will be available soon.',
+    icon: 'info',
+    confirmButtonText: 'Got it',
+  });
+}, []);
 
   useEffect(() => {
     const fetchDataAsync = async () => {
@@ -161,15 +172,13 @@ const Admin = () => {
     setPreviewUrl(null);
   };
 
-  const handlehome = () => {
-    navigate("/home")
-  }
+ 
 
 
   return (
+    <div><Nav />
     <div className="admin-container">
       <h2>Admin Panel</h2>
-      <button className="back1" onClick={handlehome}>Home</button>
       <div className="admin-nav">
         <button
           className={activePage === "rooms" ? "active" : ""}
@@ -196,7 +205,7 @@ const Admin = () => {
 
       <div className="admin-content">
         {loading ? (
-          <div>Loading...</div>
+         <Loader/>
         ) : activePage === "rooms" ? (
           <Fade duration={800}>
             <>
@@ -250,80 +259,96 @@ const Admin = () => {
           <Fade duration={800}>
             <>
               <h3>{editingId ? "Edit Room" : "Add Room"}</h3>
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <label>Room Name:</label>
-                  <input
-                    type="text"
-                    value={roomName}
-                    onChange={(e) => setRoomName(e.target.value)}
-                    placeholder="e.g. Roomelux"
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Capacity:</label>
-                  <input
-                    type="text"
-                    value={guests}
-                    onChange={(e) => setGuests(e.target.value)}
-                    placeholder="e.g. 4"
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Price:</label>
-                  <input
-                    type="text"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    placeholder="e.g. 200"
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Room Type:</label>
-                  <input
-                    type="text"
-                    value={roomType}
-                    onChange={(e) => setRoomType(e.target.value)}
-                    placeholder="e.g. Suite"
-                  />
-                </div>
-                <div>
-                  <label>Description:</label>
-                  <textarea
-                    value={descriptions}
-                    onChange={(e) => setDescriptions(e.target.value)}
-                    placeholder="e.g. A luxurious room with a king size bed."
-                  />
-                </div>
-                <div>
-                  <label>Amenities:</label>
-                  <input
-                    type="text"
-                    value={amenities}
-                    onChange={(e) => setAmenities(e.target.value)}
-                    placeholder="e.g. WiFi, Air Conditioning"
-                  />
-                </div>
-                <div>
-                  <label>Duration:</label>
-                  <input
-                    type="text"
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
-                    placeholder="e.g. Nightly, Weekly"
-                  />
-                </div>
-                <div>
-                  <label>Upload Image:</label>
-                  <input type="file" accept="image/png, image/jpeg" onChange={handleImageChange} required />
-                </div>
-                {uploading && <p>Uploading image...</p>} 
-                {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: "100px", height: "auto" }} />}
-                <button type="submit">{editingId ? "Update Room" : "Add Room"}</button>
-              </form>
+              <form onSubmit={handleSubmit} className="room-form">
+  <div className="form-group">
+    <label className="form-label">Room Name:</label>
+    <input
+      type="text"
+      value={roomName}
+      onChange={(e) => setRoomName(e.target.value)}
+      placeholder="e.g. Roomelux"
+      required
+      className="form-input"
+    />
+  </div>
+  <div className="form-group">
+    <label className="form-label">Capacity:</label>
+    <input
+      type="text"
+      value={guests}
+      onChange={(e) => setGuests(e.target.value)}
+      placeholder="e.g. 4"
+      required
+      className="form-input"
+    />
+  </div>
+  <div className="form-group">
+    <label className="form-label">Price:</label>
+    <input
+      type="text"
+      value={price}
+      onChange={(e) => setPrice(e.target.value)}
+      placeholder="e.g. 200"
+      required
+      className="form-input"
+    />
+  </div>
+  <div className="form-group">
+    <label className="form-label">Room Type:</label>
+    <input
+      type="text"
+      value={roomType}
+      onChange={(e) => setRoomType(e.target.value)}
+      placeholder="e.g. Suite"
+      className="form-input"
+    />
+  </div>
+  <div className="form-group">
+    <label className="form-label">Description:</label>
+    <textarea
+      value={descriptions}
+      onChange={(e) => setDescriptions(e.target.value)}
+      placeholder="e.g. A luxurious room with a king size bed."
+      className="form-input"
+    ></textarea>
+  </div>
+  <div className="form-group">
+    <label className="form-label">Amenities:</label>
+    <input
+      type="text"
+      value={amenities}
+      onChange={(e) => setAmenities(e.target.value)}
+      placeholder="e.g. WiFi, Air Conditioning"
+      className="form-input"
+    />
+  </div>
+  <div className="form-group">
+    <label className="form-label">Duration:</label>
+    <input
+      type="text"
+      value={duration}
+      onChange={(e) => setDuration(e.target.value)}
+      placeholder="e.g. Nightly, Weekly"
+      className="form-input"
+    />
+  </div>
+  <div className="form-group">
+    <label className="form-label">Upload Image:</label>
+    <input
+      type="file"
+      accept="image/png, image/jpeg"
+      onChange={handleImageChange}
+      required
+      className="form-input"
+    />
+  </div>
+  {uploading && <p className="uploading-text">Uploading image...</p>} 
+  {previewUrl && <img src={previewUrl} alt="Preview" className="image-preview" />}
+  <button type="submit" className="submit-button">
+    {editingId ? "Update Room" : "Add Room"}
+  </button>
+</form>
+
               <BookingForm />
             </>
           </Fade>
@@ -371,6 +396,7 @@ const Admin = () => {
           </Fade>
         ) : null}
       </div>
+    </div>
     </div>
   );
 };

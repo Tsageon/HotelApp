@@ -3,21 +3,22 @@ import './Profile.css';
 import Loader from './Loader';
 import Footer from './footer';
 import Nav from './nav'
+import Swal from "sweetalert2";
+import { useAlert } from './Alerts';
 import { Timestamp } from "firebase/firestore";
 import { fetchUserBookings, fetchUserLikedRooms } from '../Redux/dbSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { logout, editUserProfile, fetchUserProfile } from '../Redux/authSlice';
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const showAlert = useAlert();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const authStatus = useSelector((state) => state.auth.status);
   const email = user?.email || 'N/A';
   const { likedRooms = [], loading, error, userBookings = [] } = useSelector((state) => state.db);
-
-
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -46,11 +47,28 @@ const Profile = () => {
     return isNaN(parsedDate.getTime()) ? "Invalid Date" : `${parsedDate.getDate()}/${parsedDate.getMonth() + 1}/${parsedDate.getFullYear()}`;
   };
 
+
   const LOGOUT = () => {
-    alert("Logging you out...");
-    dispatch(logout());
-    navigate("/login");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#e0b973",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log me out!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        showAlert('success', "Logging you out...");
+        dispatch(logout());
+        navigate("/login");
+      } else {
+        showAlert('info', "Logout cancelled.");
+      }
+    });
   };
+
 
   const getInitials = (email) => email.split('@')[0].split(' ').map(word => word.charAt(0)).join('').toUpperCase();
 
@@ -59,6 +77,16 @@ const Profile = () => {
     dispatch(editUserProfile({ uid: user.uid, ...formData }));
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    Swal.fire({
+      title: 'Features Coming Soon!',
+      text: 'Liked Rooms and Bookings will be available soon.',
+      icon: 'info',
+      confirmButtonText: 'Got it',
+    });
+  }, []);
+
 
   useEffect(() => {
     if (user) {
@@ -88,13 +116,14 @@ const Profile = () => {
 
   console.log('Favorites from Redux:', likedRooms);
 
-  if (authStatus === 'loading') return <Loader/>;
+  if (authStatus === 'loading') return <Loader />;
   if (authStatus === 'failed') return <p>Error: {error}</p>;
+
 
   return (
     <div>
       <nav className="nav-container">
-       <Nav/>
+        <Nav />
       </nav>
 
       <div className="profile">
@@ -172,7 +201,7 @@ const Profile = () => {
       <div className="favorite-rooms">
         <h2>Your Liked Rooms</h2>
         {loading ? (
-          <Loader/>
+          <Loader />
         ) : error ? (
           <p>Error fetching liked rooms: {error}</p>
         ) : likedRooms.length > 0 ? (

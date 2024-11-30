@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addBookings } from "../Redux/dbSlice";
+import './booking.css'
 
 const BookingForm = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const BookingForm = () => {
   const handleBooking = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(addBookings(bookingData));
+     dispatch(addBookings(bookingData));
       console.log('Booking added successfully');
       setBookingData({
         userId: '',

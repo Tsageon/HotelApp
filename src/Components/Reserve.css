@@ -1,78 +1,66 @@
-/* Default layout for larger screens (desktop) */
 .reserve-container {
-  margin: 0 auto;
-  padding: 1.3rem;
-  border-radius: 0.5rem;
-  background-color: #f9f9f9;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  gap: 2rem;
-  display: flex;
-  padding: 0 150px; /* Keep large padding for desktop */
-  max-width: 500rem;
-  height: 100vh;
-}
-
-.reserve-details {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 1rem;
-  align-items: center;
-  text-align: center;
+  justify-content: space-between; 
+  gap: 2rem;
+  padding: 2rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .reserve-room-img {
+  width: 40%; 
+  max-width: 500px;
   border-radius: 0.5rem;
-  width: 40%;
+  height: auto;
+  margin: 0 auto;
 }
 
 .reserve-info {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  flex: 1;
+  flex: 1; 
   margin-top: 2rem;
 }
 
 .room-stuff {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
-  width: 50%;
+  width: 100%;
 }
 
 .room-features,
 .room-p {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex: 1 1 48%; 
+  justify-content: center;
   align-items: center;
+  flex-direction: column;
   padding: 1.5rem;
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  background-color: #fff;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-  width: 100%;
-  height: 20vh;
-  margin: 1rem auto;
   text-align: center;
   color: black;
   font-size: 1.2rem;
+  width: 48%;
+  margin: 1rem auto;
+  height: auto;
+  max-width: calc(50% - 1rem); 
+  min-width: 200px;
 }
 
-.room-name {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.date-fix {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  flex-direction: column;
+.room-features,
+.room-p {
+  min-width: 200px;
 }
 
 .date-picker-card {
@@ -84,9 +72,9 @@
   border-radius: 0.5rem;
   background-color: #fff;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 80%;
   max-width: 80rem;
-  height: 60vh;
+  height: auto;
   margin: 0 auto;
 }
 
@@ -95,8 +83,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   font-weight: bold;
-  border-radius: 0.5rem;
-  color: whitesmoke;
   padding: 10px;
 }
 
@@ -131,13 +117,12 @@
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  width: 60%;
+  width: 48%;
 }
 
 .checkout-btn {
   background-color: #e0b973;
   color: white;
-  transition: background-color 0.3s;
 }
 
 .checkout-btn:hover {
@@ -147,7 +132,6 @@
 .cancel-btn1 {
   background-color: #f44336;
   color: white;
-  transition: background-color 0.3s;
 }
 
 .cancel-btn1:hover {
@@ -164,56 +148,57 @@
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 
-/* Mobile Styles (<= 37.5rem) */
+
 @media (max-width: 37.5rem) {
   .reserve-container {
     flex-direction: column;
     padding: 1rem;
-    max-width: 100%; /* Ensure no max-width restriction on mobile */
-    height: auto; /* Allow content to grow on mobile */
+    max-width: 100%;
+    height: auto;
   }
 
   .reserve-room-img {
-    width: 100%; /* Full width for the image on mobile */
+    width: 100%;
     height: auto;
-    margin-bottom: 1rem; /* Space between the image and other content */
+    margin-bottom: 1rem; 
   }
 
   .reserve-info {
     margin-top: 1rem;
-    text-align: center; /* Center text for mobile */
+    text-align: center; 
   }
 
   .room-stuff {
-    width: 100%; /* Ensure room stuff takes full width on mobile */
+    flex-direction: column;
+    justify-content: center;
   }
-
   .room-features,
   .room-p {
-    width: 100%; /* Full width for features and room descriptions */
-    margin: 1rem 0; /* Space between room features */
-    height: auto; /* Allow these to grow as needed */
+    font-size: 1rem;
+    width: 100%; 
+    margin: 1rem 0;
+    height: auto;
   }
 
   .date-picker-card {
-    width: 100%; /* Full width for date picker card on mobile */
+    width: 100%; 
     max-width: none;
-    height: auto; /* Allow the date picker card to adjust based on content */
+    height: auto; 
   }
 
   .input1-container {
-    grid-template-columns: 1fr; /* Stack inputs in a single column on mobile */
+    grid-template-columns: 1fr; 
   }
 
   .checkout-btn,
   .cancel-btn1 {
-    width: 100%; /* Full width for buttons on mobile */
+    width: 100%; 
     margin-top: 1rem;
   }
 
   .modal-content {
-    max-width: 90%; /* Ensure the modal isn't too wide on mobile */
-    width: 100%; /* Take up full width on mobile */
+    max-width: 90%;
+    width: 100%;
   }
 }
 
@@ -238,5 +223,13 @@
   .checkout-btn,
   .cancel-btn1 {
     width: 48%; 
+  }
+}
+
+@media (min-width: 48rem) {
+  .room-stuff {
+    flex-direction: row; 
+    justify-content: space-between;
+    width: 100%; 
   }
 }

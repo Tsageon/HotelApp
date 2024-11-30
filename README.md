@@ -41,9 +41,9 @@ A full-featured hotel booking application with user and admin functionalities. T
 - **Frontend**: React.js, Redux for state management
 - **Authentication**: Firebase Authentication
 - **Database**: Firebase Firestore or Firebase Realtime Database for storage
-- **Payment Processing**: Stripe or PayPal (or your choice of gateway)
+- **Payment Processing**:PayPal (or your choice of gateway)
 - **Notifications**: Firebase Cloud Messaging or local notifications
-- **UI/UX Design**: CSS, Bootstrap, Material UI
+- **UI/UX Design**: CSS, Bootstrap, Material UI/SweetAlerts2
 ## Setup
 1. **Clone the Repository**:
    ```bash

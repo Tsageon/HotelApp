@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Review.css';
-
-import {fetchReviews} from '../Redux/dbSlice';
-import {useDispatch,useSelector} from 'react-redux';
+import { fetchReviews } from '../Redux/dbSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const reviews = [
   {
@@ -39,14 +38,10 @@ const reviews = [
 ];
 
 const Review = () => {
+  const { clientsReviews } = useSelector((state) => state.db);
 
-
-  const {clientsReviews } = useSelector((state) => state.db);
- 
   const dispatch = useDispatch();
 
- 
-  
   const [startIndex, setStartIndex] = useState(0);
   const reviewsPerPage = 4;
 
@@ -60,7 +55,7 @@ const Review = () => {
     );
   };
 
- 
+
   const displayedReviews = clientsReviews.slice(
     startIndex,
     startIndex + reviewsPerPage > reviews.length ? reviews.length : startIndex + reviewsPerPage
@@ -69,17 +64,17 @@ const Review = () => {
 
   useEffect(() => {
     dispatch(fetchReviews());
-  }, [dispatch]); 
+  }, [dispatch]);
 
 
- console.log(clientsReviews);
+  console.log(clientsReviews);
 
   return (
     <div className="review-Parent">
       <h2>Guest Reviews</h2>
       <p className='The-p '>Discover what our guests have to say about their unforgettable experiences at our hotel. From the impeccable service to the luxurious accommodations, our guests consistently share their admiration for the attention to detail and the welcoming atmosphere that defines every stay. Whether it's the serene ambiance, our world-class amenities, or the personalized care provided by our dedicated staff, each review reflects the exceptional standards we uphold. We take pride in creating memorable moments for every guest, and their words inspire us to continually exceed expectations.</p>
       <div className="review-container">
-        {displayedReviews.map(({ id, name,email, rating, review }) => (
+        {displayedReviews.map(({ id, name, email, rating, review }) => (
           <div key={id} className="review-card">
             <h3>{name}</h3>
             <p>{email}</p>

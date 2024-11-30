@@ -1,10 +1,13 @@
 import "./Login.css"; 
 import React, { useEffect, useState } from "react";
 import Img from "./mt.png";
+import Loader from "./Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signIn } from "../Redux/authSlice";
 import { useAlert } from "./Alerts";
+import TermsAndConditions from "./Tcs";
+import Swal from 'sweetalert2';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,10 +15,15 @@ const Login = () => {
   const loading = useSelector((state) => state.auth.loading);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isAgreed, setIsAgreed] = useState(false);
   const { user, error } = useSelector((state) => state.auth || {});
   const isAdmin = useSelector((state) => state.auth.isAdmin);
   const dispatch = useDispatch();
-  
+
+  const handleAgreement = () => {
+    setIsAgreed(true);
+  };
+
   useEffect(() => {
     if (user) {
       console.log("User object after login:", user);
@@ -32,14 +40,24 @@ const Login = () => {
     }
   }, [user, isAdmin, navigate, showAlert]);
   
-  const handleLogin = () => {
+    const handleLogin = () => {
+      if (!isAgreed) {
+        Swal.fire({
+          title: "Terms & Conditions",
+          text: "You must agree to the Terms & Conditions before logging in.",
+          icon: "warning",
+          confirmButtonText: "Okay",
+        });
+        return;
+      }      
     dispatch(signIn({ email, password }));
   };
+
 
   return (
     <div className="login">
          {loading ? (
-        <div className="loader">Loading...</div>
+        <Loader />
       ) : (
         <div>
            <div className="login__page">
@@ -80,6 +98,7 @@ const Login = () => {
               </Link>
             </b>
           </p>
+          <TermsAndConditions onAgree={handleAgreement} /><br/>
           <button type="submit" className="login__btn" onClick={handleLogin}>
             Login
           </button>

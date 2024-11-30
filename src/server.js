@@ -7,11 +7,10 @@ const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 
-// Configure PayPal SDK
 const environment = new paypal.core.SandboxEnvironment('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
 const client = new paypal.core.PayPalHttpClient(environment);
 
-// Create Order endpoint
+
 app.post('/api/orders', async (req, res) => {
     const { totalprice } = req.body.cart;
 
@@ -22,11 +21,11 @@ app.post('/api/orders', async (req, res) => {
         purchase_units: [{
             amount: {
                 currency_code: 'USD',
-                value: totalprice.toString(), // Convert to string
+                value: totalprice.toString(), 
                 breakdown: {
                     item_total: {
                         currency_code: 'USD',
-                        value: totalprice.toString() // Convert to string
+                        value: totalprice.toString() 
                     }
                 }
             }
@@ -42,7 +41,6 @@ app.post('/api/orders', async (req, res) => {
     }
 });
 
-// Capture Order endpoint
 app.post('/api/orders/:orderId/capture', async (req, res) => {
     const request = new paypal.orders.OrdersCaptureRequest(req.params.orderId);
     request.requestBody({});
@@ -56,7 +54,7 @@ app.post('/api/orders/:orderId/capture', async (req, res) => {
     }
 });
 
-// Start server
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
