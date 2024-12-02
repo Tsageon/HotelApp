@@ -4,9 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import "./App.css";
+import { useNavigate } from "react-router-dom";
 import { setUser, logout, setLoading } from "./Redux/authSlice";
 import { auth } from './Config/Fire';
-import { AlertProvider } from "./Components/Alerts";
+import { AlertProvider, useAlert } from "./Components/Alerts";
 import Footer from "./Components/footer";
 import Gallery from "./Components/Gallery";
 import Forgotpassword from "./Components/Forgotpassword";
@@ -27,6 +28,8 @@ import AboutUs from "./Components/AboutUs"
 function App() {
   const user = useSelector((state) => state.auth.user);
   const { loading } = useSelector((state) => state.auth || {});
+  const showAlert = useAlert(); 
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -88,10 +91,23 @@ function App() {
                 <Route path="/forgotpassword" element={<Forgotpassword />} />
                 <Route path="/room" element={<Room />} />
                 <Route path="/amenities" element={<Amenities />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/reserve" element={<Reserve />} />
-                <Route path="/checkout" element={<CheckoutPayment />} />
+                <Route
+                path="/profile"
+                element={user ? <Profile /> : (showAlert("error", "Please log in to view your profile"), navigate("/login"))}
+              />
+                 <Route
+                path="/admin"
+                element={user && user.email === "KB@gmail.com" ? <Admin /> : (showAlert("error", "You do not have permission to access this page."), navigate("/"))}
+              />
+                <Route
+                path="/reserve"
+                element={user ? <Reserve /> : (showAlert("error", "Please log in to make a reservation."), navigate("/login"))}
+              />
+
+                <Route
+                path="/checkout"
+                element={user ? <CheckoutPayment /> : (showAlert("error", "Please log in to proceed to checkout."), navigate("/login"))}
+              />
               </Routes>
             </div>
           )}

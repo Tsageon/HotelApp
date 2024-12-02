@@ -68,6 +68,7 @@
 
   .gallery-container p {
     font-size: 0.875rem;
+    width: auto;
   }
 
   .gallery-grid {

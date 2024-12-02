@@ -18,7 +18,9 @@ const Profile = () => {
   const user = useSelector((state) => state.auth.user);
   const authStatus = useSelector((state) => state.auth.status);
   const email = user?.email || 'N/A';
+
   const { likedRooms = [], loading, error, userBookings = [] } = useSelector((state) => state.db);
+  const [imgError, setImgError] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -28,7 +30,7 @@ const Profile = () => {
     preferences: user?.preferences || [],
     profilePictureFile: null,
   });
-  const [imgError, setImgError] = useState(false);
+
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -109,8 +111,8 @@ const Profile = () => {
 
   useEffect(() => {
     if (user?.uid) {
-      dispatch(fetchUserBookings());
-      dispatch(fetchUserLikedRooms());
+      dispatch(fetchUserBookings(user?.uid));
+      dispatch(fetchUserLikedRooms(user.uid));
     }
   }, [dispatch, user?.uid]);
 
@@ -207,14 +209,18 @@ const Profile = () => {
         ) : likedRooms.length > 0 ? (
           likedRooms.map((room) => (
             <div key={room.id}>
-              <img className='Room-img' src={room.image} alt={room.roomName} />
-              <p>{room.roomName}</p>
-              <p>{room.descriptions}</p>
-              <p>R{room.price}</p>
+              <img
+                className="Room-img"
+                src={room.image || "default-image-url.jpg"}
+                alt={room.roomName || "Room"}
+              />
+              <p>{room.roomName || "Unnamed Room"}</p>
+              <p>{room.descriptions || "No description available."}</p>
+              <p>R{room.price || "N/A"}</p>
             </div>
           ))
         ) : (
-          <p>No liked rooms found.</p>
+          <p><i><b>No liked rooms found.</b></i></p>
         )}
       </div>
 
@@ -231,7 +237,7 @@ const Profile = () => {
             </div>
           ))
         ) : (
-          <p>No bookings found.</p>
+          <p><i><b>No Bookings found.</b></i></p>
         )}
       </div>
 

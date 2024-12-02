@@ -8,6 +8,7 @@ import { SiGmail } from "react-icons/si";
 import "./footer.css";
 import Logo from "./mt.png";
 import RatingReview from "./star";
+import Swal from 'sweetalert2';
 
 const Footer = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,13 @@ const Footer = () => {
     };
     console.log("Review data to be added:",reviewData)
     dispatch(addReview(reviewData));
-    alert("Review added!Thank you?")
+    
+    Swal.fire({
+      title: 'Thank You!',
+      text: 'We value your opinion',
+      icon: 'success',
+      confirmButtonText: 'Good',
+    });
 
     setReviewText("");
     setRating(0);

@@ -153,6 +153,7 @@ button {
 
   .room-cards{
     grid-template-columns: repeat(3, 1fr); 
+    text-align: center;
   }
 
   .room-name {
@@ -186,6 +187,7 @@ button {
 
  .room-cards{
   grid-template-columns: repeat(2, 1fr); 
+  text-align: center;
 
  }
   .price {

@@ -14,14 +14,51 @@ import "./Room.css";
 
 
 const Room = () => {
+
+  const handleAddFavorite = (room) => {
+    console.log("room in handleAddFavorite:", room);
+    if (!room || !room.id) {
+      console.log("Invalid room object:", room);
+      return; 
+    }
+
+    const likedData = {
+      roomId: room.id || "defaultRoomId",
+      roomName: room.roomName || "Booo",
+      roomImage: room.image || "nothing",
+      roomPrice: room.price || "N/A",
+    };
+
+    console.log("likedData being passed:", likedData);
+    Swal.fire({
+      title: "Coming Soon!",
+      text: "This feature is still under development. Your input has been noted!",
+      icon: "info",
+      confirmButtonText: "Okay",
+    });
+  
+  
+    const showAlert = {
+      success: (message) => Swal.fire("Success", message, "success"),
+      error: (message) => Swal.fire("Error", message, "error"),
+    };
+      dispatch(userLikedRooms(likedData, showAlert));
+  };
+  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [, setIsSharing] = useState(false);
-  const { data, loading, error } = useSelector((state) => state.db);
+  const { data = [], loading = false, error = null } = useSelector((state) => state.db || {});
   const user = useSelector((state) => state.auth.user);
   const favorites = useSelector((state) => state.db?.favorites || []);
+  console.log("Current favorites:", favorites);  
   const rooms = Array.isArray(data) && data.length > 0 ? data : [];
+
+  useEffect(() => {
+    console.log("Updated favorites:", favorites);  
+  }, [favorites]);
 
   useEffect(() => {
     if (rooms.length === 0 && !loading) {
@@ -56,20 +93,7 @@ const Room = () => {
     Swal.fire({icon:"success", text:`Reservation confirmed for ${selectedRoom.roomName}!`,confirmButtonText:'Good'});
   };
 
-  const handleAddFavorite = () => {
-    try {
-      throw new Error("Feature Coming Soon");
-    } catch (error) {
-      Swal.fire({
-        title: 'Coming Soon!',
-        text: 'This feature is currently under development.',
-        icon: 'info',
-        confirmButtonText: 'Ok',
-      });
-    }
-    dispatch(userLikedRooms()); 
-  };
-
+ 
   const handleShare = async (room) => {
     const { roomName, descriptions, price, id } = room;
     const shareData = {
@@ -108,6 +132,7 @@ const Room = () => {
     }
   };
 
+  
   return (
     <div>
       <Nav />
@@ -135,6 +160,7 @@ const Room = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      console.log("room in handleAddFavorite:", room);
                       handleAddFavorite(room);
                     }}
                     className="favorite-icon-wrapper"
@@ -179,7 +205,7 @@ const Room = () => {
               </div>
             ))
           ) : (
-            <p>No rooms available at the moment.</p>
+            <p>No rooms available at the moment. If this message is here longer than 2 minutes<i><b>Refresh</b></i></p>
           )}
         </div>
       </div>

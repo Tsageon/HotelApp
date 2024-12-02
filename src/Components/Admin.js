@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Fade } from "react-awesome-reveal";
+import { useNavigate } from "react-router";
 import { Timestamp } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -14,10 +15,11 @@ import "./Admin.css";
 
 const Admin = () => {
   const bookings = useSelector(selectBookings);
-  console.log("Bookings from Redux:", bookings)
-  const [activePage, setActivePage] = useState("rooms");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const rooms = useSelector(selectRooms);
+  const user = useSelector((state) => state.auth.user);
+  const [activePage, setActivePage] = useState("rooms");
   const [roomName, setRoomName] = useState("");
   const [guests, setGuests] = useState("");
   const [roomType, setRoomType] = useState("");       
@@ -57,6 +59,18 @@ const Admin = () => {
     return `${parsedDate.getDate()}/${parsedDate.getMonth() + 1}/${parsedDate.getFullYear()}`;
 };
 
+useEffect(() => {
+  if (!user || (user.email !== "kb@gmail.com" && user.email !== "anotheremail@example.com")) {
+    Swal.fire({
+      title: "Access Denied",
+      text: "You do not have permission to access this page.",
+      icon: "error",
+      confirmButtonText: "OK"
+    }).then(() => {
+      navigate("/");
+    });
+  }
+}, [user, navigate]); 
 
 useEffect(() => {
   Swal.fire({
@@ -94,7 +108,7 @@ useEffect(() => {
     e.preventDefault();
   
     if (!roomName || !price || !guests || !image) {
-      alert("All fields are required!");
+      Swal.fire({title:"All fields are required!", icon: 'info', text:'Looks like you missed some fields', confirmButtonText:'Okay'});
       return;
     }
   
@@ -147,7 +161,9 @@ useEffect(() => {
       reader.onloadend = () => setPreviewUrl(reader.result);
       reader.readAsDataURL(file);
     } else {
-      alert("Upload a valid image file (JPEG or PNG).");
+      Swal.fire({title:"Upload a valid image file (JPEG or PNG).", icon:'info',
+        text:'We do not support that extension yet!'
+      });
     }
   };
 

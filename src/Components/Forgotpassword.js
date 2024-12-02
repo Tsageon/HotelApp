@@ -1,5 +1,6 @@
 import "./Forgotpassword.css";
 import Img from "./mt.png";
+import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { resetPassword } from '../Redux/authSlice'; 
@@ -17,7 +18,13 @@ const Forgotpassword = () => {
 
   const handlePasswordReset = async () => {
     dispatch(resetPassword({ email}));
-    alert("Link has been sent")
+  
+    Swal.fire({
+      title: 'Link has been sent!',
+      text: 'Check your email',
+      icon: 'success',
+      confirmButtonText: 'Okay',
+    });
   };
 
   return (
