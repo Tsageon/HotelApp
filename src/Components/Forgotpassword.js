@@ -4,21 +4,18 @@ import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { resetPassword } from '../Redux/authSlice'; 
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 
 const Forgotpassword = () => {
   const [email, setEmail] = useState('');
   const [message] = useState(null);
- 
   const [loading] = useState(false);
 
  
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.auth);
 
   const handlePasswordReset = async () => {
     dispatch(resetPassword({ email}));
-  
     Swal.fire({
       title: 'Link has been sent!',
       text: 'Check your email',
